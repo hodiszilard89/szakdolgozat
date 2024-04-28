@@ -4,12 +4,16 @@ let helper = "";
 const isNameAvailable = async (email: string | undefined) => {
   try {
     const response = await fetch(
-      `http://localhost:8080/users/checkemail/${email}`
-    );
+      `http://localhost:8080/users/checkemail/${email}`,
+      {
+        method:"GET"
+      }
+    ) ;
     if (!response.ok) {
       throw new Error("Hiba történt a szerverrel való kommunikáció során.");
     }
     const data = await response.json();
+    console.log(data)
     return data;
   } catch (error) {
     console.error("Hiba:", error);

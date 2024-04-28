@@ -149,18 +149,7 @@ public class UsersServiceImpl implements UsersService {
         else {throw new EntityNotFoundException("Hiba", Arrays.asList("asd","asdasd"));}
     }
 
-    @Override
-    public boolean checkEmail(String email) {
-        boolean response=true;
-        try {
-            System.out.println(usersRepository.findUserByEmail(email));
-            if (usersRepository.findUserByEmail(email).isPresent() )
-                response=false;
-        }catch (Exception e){
-            response=false;
-        }
-    return response;
-    }
+
 
     @Override
     public void addComment(CommentDTO commentDTO) {
@@ -176,7 +165,16 @@ public class UsersServiceImpl implements UsersService {
             throw new EntityNotFoundException("user");
         }
     }
-
+    @Override
+    public boolean checkEmail(String email) {
+        boolean response=true;
+        Optional<Users> optionalUser = usersRepository.findUserByEmail(email);
+        System.out.println(optionalUser);
+        if (optionalUser.isPresent()){
+            response=false;
+        }
+        return response;
+    }
     public Users findUserByChatName(String username) {
         System.out.println(username);
         Optional<Users> optionalUser = usersRepository.findUserByChatName(username);

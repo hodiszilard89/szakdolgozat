@@ -191,7 +191,7 @@ export const newsApi = createApi({
 
     checkUniqueEmail: builder.query<boolean, string>({
       query: (email: string) => ({
-        url: `http://${SERVERHOST}/user/checkemail/${email}`,
+        url: `http://${SERVERHOST}/users/checkemail/${email}`,
         method: "GET",
         headers: {
           "Content-Type": "text/plain; charset=utf-8",

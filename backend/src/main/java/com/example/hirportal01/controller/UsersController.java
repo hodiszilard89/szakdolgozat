@@ -26,7 +26,7 @@ import java.util.*;
 
 
 @RestController
-
+@CrossOrigin
 @RequestMapping(path = "/users")
 public class UsersController {
     final String IMAGE_PATH="./uploads/image.jpeg";
@@ -77,9 +77,11 @@ public class UsersController {
 
     }
 
+    @CrossOrigin
     @RequestMapping(path = "/checkemail/{email}",method = RequestMethod.GET)
-    public ResponseEntity<Boolean> chechEmail(@PathVariable String email){
-
+    public ResponseEntity<Boolean> checkEmail(@PathVariable String email){
+        System.out.println(email);
+        //usersService.checkEmail(email);
         return ResponseEntity.ok(usersService.checkEmail(email));
     }
 

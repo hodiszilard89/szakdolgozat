@@ -46,10 +46,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers("/authentication").permitAll()
                // .antMatchers("/uploads/**").permitAll()
-
                 .antMatchers("/news/**").permitAll()
-                .antMatchers("/news/delete").hasAuthority("TORPPAPA")
                 .antMatchers("/users/**").permitAll()
+                .antMatchers("/news/delete").hasAuthority("TORPPAPA")
                 .antMatchers("/comment/**").hasAnyAuthority("TORPPAPA","USER","READER","WRITER")
                 .anyRequest().authenticated()
                 .and()
