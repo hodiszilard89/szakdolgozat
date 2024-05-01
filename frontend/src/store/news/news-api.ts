@@ -101,7 +101,7 @@ export const newsApi = createApi({
           Accept: "application/json",
         },
         body: {
-          username: params.email,
+          email: params.email,
           password: params.password,
         },
       }),

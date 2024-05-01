@@ -2,7 +2,7 @@ import {Roles} from './roles'
 import { News } from './news'
 export interface User{
     id:number,
-    news:News[],
+    //news:News[],
     locked:boolean,
     firstName: string,
     password:string,

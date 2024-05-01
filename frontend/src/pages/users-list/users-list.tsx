@@ -70,7 +70,7 @@ export const UsersList: FC = () => {
                       <Image
                         textAlign={"center"}
                         style={{ width: 75, height: 75 }}
-                        src={user.imagePath}
+                        src={`http://localhost:8080/${user.imagePath}`}
                         borderRadius={"full"}
                       ></Image>
                     </Td>

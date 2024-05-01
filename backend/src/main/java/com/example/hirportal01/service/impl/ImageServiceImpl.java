@@ -29,10 +29,12 @@ public class ImageServiceImpl implements ImageService {
 
             filePath = "./uploads/"+currentTime.format(formatter)+".jpeg";
             try (FileOutputStream fos = new FileOutputStream(filePath)) {
+                System.out.println(imageBytes.toString());
                 fos.write(imageBytes);
                 System.out.println("A kép sikeresen mentve: " + filePath);
             } catch (IOException e) {
                 e.printStackTrace();
+                filePath="";
                 System.err.println("Hiba történt a kép mentése közben.");
             }
 

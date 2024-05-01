@@ -35,7 +35,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             doAuthorization(request);
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-            System.out.println(e.toString());
+
             throw new EntityNotFoundException("Authorization error");
         }
 
@@ -43,9 +43,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
     private void doAuthorization(HttpServletRequest request) {
-
-        System.out.println("lekédez");
-        System.out.println(request.getHeader(HttpHeaders.AUTHORIZATION));
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
 
@@ -53,9 +50,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
                 String jwt = authorizationHeader.split(" ")[1];
 
-                String username = jwtUtil.verifyAndDecodeToken(jwt);
-
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                String email = jwtUtil.verifyAndDecodeToken(jwt);
+                System.out.println(email);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()

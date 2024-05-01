@@ -34,12 +34,7 @@ export interface Token {
 }
 const LoginModal: FC = () => {
   const [showModal, setShowModal] = useState(useSelector(selectShowLogin));
-  const initialToken: Token = {
-    role: "",
-    iss: "",
-    chatname: "",
-    id: 0,
-  };
+
   const initParam: GetTokenQueryParams = {
     email: "",
     password: "",
@@ -83,7 +78,7 @@ const LoginModal: FC = () => {
     } else {
       setError(serverErrors?.data.messages);
     }
-  }, [tokenValue, tokenParams]);
+  }, [tokenValue, serverErrors, tokenParams]);
 
   //FORMIK RÉSZ
   const { errors, values, setFieldValue, handleSubmit, setValues } = useFormik({
@@ -104,17 +99,18 @@ const LoginModal: FC = () => {
   const onClose = useCallback(() => {
     dispatch(closeLogin());
     setShowModal(false);
-    //setError("");
+    setError("");
     setValues({ email: "", password: "" });
   }, [dispatch]);
 
   useEffect(() => {
     setShowModal(showLogin);
+   
   }, [showLogin]);
 
-  // useEffect(() => {
-  //   setError(serverErrors?.data?.messages);
-  // }, [serverErrors]);
+  useEffect(() => {
+    setError(serverErrors?.data?.messages);
+  }, [serverErrors]);
 
   return (
     <Modal
@@ -128,12 +124,10 @@ const LoginModal: FC = () => {
           <form onSubmit={handleSubmit}>
             <FormLabel>{error ? `Error ${error}` : ""}</FormLabel>
             <FormControl>
-              <FormLabel>Chat név</FormLabel>
+              <FormLabel>Email cím</FormLabel>
               <Input
-                //type="email"
-                type="text"
-                placeholder="Adja meg a chat nevét"
-                value={values.email}
+                type="email"
+                placeholder="Adja meg az email címet"
                 autoComplete="new-email"
                 onChange={(event) => setFieldValue("email", event.target.value)}
               />

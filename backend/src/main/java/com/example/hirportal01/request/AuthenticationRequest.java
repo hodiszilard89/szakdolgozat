@@ -7,23 +7,23 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class AuthenticationRequest {
 
-    private String username;
+    private String email;
     private String password;
 
     public AuthenticationRequest() {
     }
 
-    public AuthenticationRequest(String username, String password) {
-        this.username = username;
+    public AuthenticationRequest(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -42,18 +42,18 @@ public class AuthenticationRequest {
 
         AuthenticationRequest that = (AuthenticationRequest) o;
 
-        return new EqualsBuilder().append(username, that.username).append(password, that.password).isEquals();
+        return new EqualsBuilder().append(email, that.email).append(password, that.password).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(username).append(password).toHashCode();
+        return new HashCodeBuilder(17, 37).append(email).append(password).toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-            .append("username", username)
+            .append("email", email)
             .append("password", password)
             .toString();
     }

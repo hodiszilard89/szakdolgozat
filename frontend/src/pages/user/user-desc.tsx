@@ -53,7 +53,7 @@ export const UserDesc: FC<UserDescProps> = ({ user, onSubmit }) => {
   const onClickViewIcon = () => {
     setViewPass(!viewPass);
   };
-  const [image, setImage] = useState<string>(user.imagePath);
+  const [image, setImage] = useState<string>("http://localhost:8080/"+user.imagePath);
   return (
     <>
       <Box

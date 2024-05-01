@@ -35,17 +35,16 @@ public class UsersServiceImpl implements UsersService {
 
     final String IMAGE_PATH="./uploads/image.jpeg";
     private final EmailService emailService;
-    private final ImageService imageService;
+    private final ImageServiceImpl imageService;
     private final ObjectMapper objectMapper;
     private final ResourceLoader resourceLoader;
     private final ModelMapper modelMapper;
     private final RolesRepository rolesRepository;
     private final UsersRepository usersRepository;
 
-    public UsersServiceImpl(EmailService emailService, ImageService imageService, ObjectMapper objectMapper, ResourceLoader resourceLoader, ModelMapper modelMapper, RolesRepository rolesRepository, UsersRepository usersRepository) {
+    public UsersServiceImpl(EmailService emailService, ImageServiceImpl imageService, ObjectMapper objectMapper, ResourceLoader resourceLoader, ModelMapper modelMapper, RolesRepository rolesRepository, UsersRepository usersRepository) {
         this.emailService = emailService;
         this.imageService = imageService;
-
         this.objectMapper = objectMapper;
         this.resourceLoader = resourceLoader;
         this.modelMapper = modelMapper;
@@ -120,25 +119,27 @@ public class UsersServiceImpl implements UsersService {
     public UsersDTO update(UserDTOForRegistration userDTOForRegistration) {
         UsersDTO usersDTO = userDTOForRegistration.getUsersDTO();
         String image=userDTOForRegistration.getImage();
-        try{
-            System.out.println(objectMapper.writeValueAsString(userDTOForRegistration.getUsersDTO()));}
-        catch ( Exception e){
-            System.out.println(e.toString());
-        }
+        System.out.println(image);
+
+//        try{
+//            System.out.println(objectMapper.writeValueAsString(userDTOForRegistration.getUsersDTO()));}
+//        catch ( Exception e){
+//            System.out.println(e.toString());
+//        }
 
         //ha nincs képküldés
         if (!userDTOForRegistration.getImage().isEmpty()){
-            String  imagePath= userDTOForRegistration.getUsersDTO().getImagePath();
-            Resource resource = resourceLoader.getResource("file:" + imagePath);
+            //String  imagePath= userDTOForRegistration.getUsersDTO().getImagePath();
+            //Resource resource = resourceLoader.getResource("file:" + imagePath);
             usersDTO.setImagePath(imageService.add(image));
-        }
+        }else{usersDTO.setImagePath(IMAGE_PATH);}
 
         return update(usersDTO);
     }
 
     @Override
-    public UsersDTO findUser(String username, String password) {
-        Optional<Users> optionalUser = usersRepository.findUser(username,password);
+    public UsersDTO findUser(String email, String password) {
+        Optional<Users> optionalUser = usersRepository.findUser(email,password);
         if (optionalUser.isPresent()){
             System.out.println("cset név  "  +optionalUser.get().getChatName());
             if (optionalUser.get().getLocked())
@@ -175,13 +176,22 @@ public class UsersServiceImpl implements UsersService {
         }
         return response;
     }
+
+    public Users findUserByEmail(String email){
+        Optional<Users> optionalUser = usersRepository.findUserByEmail(email);
+        Users user ;
+        if (optionalUser.isPresent()) {
+            user=optionalUser.get();
+        }else{throw new EntityNotFoundException("Hibás felhasználóinév vagy jelszó");}
+        return user;
+    }
     public Users findUserByChatName(String username) {
         System.out.println(username);
         Optional<Users> optionalUser = usersRepository.findUserByChatName(username);
         if (optionalUser.isPresent()){
             return modelMapper.map(optionalUser.get(),Users.class);
         }
-        else {throw new EntityNotFoundException("User");}
+        else {throw new EntityNotFoundException("Hibás felhasználóinév vagy jelszó");}
     }
 
 }

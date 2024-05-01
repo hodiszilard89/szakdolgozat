@@ -1,12 +1,12 @@
 import { User } from "../models/user";
 
 export const createUser = ():User =>({
-    news:[],
+  //  news:[],
     email:"",
     password:"",
     imagePath:"",
     chatName:"",
-    firstName: "Proba",
+    firstName: "",
     secName:"",
     locked:false,
     likednews:[],

@@ -15,7 +15,7 @@ public class UsersDTO {
     private Boolean locked;
     private Long Id;
 
-    private List<News> news;
+//    private List<News> news;
     @NotBlank
     private String email;
     @NotBlank
@@ -40,13 +40,13 @@ public class UsersDTO {
         this.locked = locked;
     }
 
-    public List<News> getNews() {
-        return news;
-    }
+//    public List<News> getNews() {
+//        return news;
+//    }
 
-    public void setNews(List<News> news) {
-        this.news = news;
-    }
+//    public void setNews(List<News> news) {
+//        this.news = news;
+//    }
 
     public String getImagePath() {
         return imagePath;

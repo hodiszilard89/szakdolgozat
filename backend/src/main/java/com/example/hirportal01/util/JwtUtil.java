@@ -15,8 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtUtil {
 
-    private static final String USERNAME_CLAIM = "username";
-    private static final String ROLE_CLAIM = "role";
+    private static final String EMAIL_CLAIM = "email";
     private static final String ID_CLAIM = "id";
 
     private final Algorithm algorithm;
@@ -32,11 +31,10 @@ public class JwtUtil {
         this.jwtConfigurationProperties = jwtConfigurationProperties;
     }
 
-    public String createAndSignToken(String username, String role, Long id) {
+    public String createAndSignToken(String email, Long id) {
         return JWT.create()
                 .withIssuer(jwtConfigurationProperties.getIssuer())
-                .withClaim(USERNAME_CLAIM, username)
-                .withClaim(ROLE_CLAIM,  role)
+                .withClaim(EMAIL_CLAIM, email)
                 .withClaim(ID_CLAIM,  id)
                 .withExpiresAt(createExpirationDate())
                 .sign(algorithm);
@@ -45,7 +43,7 @@ public class JwtUtil {
 
     public String verifyAndDecodeToken(String token) {
         DecodedJWT decodedJWT = jwtVerifier.verify(token);
-        return decodedJWT.getClaim(USERNAME_CLAIM).asString();
+        return decodedJWT.getClaim(EMAIL_CLAIM).asString();
     }
 
     private Date createExpirationDate() {

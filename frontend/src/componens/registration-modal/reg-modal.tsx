@@ -49,7 +49,14 @@ const RegModal: FC = () => {
   const { addUser } = useAddUser();
   //formik
   const { errors, values, setFieldValue, handleSubmit, setValues } = useFormik({
-    initialValues: initValues,
+    initialValues: {
+      email: "",
+      password: "",
+      confirmpassword: "",
+      chatname: "",
+      secname: "",
+      firstname: "",
+    },
     onSubmit: async (values) => {
 
       try {

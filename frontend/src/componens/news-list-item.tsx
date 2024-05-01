@@ -22,6 +22,7 @@ import { selectAuthUser } from "../store/news/auth-user-slice";
 
 import { LikeButton } from "./like-button";
 import { selectNews } from "../store/news/news-slice";
+import { User } from "../models/user";
 
 export interface NewsListItemProps {
   //news: News;
@@ -49,8 +50,8 @@ export const NewsListItem: FC<NewsListItemProps> = ({
   return (
     <Card padding={0}>
       
-       {(userInState?.roles?.filter(item=>item.title==="ADMIN")) ?
-       <NewsItemMenu stateId={stateId} placement="bottom-end" />:""}
+       {(userInState?.roles?.filter(item=>item.title==="ADMIN").length===0)?
+       "":<NewsItemMenu stateId={stateId} placement="bottom-end" />}
       <CardBody margin={0} paddingTop={0}>
         <Link to={`/news`} onClick={onClick}>
           <CardHeader padding={0}>

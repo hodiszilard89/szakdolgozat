@@ -2,6 +2,7 @@ package com.example.hirportal01.security;
 
 import com.example.hirportal01.dto.UsersDTO;
 import com.example.hirportal01.entity.Users;
+import com.example.hirportal01.exception.EntityNotFoundException;
 import com.example.hirportal01.exception.UserIsBlockedException;
 import com.example.hirportal01.repository.UsersRepository;
 import com.example.hirportal01.service.impl.UsersServiceImpl;
@@ -25,30 +26,39 @@ import java.util.*;
 public class UserDetailsServiceImpl implements UserDetailsService{
     @Autowired
     private final UsersServiceImpl usersService;
-    @Autowired
-    private final ModelMapper modelMapper;
-    public UserDetailsServiceImpl(UsersServiceImpl usersService, ModelMapper modelMapper) {
+
+    public UserDetailsServiceImpl(UsersServiceImpl usersService) {
         this.usersService = usersService;
-        this.modelMapper = modelMapper;
     }
-    private List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
     @Override
-    public UserDetails loadUserByUsername(String username) {
+    public UserDetails loadUserByUsername(String email) {
         String chatName;
         String password;
-        Users users = usersService.findUserByChatName(username);
+        Users users = usersService.findUserByEmail(email);
         if (users != null){
             chatName=users.getChatName();
             password=users.getPassword();
-           if (users.getLocked()) throw  new UserIsBlockedException(username+" is blocked");
+           if (users.getLocked()) throw  new UserIsBlockedException(chatName+" is blocked");
         }
         else{
-            throw new UsernameNotFoundException(username);
+            throw new EntityNotFoundException(email);
         }
-
-
 
         return new User(chatName,password, true,true,true,true,users.getAuthorities());
     }
+    public User loadUserByEmail(String email) {
+        String chatName;
+        String password;
+        Users users = usersService.findUserByEmail(email);
+        if (users != null){
+            chatName=users.getChatName();
+            password=users.getPassword();
+            if (users.getLocked()) throw  new UserIsBlockedException(chatName+" is blocked");
+        }
+        else{
+            throw new EntityNotFoundException("Hibás felhasználóinév vagy jelszó");
+        }
 
+        return new User(email,password, true,true,true,true,users.getAuthorities());
+    }
 }

@@ -99,7 +99,7 @@ export const Navbar: FC = () => {
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
             <DesktopNavMenu arr={type} />
             {user?.roles?.find(
-              (roles) => roles.title === "ADMIN" || "WRITER"
+              (roles) => (roles.title === "ADMIN" )|| (roles.title === "WRITER" )
             ) ? (
               <DesktopNavMenu arr={actions} />
             ) : (
