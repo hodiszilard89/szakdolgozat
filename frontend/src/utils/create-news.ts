@@ -7,7 +7,7 @@ import { Comment } from "../models/comment"
 export const createNews = (): News=>({
 
     imgPath:"",
-    text:"új hír",
+    text:"",
     subtitle:"",
     priority:false,
     title:"",

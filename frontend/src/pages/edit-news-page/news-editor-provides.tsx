@@ -1,40 +1,34 @@
-import React, { FC, useCallback} from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { FC } from "react";
+import { useSelector } from "react-redux";
+import { selectEditor } from "../../store/news/editor-slice";
+import NewsEditor from "./news-editor";
+import { newsFactory } from "../../utils/news_factory";
+import { Box,  Text } from "@chakra-ui/react";
+import { Navbar } from "../../componens/navbar";
+import { Footer } from "../../componens/footer";
 import {
 
-  setNews,
-} from "../../store/news/editor-slice";
+  selectOnlineUser,
+} from "../../store/news/auth-user-slice";
+import { NoPermission } from "../no-permission";
 
-import NewsEditor from "./news-editor";
-
-import { News } from "../../models/news";
-
-import { useNewsChancages } from "../../store/hooks/use-news-chancages";
-
-import { selectNewsId } from "../../store/news/editor-slice";
-import { createRawNews } from "../../utils/create-raw-news";
 
 export const NewsEditorProvider: FC = () => {
-  const newsId = useSelector(selectNewsId);
-  const dispatch = useDispatch();
-  const { save } = useNewsChancages();
-
-  const onSubmit = useCallback(
-    async (id: number, news: News) => {
-      dispatch(setNews(createRawNews()));
-
-      news.releasedate = new Date();
-      await save(news);
-    },
-    [save, dispatch]
-  );
-
+  const { news } = useSelector(selectEditor);
+  const user = useSelector(selectOnlineUser);
   return (
     <>
-      <NewsEditor
-        id={newsId ? Number(newsId) : 0}
-        onSubmit={onSubmit}
-      ></NewsEditor>
+      {user?.roles?.find((role) => 
+        (role.title === "ADMIN" || role.title === "WRITER")
+      ) ? (
+        <Box width={"80%"} margin={"auto"}>
+          <Navbar />
+          {news && <NewsEditor news={newsFactory(news)} />}
+          <Footer />
+        </Box>
+      ) : 
+       <NoPermission/>
+      }
     </>
   );
 };

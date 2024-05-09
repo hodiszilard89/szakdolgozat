@@ -24,28 +24,25 @@ import { setEditUser } from "../../store/news/users-slice";
 import { useGetUsers } from "../../store/hooks/use-get-users";
 import { useUserChancages } from "../../store/hooks/use-user-chancages";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { User } from "../../models/user";
 import { Navbar } from "../../componens/navbar";
+import { authUserSlice, selectOnlineUser } from "../../store/news/auth-user-slice";
+import { Footer } from "../../componens/footer";
 
 export const UsersList: FC = () => {
   const dispatch = useDispatch();
-  const { deleteUser } = useUserChancages();
+  
   const ICON_SIZE = 25;
-
+ 
   const users = useGetUsers();
   const [data, setData] = useState<User[]>();
-
-  const onDelete = useCallback(async (id: number) => {
-    if (window.confirm("Are you sure you want to delete this news?")) {
-      await deleteUser(id);
-    }
-  }, []);
-
+  
   useEffect(() => {
     users && setData(users);
   }, [users]);
   return (
+  
     <Box width={"80%"} margin={"auto"}>
       <Navbar />
       <TableContainer>
@@ -108,6 +105,7 @@ export const UsersList: FC = () => {
         {" "}
         Főoldal
       </Button>
+      <Footer/>
     </Box>
   );
 };

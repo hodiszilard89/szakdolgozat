@@ -1,4 +1,4 @@
-import React, { useState, FC, useEffect } from "react";
+import React, { useState, FC, useEffect, useCallback } from "react";
 
 import {
   Box,
@@ -9,79 +9,89 @@ import {
   FormControl,
   Checkbox,
   Text,
+  Flex,
+  useSafeLayoutEffect,
   
 } from "@chakra-ui/react";
 
 
-import { selectNews } from "../../store/news/editor-slice";
-import { useSelector } from "react-redux";
+import { closeEditor, selectNews, setNews } from "../../store/news/editor-slice";
+import { useDispatch, useSelector } from "react-redux";
 import { News } from "../../models/news";
 import { useNewsTypes } from "../../store/hooks/use-news-types";
 import {  useFormik } from "formik";
 import { GenreSelector } from "../../componens/genre-selector";
 import { Image } from "@chakra-ui/react";
 import { newsEditValidationSchema } from "./news-edit-validation.schema";
-import { newsFactory } from "../../utils/news_factory";
+import { newsFactory, serializNews } from "../../utils/news_factory";
 import { selectAuthUser } from "../../store/news/auth-user-slice";
 import { Navbar } from "../../componens/navbar";
 import { createNews } from "../../utils/create-news";
-
+import { RawNews } from "../../models";
+import { updateNewsItem } from "../../store/news/news-slice";
+import { useGetOneNewsQuery } from "../../store/news/news-api";
+import { useOneNews } from "../../store/hooks/use-one-news";
+import { useLocation } from "react-router-dom";
+import { useNewsChancages } from "../../store/hooks/use-news-chancages";
 export interface NewsEditorProps {
-  id: News["id"];
-  onSubmit: (id: number, news: News) => Promise<void>;
+  news: News;
 }
 
-export const NewsEditor: FC<NewsEditorProps> = ({ onSubmit, id }) => {
+export const NewsEditor: FC<NewsEditorProps> = ({ news }) => {
   const user = useSelector(selectAuthUser).user;
-
   const { types } = useNewsTypes();
-  const news = useSelector(selectNews);
+  const dispatch = useDispatch();
+  const { save } = useNewsChancages();
 
-  const [updateNews, setUpdateNews] = useState(news);
+  const onSubmit = useCallback(
+    async (news: News) => {
+      await save(news);
+    },
+    [save, dispatch]
+  );
+
+  useEffect(()=>{
+    setValues(news)
+  },[news])
 
   const {
     errors,
     values,
     setFieldValue,
     handleSubmit,
-    handleReset,
-
-    resetForm,
+    setValues,
   } = useFormik({
-    initialValues: newsFactory(updateNews),
+    initialValues: news,
     onSubmit: async (values: News, { setSubmitting }) => {
+      setSubmitting(true) 
       if (user) {
         try {
           const validatedNews = { ...values };
           validatedNews.writer = user;
-          await onSubmit(id!, validatedNews);
-         
+          await onSubmit(validatedNews);
+
         } catch (e) {
           console.error(e);
         }
       } else {
         window.confirm("jelentkezz be");
       }
-      handleReset(undefined)
+      setSubmitting(false)
     },
     validationSchema: newsEditValidationSchema,
   });
 
-  useEffect(() => {
-    setUpdateNews(news);
 
-    if (!news) resetForm({ values: createNews() });
-  }, [news]);
-
+ 
+  
   return (
-    <>
-
-      <Box width={"80%"} margin={"auto"}> 
-        <Navbar />
+  
+     
+     
         <form onSubmit={handleSubmit}>
           {values.imgPath && (
             <Image
-              src={values.imgPath}
+              src={values?.imgPath}
               style={{ width: "600px", height: "400px" }}
             ></Image>
           )}
@@ -101,7 +111,7 @@ export const NewsEditor: FC<NewsEditorProps> = ({ onSubmit, id }) => {
             <FormLabel>Title</FormLabel>
             <Input
               backgroundColor={"white"}
-              value={values.title ? values.title : ""}
+              value={values.title}
               type="text"
               placeholder="Enter title"
               // value={values.title&&""}
@@ -138,10 +148,13 @@ export const NewsEditor: FC<NewsEditorProps> = ({ onSubmit, id }) => {
 
             <FormErrorMessage>{errors.text}</FormErrorMessage>
           </FormControl>
+          <Flex   paddingTop={3}>
           <Text display={"flex"}>
             <FormLabel> Vezető hír</FormLabel>
-            <Checkbox
-              paddingLeft={3}
+           
+          </Text>
+          <Checkbox
+            
               border={"1px black"}
               display={"flex"}
               size="lg"
@@ -152,17 +165,16 @@ export const NewsEditor: FC<NewsEditorProps> = ({ onSubmit, id }) => {
                 
                 setFieldValue("priority", event.currentTarget.checked);
               }}
-            ></Checkbox>
-          </Text>
-
+            /> 
+          </Flex>
+         
           <FormControl isInvalid={!!errors.types}>
-            <FormLabel>Genres</FormLabel>
+            <FormLabel>Kategória</FormLabel>
             {types ? (
               <GenreSelector
                 value={values.types}
                 types={types}
                 onChange={(genres) => {
-          
                   return setFieldValue("types", genres);
                 }}
               />
@@ -179,13 +191,13 @@ export const NewsEditor: FC<NewsEditorProps> = ({ onSubmit, id }) => {
             colorScheme="teal"
             variant="solid"
             type="reset"
-            onClick={(e) => handleReset(e)}
+            onClick={(e) =>dispatch(closeEditor())}
           >
             Reset
           </Button>
         </form>
-      </Box>
-    </>
+     
+  
   );
 };
 

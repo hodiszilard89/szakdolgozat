@@ -45,7 +45,7 @@ export const NewsList: FC = () => {
     search: searchText,
   });
 
-  const prioritis = allNews?.newsList.filter((news) => news.priority);
+ 
 
   useEffect(() => {
     setPageIndex(side);
@@ -55,15 +55,12 @@ export const NewsList: FC = () => {
     allNews && setNewsDataState(allNews.newsList.map(serializNews));
     allNews && dispatch(setNews(allNews.newsList.map(serializNews)));
 
-    //   prioritis && dispatch(setPriorityNews(prioritis.map(serializNews)));
   }, [allNews, dispatch, searchText, side]);
   return (
     <Grid justifyItems={"center"}>
       <Box>
         <Text fontSize={"xx-large"} fontWeight={"bold"} mb={"5"}>
-        {
-          (idFromState!==-1)?types[idFromState!-1].title:"ÖSSZES"
-        }
+          {idFromState !== -1 ? types[idFromState! - 1].title : "ÖSSZES"}
         </Text>
       </Box>
       <Box w={"80%"}>
@@ -77,13 +74,9 @@ export const NewsList: FC = () => {
             margin: 0,
           }}
         >
-          {newsDataState.map((news, id) => (
+          {allNews?.newsList.map((news, id) => (
             <GridItem as={ListItem} key={id}>
-              <NewsListItem
-                key={news.id}
-                stateId={id}
-               
-              />
+              <NewsListItem key={news.id} stateId={news.id!} news={news} />
             </GridItem>
           ))}
         </Grid>
@@ -92,7 +85,7 @@ export const NewsList: FC = () => {
             <Button
               isDisabled={side === 0}
               onClick={() => {
-                dispatch(setSide(side -1));
+                dispatch(setSide(side - 1));
               }}
               m={2}
               pe={5}

@@ -25,33 +25,28 @@ import { selectNews } from "../store/news/news-slice";
 import { User } from "../models/user";
 
 export interface NewsListItemProps {
-  //news: News;
+  news: News;
   stateId: number;
 }
 
 export const NewsListItem: FC<NewsListItemProps> = ({
-  //news: fromState,
+  news,
+  //id?
   stateId,
 }) => {
   const dispach = useDispatch();
-
-  const newsFromGlobal = newsFactory(useSelector(selectNews)[stateId]);
-  const [news, setNews] = useState<News>(newsFromGlobal);
   const userInState = useSelector(selectAuthUser).user;
 
   const onClick = useCallback(() => {
     dispach(setNewsEditSlice(serializNews(news)));
   }, [news, dispach]);
 
-
-
-  
-
   return (
     <Card padding={0}>
       
-       {(userInState?.roles?.filter(item=>item.title==="ADMIN").length===0)?
-       "":<NewsItemMenu stateId={stateId} placement="bottom-end" />}
+       {(userInState?.roles?.find(role=>(role.title==="ADMIN") ))?
+       <NewsItemMenu stateId={stateId} placement="bottom-end" news={news} />
+        :""} 
       <CardBody margin={0} paddingTop={0}>
         <Link to={`/news`} onClick={onClick}>
           <CardHeader padding={0}>
@@ -69,12 +64,12 @@ export const NewsListItem: FC<NewsListItemProps> = ({
           )}
 
           <Text>
-            {news?.subtitle ? news.subtitle.substring(0, 40) + "..." : ""}
+            {news?.subtitle ? news.subtitle.substring(0, 25) + "..." : ""}
           </Text>
         </Link>
 
         <Flex justifyItems="center" justify="space-between" margin={0}>
-          <LikeButton id={stateId}  onLineUser={userInState} />
+          <LikeButton id={stateId}  onLineUser={userInState} newsProp = {news}/>
           <Text>szerző: {news.writer?.chatName}</Text>
         </Flex>
       </CardBody>

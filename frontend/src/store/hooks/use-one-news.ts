@@ -5,16 +5,14 @@ import {newsFactory} from "../../utils/news_factory"
 
 import { newsApi, useGetOneNewsQuery } from "../news/news-api";
 
-export const useOneNews = (newsId: number) => {
+export const useOneNews = (newsId: number | undefined) => {
   const { isLoading, isFetching, error } = useGetOneNewsQuery(newsId, {
     skip: !newsId,
   });
   const select = newsApi.endpoints.getOneNews.select(newsId );
   const { data } = useSelector(select);
-
   const news = useMemo(
-    ()=>
-       data && newsFactory(data),
+    ()=> data,
     [data]);
 
 
@@ -22,6 +20,6 @@ export const useOneNews = (newsId: number) => {
   return {
     isLoading: isLoading || (!data && isFetching),
     error,
-    news
+    news,
   };
 };

@@ -51,9 +51,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 String jwt = authorizationHeader.split(" ")[1];
 
                 String email = jwtUtil.verifyAndDecodeToken(jwt);
-                System.out.println(email);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                System.out.println("jmlémnjl"+userDetails.getAuthorities());
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()
                 );

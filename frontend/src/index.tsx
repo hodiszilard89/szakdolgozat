@@ -9,6 +9,7 @@ import * as serviceWorker from "./serviceWorker";
 import  AuthProvider  from "react-auth-kit";
 import createStore from 'react-auth-kit/createStore';
 import { theme } from "./theme";
+import { Navbar } from "./componens/navbar";
 
 const container = document.getElementById("root");
 if (!container) throw new Error("Failed to find the root element");

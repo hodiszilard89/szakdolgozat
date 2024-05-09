@@ -119,20 +119,20 @@ public class UsersServiceImpl implements UsersService {
     public UsersDTO update(UserDTOForRegistration userDTOForRegistration) {
         UsersDTO usersDTO = userDTOForRegistration.getUsersDTO();
         String image=userDTOForRegistration.getImage();
-        System.out.println(image);
 
-//        try{
-//            System.out.println(objectMapper.writeValueAsString(userDTOForRegistration.getUsersDTO()));}
-//        catch ( Exception e){
-//            System.out.println(e.toString());
-//        }
-
-        //ha nincs képküldés
-        if (!userDTOForRegistration.getImage().isEmpty()){
-            //String  imagePath= userDTOForRegistration.getUsersDTO().getImagePath();
-            //Resource resource = resourceLoader.getResource("file:" + imagePath);
-            usersDTO.setImagePath(imageService.add(image));
-        }else{usersDTO.setImagePath(IMAGE_PATH);}
+        // képküldés
+        if (userDTOForRegistration.getImage().isEmpty()){
+            usersDTO.setImagePath(IMAGE_PATH);
+             }else {
+            String oldImagePath = usersDTO.getImagePath();
+            System.out.println(oldImagePath);
+            if (usersDTO.getImagePath().equals(IMAGE_PATH)) {
+                usersDTO.setImagePath(imageService.add(image));
+            } else {
+                imageService.delete(oldImagePath);
+                usersDTO.setImagePath(imageService.add(image));
+            }
+        }
 
         return update(usersDTO);
     }

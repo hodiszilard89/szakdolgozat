@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -12,23 +12,25 @@ import {
   useDisclosure,
   useMultiStyleConfig,
 } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { useNewsChancages } from "../store/hooks/use-news-chancages";
-import { setNews, showEditor, setId } from "../store/news/editor-slice";
+import { selectEditor, setNews, showEditor} from "../store/news/editor-slice";
 import { useNavigate } from "react-router-dom";
 import { selectNews } from "../store/news/news-slice";
+import { News } from "../models";
+import { serializNews } from "../utils/news_factory";
 
 export interface NewsItemMenuProps
   extends BoxProps,
     Pick<MenuProps, "placement" | "offset"> {
-
+  news:News;
   stateId:number;
 }
 
 export const NewsItemMenu: FC<NewsItemMenuProps> = ({
   placement,
+  news,
   offset = [0, -32],
   stateId,
   ...props
@@ -37,27 +39,22 @@ export const NewsItemMenu: FC<NewsItemMenuProps> = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const style = useMultiStyleConfig("NewsItemMenu", {});
   const { deleteNews } = useNewsChancages();
-
-  const news = useSelector(selectNews)[stateId]
-
-
   const dispatch = useDispatch();
 
   const onDelete = useCallback(async () => {
     if (window.confirm("Are you sure you want to delete this news?")) {
 
-      await deleteNews(news.id!);
+      await deleteNews(stateId);
     }
-  }, [deleteNews, news]);
+  }, [deleteNews]);
 
   
 
   const onEdit = useCallback(() => {
-    dispatch(setNews(news));
-    dispatch(setId(stateId))
+    dispatch(setNews(serializNews(news)))
     dispatch(showEditor(stateId));
-    navigate(`/edit/${stateId}`);
-  }, [dispatch, news]);
+    navigate(`/edit`);
+  }, [dispatch, stateId]);
 
   return (
     <Menu

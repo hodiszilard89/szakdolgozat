@@ -7,13 +7,10 @@ import { createRawNews } from "../../utils/create-raw-news";
 interface NewsEditorState{
     news:RawNews | null;
     newsId: RawNews["id"];
-    showEditor:boolean;
 }
-
 const initialState:NewsEditorState ={
     news: null,
-    newsId: 0,
-    showEditor:false,
+    newsId: undefined,
 }
 export const newsEditorSlice = createSlice({
     
@@ -21,34 +18,34 @@ export const newsEditorSlice = createSlice({
     initialState,
     reducers:{
         showEditor: (state: NewsEditorState,
-                     action: PayloadAction<number>
+                     action: PayloadAction<News["id"]>
                      ) => {
-                        state.newsId=action.payload;   
-                        if(!state.news){
+                        state.newsId=action.payload;    
+                        if(!action.payload){
                             state.news = createRawNews()
                         }
             },
         setNews: (
             state:NewsEditorState, 
             action: PayloadAction<RawNews|null>)=>{     
-                if (action.payload) state.news={...action.payload}  
-                    else state.news=action.payload
+                // if (action.payload) 
+                     state.news=action.payload
              },
-        setId:(
-            state:NewsEditorState,
-            action:PayloadAction<number>)=>{
-                state.newsId=action.payload
-            },
+        closeEditor : (
+            state: NewsEditorState
+                    )=>{
+                        state.news=null
+                        state.newsId=undefined
+                    }
         
     }
 });
 
 
-export const {setNews, showEditor, setId} = newsEditorSlice.actions;
+export const {setNews, showEditor, closeEditor} = newsEditorSlice.actions;
 export const newsEditorReducer = newsEditorSlice.reducer;
 export const newsEditorPath = newsEditorSlice.name;
 
-export const selectShowEditor = (state:RootState) => state.newsEditor.showEditor;
 export const selectNewsId = (state: RootState) => state.newsEditor.newsId;
 export const selectNews = (state: RootState) => state.newsEditor.news;
 export const selectEditor = (state: RootState) => state.newsEditor;  

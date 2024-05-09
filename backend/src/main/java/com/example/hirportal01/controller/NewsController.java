@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(originPatterns = "*")
 @RequestMapping("/news")
 public class NewsController {
 
@@ -69,14 +69,6 @@ public class NewsController {
         return  ResponseEntity.ok(newsService.getNewsByTypeId(id, limit, side, search));
 
     }
-//    @RequestMapping(path="/type" ,method = RequestMethod.GET)
-//    public ResponseEntity<List<NewsDTO>>findByType(@RequestBody Object object){
-//        System.out.println(object.toString());
-//        return ResponseEntity.ok(null);
-//        //return  ResponseEntity.ok(newsService.getNewsByTypeId(id));
-//
-//    }
-
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<NewsDTO>>findAll(){

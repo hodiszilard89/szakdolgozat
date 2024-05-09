@@ -17,20 +17,25 @@ import {
   selectAuthUser,
   selectOnlineUser,
 } from "../store/news/auth-user-slice";
+import { createRawNews } from "../utils/create-raw-news";
+import { createNews } from "../utils/create-news";
 export interface LikeButtonProps {
   id: number;
+  newsProp:News;
+  onLineUser:User|undefined;
 }
 
-export const LikeButton: FC<{ id: number; onLineUser: User | undefined }> = ({
+export const LikeButton: FC<LikeButtonProps> = ({
   id,
   onLineUser,
+  newsProp,
 }) => {
   // const userFromState=useSelector(selectOnlineUser);
   const [user, setUser] = useState<User | undefined>(onLineUser);
 
   //news elkétem a hírt  a központi stateből    -------------   updateNewsItemmel tudom frissíteni
-  const newsFromState = newsFactory(useSelector(selectNews)[id]);
-  const [news, setNews] = useState<News>(newsFromState);
+  //const newsFromState = newsFactory(useSelector(selectNews)[id]);
+  const [news, setNews] = useState<News>(newsProp);
   const [addLike] = useCreateLikeMutation();
   useEffect(()=>{setUser(onLineUser)},[onLineUser])
   

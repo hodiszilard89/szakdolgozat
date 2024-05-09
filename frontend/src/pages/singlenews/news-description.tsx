@@ -31,61 +31,30 @@ import { useOneNews } from "../../store/hooks/use-one-news";
 
 export interface NewsDescProps {
   id: number;
-  news?: News;
+  news: News;
   onSubmit: (comment: Comment) => Promise<void>;
 }
 export interface CommentText {
   text: string;
 }
 
-export const NewsDescription: FC<NewsDescProps> = ({ onSubmit }) => {
-  const navigate = useNavigate();
+export const NewsDescription: FC<NewsDescProps> = ({ onSubmit, news }) => {
+
   const dispatch = useDispatch();
   const style = useMultiStyleConfig("GenresLable", {});
 
   const user = useSelector(selectAuthUser).user;
 
-  const newsFromState = newsFactory(useSelector(selectNews));
-  // useEffect(() => {
-  //   if (!newsFromState.id) navigate("/");
-  // }, []);
+  //const newsFromState = newsFactory(useSelector(selectNews)!);
+  const newsFromState = news;
 
   const [comments, setComments] = useState<Comment[]>(
     newsFromState.comments ? newsFromState.comments : []
   );
   
-  //const [comments, setComments] = useState<Comment[]>(news?.comments?news.comments:[]);
-  // useEffect(() => {
-  //   setComments(newsFromState.comments?newsFromState.comments:[]);
-
-  // }, [setComments]);
-  // const { errors, values, setFieldValue, handleSubmit, resetForm } = useFormik({
-  //   initialValues: createComment(),
-
-  //   onSubmit: async (values: Comment) => {
-  //     resetForm();
-  //     values.releasedate = new Date();
-  //     values.news = serializNews(newsFromState);
-
-  //     values.writer = user!;
-  //     if (user !== undefined) {
-  //       try {
-  //         setComments([...comments, values]);
-
-  //         await onSubmit(values);
-  //       } catch (e) {
-  //         console.error(e);
-  //       }
-  //     } else {
-  //       window.confirm("Jelentkezz be!");
-  //     }
-  //   },
-  //   validationSchema: newsCommentValidationSchema,
-  //});
 
   return (
     <Box margin={"auto"} w={"80%"}>
-      <Navbar />
       <Box>
         <Box>
           <Image

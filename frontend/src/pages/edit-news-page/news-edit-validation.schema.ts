@@ -4,5 +4,5 @@ export const newsEditValidationSchema = Yup.object({
   title: Yup.string().required("Cím megadása kötelező"),
   subtitle: Yup.string().required("Leírás megadása kötelező"),
   text: Yup.string().required("Tartalom megadása kötelező"),
-  types: Yup.array().min(1, "Please Select min one"),
+  types: Yup.array().min(1, "Minimum egy kiválasztása kötelező"),
 });

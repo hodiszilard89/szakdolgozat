@@ -1,5 +1,5 @@
 import { MyTimeFormat } from "./my-time.-format";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 
 import { Comment as CommentDTO } from "../models";
 
@@ -30,7 +30,7 @@ export const MyComment: FC<CommentProps> =({
           <Box display={"flex"} alignItems={"center"} mb={3}>
             <Image
               borderRadius={"50%"}
-              src={comment.writer.imagePath ? "." + comment.writer.imagePath : ""}
+              src={comment.writer.imagePath ?  "http://localhost:8080/"+comment.writer.imagePath : ""}
               className="card-img-top"
               style={{ width: "50px", height: "50px" }}
               me={3}

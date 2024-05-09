@@ -3,7 +3,7 @@ import { Type } from "../models/type";
 
 export const createRawNews = (): RawNews => ({
 
-  title: "új raw hír",
+  title: "",
   releasedate: new Date().toISOString().split("T")[0],
   subtitle:"",
   priority:false,

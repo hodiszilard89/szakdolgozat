@@ -89,6 +89,8 @@ const RegModal: FC = () => {
     dispatch(showLogin());
   }, []);
 
+
+
   useEffect(() => {
     setShowModal(showReg);
 

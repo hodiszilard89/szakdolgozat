@@ -1,10 +1,10 @@
 import { date } from "yup";
 import { RawNews, News, Comment, RawComment } from "../models";
 
-export const newsFactory = (rawNewsData: RawNews|null) => {
-    const releaseDate = new Date();
-
-    if (rawNewsData?.releasedate) {
+export const newsFactory = (rawNewsData: RawNews) => {
+    const releaseDate = new Date(Date.now());
+    
+    if (rawNewsData.releasedate) {
       const [year, month, day] = rawNewsData.releasedate.split("-");
       releaseDate.setFullYear(Number(year));
       releaseDate.setMonth(Number(month) - 1);
@@ -16,23 +16,15 @@ export const newsFactory = (rawNewsData: RawNews|null) => {
     return {
       ...rawNewsData,
      releasedate: releaseDate,
-     
     } as News;
   };
 
-
-  // export const serializeNews = (news: News): RawNews => {
-   
-  //   return {
-  //     ...news,
-  //     releasedate: news.releasedate && news.releasedate.toISOString(),
-  //   }
-  // };
   export const serializNews = (news: News): RawNews => {
 
       return {
         ...news,
         releasedate: news.releasedate?new Date(news.releasedate).toISOString().split("T")[0]:new Date().toISOString().split("T")[0],
+       //releasedate: news.releasedate.toISOString().split("T")[0],
       }
     };
 

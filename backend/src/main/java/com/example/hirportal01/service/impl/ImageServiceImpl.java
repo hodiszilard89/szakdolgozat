@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -29,7 +30,6 @@ public class ImageServiceImpl implements ImageService {
 
             filePath = "./uploads/"+currentTime.format(formatter)+".jpeg";
             try (FileOutputStream fos = new FileOutputStream(filePath)) {
-                System.out.println(imageBytes.toString());
                 fos.write(imageBytes);
                 System.out.println("A kép sikeresen mentve: " + filePath);
             } catch (IOException e) {
@@ -42,10 +42,14 @@ public class ImageServiceImpl implements ImageService {
             e.printStackTrace();
 
         }
-        // return ResponseEntity.status(HttpStatus.CREATED).body(null);
         return filePath;
     }
 
+    public void delete(String path){
+
+       File image = new File(path);
+        System.out.println(image.delete());
+    }
     @Override
     public Resource get(String imageName) {
         Path imagePath = Paths.get("uploads", imageName);

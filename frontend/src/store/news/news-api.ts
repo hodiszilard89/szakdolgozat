@@ -132,10 +132,11 @@ export const newsApi = createApi({
           : [{ type: newsTag, id:"LIST" }];
       },
     }),
-    getOneNews: builder.query<RawNews, RawNews["id"]>({
+    getOneNews: builder.query<News, RawNews["id"]>({
       query: (newsId: RawNews["id"]) => ({
         url: `http://${SERVERHOST}:8080/news/${newsId}`,
       }),
+      providesTags: (news ) => ([{ type: newsTag, id:news?.id }]),
     }),
     getUsers: builder.query<User[], void>({
       query: () => ({
@@ -144,8 +145,9 @@ export const newsApi = createApi({
       providesTags: (result?: User[]) => {
         return result && Array.isArray(result)
           ? [
-              ...result.map(({ id }) => ({ type: userTag, id })),
-              { type: userTag, id: "LIST" },
+              ...result.map(({ id }) => ({ type: userTag, id }))
+              // ,
+              // { type: userTag, id: "LIST" },
             ]
           : [{ type: userTag, id: "LIST" }];
       },
@@ -184,9 +186,9 @@ export const newsApi = createApi({
           "Content-Type": "text/plain; charset=utf-8",
           Accept: "application/json; charset=utf-8",
         },
-        body: JSON.stringify(news),
+        body: JSON.stringify(news),  
       }),
-      invalidatesTags: [{ type: newsTag, id: "LIST" }],
+      invalidatesTags: (_result,_error, {id,})=> [{ type: newsTag, id:id }],
     }),
 
     checkUniqueEmail: builder.query<boolean, string>({
@@ -226,9 +228,9 @@ export const newsApi = createApi({
         invalidatesTags: [{ type: userTag, id: user.id }],
         // invalidatesTags: [{ type: userTag, id: user.id }],
       }),
-      invalidatesTags: [{ type: userTag, id: "LIST" }],
+      invalidatesTags:(_resut, error, {user})=>{return [{ type: userTag, id: user.id }]} ,
     }),
-    deleteNews: builder.mutation<void, number>({
+    deleteNews: builder.mutation<void, News["id"]>({
       query: (newsId: number) => ({
         url: `http://${SERVERHOST}:8080/news/delete/${newsId}`,
         method: "DELETE",
@@ -238,7 +240,7 @@ export const newsApi = createApi({
         if (!error) {
           tags.push({ type: newsTag, id });
         }
-        tags.push({ type: newsTag, id: "LIST" });
+        tags.push({ type: newsTag, id: id });
         return tags;
       },
     }),
@@ -283,7 +285,8 @@ export const newsApi = createApi({
 
         body: JSON.stringify(comment),
       }),
-      invalidatesTags: [{ type: newsTag, id: "LIST" }],
+     // invalidatesTags:(_resut, error, {user})=>{return [{ type: userTag, id: user.id }]} ,
+      invalidatesTags:(_result, error,{news})=> [{ type: newsTag, id:news.id }],
     }),
     addLike: builder.mutation<void, Like>({
 

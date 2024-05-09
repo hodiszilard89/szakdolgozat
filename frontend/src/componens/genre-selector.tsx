@@ -48,13 +48,15 @@ export const GenreSelector: FC<GenreSelectorProps> = ({
     },
     []
   );
+  useEffect(()=>{return()=>{console.log("unmont")}},[])
 
   useEffect(() => {
     Array.isArray(value) && setSelectedItems(value);
-  }, []);
+  }, [value]);
 
   return (
-    <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+    <Grid paddingTop={"3"} templateColumns="repeat(4, 3fr)" gap={4} paddingBottom={3}>
+
       <Box>
         <Menu
           placement="bottom-start"

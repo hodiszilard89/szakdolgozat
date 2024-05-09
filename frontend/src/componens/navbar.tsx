@@ -35,7 +35,7 @@ import { outUser } from "../store/news/auth-user-slice";
 import { FaNewspaper } from "react-icons/fa";
 import { Type } from "../models/type";
 import { useHeaderSearch } from "../store/hooks/use-header-search";
-import { setNews } from "../store/news/editor-slice";
+import { setNews, showEditor } from "../store/news/editor-slice";
 import { setEditUser } from "../store/news/users-slice";
 import { NewsIcon } from "./news-icon";
 import { Search } from "./search";
@@ -178,6 +178,7 @@ export const Navbar: FC = () => {
 
 const DesktopNavMenu = ({ arr }: { arr: MenuItem[] }) => {
   const linkHoverColor = useColorModeValue("gray.800", "white");
+  const dispach= useDispatch();
   const linkColor = useColorModeValue("gray.600", "gray.200");
   const popoverContentBgColor = useColorModeValue("white", "gray.800");
   const style = useMultiStyleConfig("DesktopNavMenuStyle",{})
@@ -248,7 +249,7 @@ const DesktopSubNav = ({ label, href, subLabel, id }: NavItem) => {
                 dispach(setNewsTypeId(id));
                 dispach(setSide(0));
               } else {
-                dispach(setNews(null));
+                dispach(showEditor());
                 navigate(`/${href}`);
               }
             }}
@@ -357,6 +358,7 @@ interface NavItem {
 
 interface NavMenuItem extends Type {
   path?: string;
+  onClick?:()=>void;
 }
 
 const ACTIONS: Array<NavMenuItem> = [
@@ -367,7 +369,8 @@ const ACTIONS: Array<NavMenuItem> = [
   },
   {
     id: -1,
-    title: "FELLHASZNÁLÓK",
+    title: "FELHASZNÁLÓK",
     path: "users",
+    onClick:()=>{console.log("hello")}
   },
 ];
