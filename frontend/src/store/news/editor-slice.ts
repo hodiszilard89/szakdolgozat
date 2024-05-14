@@ -28,21 +28,13 @@ export const newsEditorSlice = createSlice({
         setNews: (
             state:NewsEditorState, 
             action: PayloadAction<RawNews|null>)=>{     
-                // if (action.payload) 
                      state.news=action.payload
-             },
-        closeEditor : (
-            state: NewsEditorState
-                    )=>{
-                        state.news=null
-                        state.newsId=undefined
-                    }
-        
+             },        
     }
 });
 
 
-export const {setNews, showEditor, closeEditor} = newsEditorSlice.actions;
+export const {setNews, showEditor} = newsEditorSlice.actions;
 export const newsEditorReducer = newsEditorSlice.reducer;
 export const newsEditorPath = newsEditorSlice.name;
 

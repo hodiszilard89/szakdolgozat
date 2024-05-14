@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 
 
-import { closeEditor, selectNews, setNews } from "../../store/news/editor-slice";
+import {  selectNews, setNews, showEditor } from "../../store/news/editor-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { News } from "../../models/news";
 import { useNewsTypes } from "../../store/hooks/use-news-types";
@@ -23,15 +23,9 @@ import {  useFormik } from "formik";
 import { GenreSelector } from "../../componens/genre-selector";
 import { Image } from "@chakra-ui/react";
 import { newsEditValidationSchema } from "./news-edit-validation.schema";
-import { newsFactory, serializNews } from "../../utils/news_factory";
+
 import { selectAuthUser } from "../../store/news/auth-user-slice";
-import { Navbar } from "../../componens/navbar";
-import { createNews } from "../../utils/create-news";
-import { RawNews } from "../../models";
-import { updateNewsItem } from "../../store/news/news-slice";
-import { useGetOneNewsQuery } from "../../store/news/news-api";
-import { useOneNews } from "../../store/hooks/use-one-news";
-import { useLocation } from "react-router-dom";
+
 import { useNewsChancages } from "../../store/hooks/use-news-chancages";
 export interface NewsEditorProps {
   news: News;
@@ -191,7 +185,7 @@ export const NewsEditor: FC<NewsEditorProps> = ({ news }) => {
             colorScheme="teal"
             variant="solid"
             type="reset"
-            onClick={(e) =>dispatch(closeEditor())}
+            onClick={(e) =>dispatch(showEditor())}
           >
             Reset
           </Button>

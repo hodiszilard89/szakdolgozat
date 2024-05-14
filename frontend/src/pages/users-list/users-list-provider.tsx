@@ -12,11 +12,7 @@ export const UsersListProvider: FC = () => {
   return user?.roles?.find(
     (role) => role.title === "ADMIN" || role.title === "WRITER"
   ) ? (
-    <> 
- 
     <UsersList />
-    <Footer/>
-    </>
    
   ) : (
    <NoPermission/>

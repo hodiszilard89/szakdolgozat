@@ -2,23 +2,17 @@ import { FC, useDeferredValue, useEffect } from "react";
 import { Box, Flex, Grid } from "@chakra-ui/react";
 
 import { NewsList } from "./news-list/news-list";
-
-import { useDispatch, useSelector } from "react-redux";
-
-import { selectNews, setPriorityNews } from "../store/news/news-slice";
-import { newsFactory, serializNews } from "../utils/news_factory";
 import { Footer } from "../componens/footer";
 import { Navbar } from "../componens/navbar";
 
 import Carousel from "../componens/carousel/carousel";
-import { closeEditor } from "../store/news/editor-slice";
+
 import { CarouselProvider } from "../componens/carousel/carousel-provider";
+import { NewsListProvider } from "./news-list/newslist.provider";
 
 export const HomePage: FC = () => {
-  // const priority = useSelector(selectNews)
-  //   .filter((news) => news.priority)
-  //   .map(newsFactory);
 
+  console.log(process.env.REACT_APP_PROBA)
   return (
     <Box margin={"auto"} w={"80%"}>
       <Navbar />
@@ -35,7 +29,7 @@ export const HomePage: FC = () => {
                 <CarouselProvider/>
               {/* </Grid>
             </Box> */}
-            <NewsList />
+            <NewsListProvider />
             <Footer />
           </Box>
         </Flex>

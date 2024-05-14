@@ -42,10 +42,6 @@ export const NewsDescription: FC<NewsDescProps> = ({ onSubmit, news }) => {
 
   const dispatch = useDispatch();
   const style = useMultiStyleConfig("GenresLable", {});
-
-  const user = useSelector(selectAuthUser).user;
-
-  //const newsFromState = newsFactory(useSelector(selectNews)!);
   const newsFromState = news;
 
   const [comments, setComments] = useState<Comment[]>(
@@ -101,34 +97,6 @@ export const NewsDescription: FC<NewsDescProps> = ({ onSubmit, news }) => {
           setComments={setComments}
           comments={comments}
         />
-        {/* <form
-          onSubmit={(e) => {
-            handleSubmit(e);
-          }}
-        >
-          <FormControl isInvalid>
-            <FormLabel>
-              <Text fontSize={"2xl"} fontWeight={"bold"}>
-                Írj egy kommentet
-              </Text>
-            </FormLabel>
-            <Input
-              h={"100"}
-              as="textarea"
-              backgroundColor={"white"}
-              rows={3}
-              placeholder="Ide írd a kommentedet"
-              value={values.text}
-              onChange={(event) => {
-                setFieldValue("text", event.target.value);
-              }}
-            />
-            <FormErrorMessage>{errors.text}</FormErrorMessage>
-          </FormControl>
-          <Button colorScheme="teal" variant="solid" size={"lg"} type="submit">
-            Küldés
-          </Button>
-        </form> */}
       </Box>
     </Box>
   );
