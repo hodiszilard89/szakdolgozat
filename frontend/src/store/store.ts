@@ -7,8 +7,6 @@ import { authUserPath, authUserReducer } from "./news/auth-user-slice"
 import { regModalPath, regModalReducer } from "./news/reg-slice"
 import { newsSliceReducer, newsSlicePath } from "./news/news-slice"
 import {usesSlicePath, usesSliceReducer} from "./news/users-slice"
-//import { securityPath, securityReducer } from "./security/security-api"
-
  
  const appReducer = combineReducers({
     [newsPath] : newsReducer,

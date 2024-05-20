@@ -15,7 +15,6 @@ import { Type } from "../../models/type";
 import { Token } from "../../models/token";
 
 import {
-  BaseQueryApi,
   BaseQueryFn,
 } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
 
@@ -51,31 +50,25 @@ export interface GetTokenQueryParams {
 export interface GetNewsQueryParams {
   type?: Type[];
   offset?: number;
-  sortBy?: string;
-
   limit?: number;
   id?: number;
   search?: string;
-  searchBy?: "titel";
 }
-
 export interface GetRequestParamsForNewsQuery {
   typeId: Type["id"];
   limit: number;
   side: number;
   search:string|undefined;
 }
-
 export interface ResponseForNewsQuery{
   lastSide:boolean;
   newsList:News[];
 }
  
-export const storage = window.localStorage;
-const SERVERHOST = "localhost";
+const storage = window.localStorage;
+const SERVERHOST =process.env.REACT_APP_SERVERHOST;
 const newsTag: string = "NEWS";
 const userTag: string = "USER";
-const commentTag: string = "COMMENT";
 export const newsApi = createApi({
   reducerPath: "newsPath",
   baseQuery: fetchBaseQuery({
@@ -146,8 +139,6 @@ export const newsApi = createApi({
         return result && Array.isArray(result)
           ? [
               ...result.map(({ id }) => ({ type: userTag, id }))
-              // ,
-              // { type: userTag, id: "LIST" },
             ]
           : [{ type: userTag, id: "LIST" }];
       },
@@ -273,7 +264,6 @@ export const newsApi = createApi({
       }),
     }),
     addComment: builder.mutation<void, Comment>({
-      //első paraméter amit visszakapunk 2. amit küldünk
 
       query: (comment: Comment) => ({
         url: `http://${SERVERHOST}:8080/comment`,
@@ -285,7 +275,6 @@ export const newsApi = createApi({
 
         body: JSON.stringify(comment),
       }),
-     // invalidatesTags:(_resut, error, {user})=>{return [{ type: userTag, id: user.id }]} ,
       invalidatesTags:(_result, error,{news})=> [{ type: newsTag, id:news.id }],
     }),
     addLike: builder.mutation<void, Like>({

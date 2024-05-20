@@ -7,7 +7,6 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 export const Pager : FC <{lastSide:boolean|undefined}>= ({lastSide})=>{
     const side=useSelector(selectSide)
     const dispatch=useDispatch()
-    console.log("lastside",lastSide);
 
     return (
         <Box mt={10} textAlign={"center"}>

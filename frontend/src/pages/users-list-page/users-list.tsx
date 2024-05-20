@@ -44,7 +44,6 @@ export const UsersList: FC = () => {
   return (
   
     <Box width={"80%"} margin={"auto"}>
-      <Navbar />
       <TableContainer>
         <Table variant="simple" colorScheme="cian">
           <Thead>
@@ -102,10 +101,9 @@ export const UsersList: FC = () => {
         </Table>
       </TableContainer>
       <Button mt={"5"} size={"md"} as={Link} to="/">
-        {" "}
+      
         Főoldal
       </Button>
-      <Footer/>
     </Box>
   );
 };

@@ -17,7 +17,6 @@ export const useNewsList = (query: GetNewsQueryParams) => {
 
   if (searchQuery){
     queryParams.search = searchQuery;
-    queryParams.searchBy = "titel"
   }
 
   const {isLoading, isFetching, error} = useGetNewsQuery(query);

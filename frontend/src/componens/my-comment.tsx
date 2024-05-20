@@ -1,4 +1,4 @@
-import { MyTimeFormat } from "./my-time.-format";
+
 import { FC, useEffect, useState } from "react";
 
 import { Comment as CommentDTO } from "../models";
@@ -12,6 +12,7 @@ import {
 
 } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
+import { MyTimeFormat } from "../utils/my-time.-format";
 
 
 interface CommentProps {

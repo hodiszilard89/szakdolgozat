@@ -44,7 +44,8 @@ export const NewsListItem: FC<NewsListItemProps> = ({
        <NewsItemMenu stateId={stateId} placement="bottom-end" news={news} />
         :""} 
       <CardBody margin={0} paddingTop={0}>
-        <Link to={`/news`} onClick={onClick}>
+        <Link to={`/news/${news.id}`} 
+          onClick={onClick}>
           <CardHeader padding={0}>
             <Text fontSize={"2xl"} fontWeight={"bold"}>
               {news.title}

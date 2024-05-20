@@ -39,6 +39,7 @@ import { setNews, showEditor } from "../store/news/editor-slice";
 import { setEditUser } from "../store/news/users-slice";
 import { NewsIcon } from "./news-icon";
 import { Search } from "./search";
+import { IconProvider } from "./icon-provider";
 
 interface MenuItem {
   label: string;
@@ -61,6 +62,8 @@ export const Navbar: FC = () => {
     <Box
       style={{ position: "sticky", top: "0", zIndex: "10" }}
       pb={5}
+      margin={"auto"}
+      width={"80%"}
       boxShadow="0px 8px 4px rgba(0, 0, 0, 0.1)"
       padding="4"
       backgroundColor={"white"}
@@ -95,7 +98,7 @@ export const Navbar: FC = () => {
           flex={{ base: 1 }}
           justify={{ base: "center", md: "start" }}
         >
-          <NewsIcon />
+          <IconProvider />
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
             <DesktopNavMenu arr={type} />
             {user?.roles?.find(

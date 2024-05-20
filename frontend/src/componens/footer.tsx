@@ -18,7 +18,7 @@ import {
 export const Footer: FC = () => {
   return (
     <div>
-      <Box marginTop={10} padding={15} backgroundColor={"lightgray"}>
+      <Box marginTop={10} padding={15} backgroundColor={"lightgray"} margin={"auto"} width={"80%"}>
         <Grid
           templateColumns={{ base: "1fr", md: "1fr 1fr 1fr" }}
           justifyItems={"center"}

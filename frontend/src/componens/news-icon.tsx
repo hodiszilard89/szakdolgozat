@@ -1,34 +1,37 @@
 import {
   Box,
+  Button,
   Flex,
   Icon,
   useBreakpointValue,
   useColorModeValue,
+  Link
 } from "@chakra-ui/react";
-import { FC } from "react";
-import { Link } from "react-router-dom";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import {  NavLink, useNavigate } from "react-router-dom";
 import { setSearchText } from "../store/news/search-slice";
 import { setSide, setNewsTypeId } from "../store/news/news-slice";
 import { FaNewspaper } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-export const NewsIcon: FC = () => {
+export const NewsIcon: FC<{onClick:()=>void}> = ({onClick}) => {
   const dispach = useDispatch();
 
   return (
     <Box
+
       display={"flex"}
       textAlign={useBreakpointValue({ base: "center", md: "left" })}
       fontFamily={"heading"}
       color={useColorModeValue("gray.800", "white")}
     >
       <Link
-      to={"/"}
+        //to={"/"}
         onClick={() => {
-          dispach(setSide(0))
+          onClick();
+          dispach(setSide(0));
           dispach(setSearchText(undefined));
           dispach(setNewsTypeId(-1));
         }}
-        
       >
         <Flex
           display={"flex"}
@@ -40,6 +43,6 @@ export const NewsIcon: FC = () => {
           FAKE NEWS
         </Flex>
       </Link>
-    </Box>
+      </Box>
   );
 };

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useRef } from "react";
 import { createComment } from "../../utils/create-comment";
 import { Comment, News } from "../../models";
 import { useFormik } from "formik";
@@ -14,23 +14,27 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 
+///import { newsCommentValidationSchema } from "../single-news-page/comment-validation.schema";
+import { User } from "../../models/user";
 import { newsCommentValidationSchema } from "./comment-validation.schema";
 
 export interface NewsDescProps {
   comments: Comment[];
   setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
   news: News;
+  user:User|undefined;
   onSubmit: (comment: Comment) => Promise<void>;
 }
 
 export const CommentForm: FC<NewsDescProps> = ({
   onSubmit,
   news,
+  user,
   setComments,
   comments
 }) => {
-  const user = useSelector(selectAuthUser).user;
-
+  
+  //const inputRef = useRef<HTMLTextAreaElement>(null);
   const { errors, values, setFieldValue, handleSubmit, resetForm } = useFormik({
     initialValues: createComment(),
     onSubmit: async (values: Comment) => {
@@ -40,8 +44,9 @@ export const CommentForm: FC<NewsDescProps> = ({
       values.news = serializNews(news);
       if (user !== undefined) {
         try {
-          setComments([...comments, values]);
           values.writer = user;
+          setComments([...comments, values]);
+  
           await onSubmit(values);
         } catch (e) {
           console.error(e);
@@ -50,7 +55,6 @@ export const CommentForm: FC<NewsDescProps> = ({
         window.confirm("Jelentkezz be!");
       }
 
-      console.log(values);
     },
     validationSchema: newsCommentValidationSchema,
   });
@@ -68,11 +72,13 @@ export const CommentForm: FC<NewsDescProps> = ({
           </Text>
         </FormLabel>
         <Input
+       
           h={"100"}
           as="textarea"
           backgroundColor={"white"}
-          rows={3}
+          rows={15}
           placeholder="Ide írd a kommentedet"
+
           value={values.text}
           onChange={(event) => {
             setFieldValue("text", event.target.value);

@@ -10,7 +10,7 @@ import {
 
   selectOnlineUser,
 } from "../../store/news/auth-user-slice";
-import { NoPermission } from "../no-permission";
+import { Error } from "../Error";
 
 
 export const NewsEditorProvider: FC = () => {
@@ -22,12 +22,12 @@ export const NewsEditorProvider: FC = () => {
         (role.title === "ADMIN" || role.title === "WRITER")
       ) ? (
         <Box width={"80%"} margin={"auto"}>
-          <Navbar />
+        
           {news && <NewsEditor news={newsFactory(news)} />}
-          <Footer />
+        
         </Box>
       ) : 
-       <NoPermission/>
+       <Error msg="Nincs hozzáfárási jogod"/>
       }
     </>
   );

@@ -5,7 +5,7 @@ import { selectOnlineUser } from "../../store/news/auth-user-slice";
 import { Text } from "@chakra-ui/react";
 import { Navbar } from "../../componens/navbar";
 import { Footer } from "../../componens/footer";
-import { NoPermission } from "../no-permission";
+import { Error } from "../Error";
 
 export const UsersListProvider: FC = () => {
   const user = useSelector(selectOnlineUser);
@@ -15,6 +15,6 @@ export const UsersListProvider: FC = () => {
     <UsersList />
    
   ) : (
-   <NoPermission/>
+   <Error msg={"Nincs hozzáférési jogod"}/>
   );
 };

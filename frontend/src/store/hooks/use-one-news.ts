@@ -20,6 +20,6 @@ export const useOneNews = (newsId: number | undefined) => {
   return {
     isLoading: isLoading || (!data && isFetching),
     error,
-    news,
+    data,
   };
 };

@@ -6,23 +6,26 @@ import { store } from "./store/store";
 import { Provider } from "react-redux";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorker from "./serviceWorker";
-import  AuthProvider  from "react-auth-kit";
-import createStore from 'react-auth-kit/createStore';
+import AuthProvider from "react-auth-kit";
+import createStore from "react-auth-kit/createStore";
 import { theme } from "./theme";
-import { Navbar } from "./componens/navbar";
+
+import { BrowserRouter } from "react-router-dom";
 
 const container = document.getElementById("root");
 if (!container) throw new Error("Failed to find the root element");
 const root = ReactDOM.createRoot(container);
-const authStore = createStore({ authName:'_auth',
-                                authType:'localstorage'});
+const authStore = createStore({ authName: "_auth", authType: "localstorage" });
+
 root.render(
   <React.StrictMode>
     <ColorModeScript />
     <ChakraProvider theme={theme}>
       <AuthProvider store={authStore}>
         <Provider store={store}>
-          <App />
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
         </Provider>
       </AuthProvider>
     </ChakraProvider>

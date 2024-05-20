@@ -69,7 +69,6 @@ export const UserDesc: FC<UserDescProps> = ({ user, onSubmit }) => {
         boxShadow={"md"}
         borderRadius={"15"}
       >
-        <Navbar/>
         <Grid templateColumns="repeat(3, 1fr)" gap={4} mb={10}>
           <GridItem bg="">
             <Image
@@ -95,8 +94,10 @@ export const UserDesc: FC<UserDescProps> = ({ user, onSubmit }) => {
         </Grid>
       </Box>
       <Box
+        
         padding={"5"}
         margin={"auto"}
+        mb={"10"}
         maxWidth={"80%"}
         bg={"white"}
         boxShadow={"md"}
@@ -105,7 +106,7 @@ export const UserDesc: FC<UserDescProps> = ({ user, onSubmit }) => {
         as="form"
         onSubmit={handleSubmit}
       >
-        <>
+        
           <FormControl
             isDisabled={
               !viewer?.roles?.find((roles) => roles.title === "ADMIN") &&
@@ -255,7 +256,7 @@ export const UserDesc: FC<UserDescProps> = ({ user, onSubmit }) => {
               </GridItem>
             </Grid>
           </FormControl>
-        </>
+        
 
         <Button
           isDisabled={
@@ -283,7 +284,6 @@ export const UserDesc: FC<UserDescProps> = ({ user, onSubmit }) => {
           </Link>
         </>
       </Box>
-      <Footer />
     </>
   );
 };

@@ -2,13 +2,13 @@ import { Box, Button, Center, Flex, Text } from "@chakra-ui/react";
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const NoPermission: FC = () => {
+export const Error: FC<{msg:string}> = ({msg}) => {
   const navigate = useNavigate();
   return (
     <Center h="100vh">
       <Box>
         <Text fontSize={"2xl"} fontWeight={"bold"}>
-          Nincs hozzáférési jogod!
+          {msg}
         </Text>
         <Button border={"solid 1px"} onClick={() => navigate("/")}>Vissza a Főoldalra</Button>
       </Box>

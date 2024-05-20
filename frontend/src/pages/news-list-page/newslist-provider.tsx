@@ -8,6 +8,7 @@ import { NewsList } from "./news-list";
 import { Box, Text } from "@chakra-ui/react";
 import { Pager } from "./pager";
 import { useNewsTypes } from "../../store/hooks/use-news-types";
+import { Error } from "../Error";
 
 export const NewsListProvider: FC = () => {
   const itemsPerPage = 15;
@@ -22,7 +23,7 @@ export const NewsListProvider: FC = () => {
     side: side,
     search: searchText,
   });
-  const lastSide = allNews?.lastSide;
+
   useEffect(() => {
     dispatch(setSearchText(undefined));
   }, [typeId]);
@@ -33,15 +34,21 @@ export const NewsListProvider: FC = () => {
 
   return (
     <>
-     <Box textAlign={"center"} >
-        <Text fontSize={"xx-large"} fontWeight={"bold"} mb={"5"}>
-          {typeId !== -1 ? types[typeId! - 1].title : "ÖSSZES"}
-        </Text>
-      </Box>
-      <NewsList news={allNews?.newsList} />
-      <Box mt={10} textAlign={"center"} width={"80%"} margin={"auto"}>
-        <Pager lastSide={lastSide} />
-      </Box>
+      {allNews?.newsList ? (
+        <>
+          <Box textAlign={"center"}>
+            <Text fontSize={"xx-large"} fontWeight={"bold"} mb={"5"}>
+              {typeId !== -1 ? types[typeId! - 1].title : "ÖSSZES"}
+            </Text>
+          </Box>
+          <NewsList news={allNews?.newsList} />
+          <Box mt={10} textAlign={"center"} width={"80%"} margin={"auto"}>
+            <Pager lastSide={allNews?.lastSide} />
+          </Box>
+        </>
+      ) : (
+        <Error msg="Nincs kapcsolat a szerverrel" />
+      )}
     </>
   );
 };
