@@ -3,8 +3,8 @@ import {FC, useRef, useState} from 'react'
 
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { setSearchText } from '../store/news/search-slice';
-import { setSide } from '../store/news/news-slice';
+import { setSearchText } from '../store/slices/search-slice';
+import { setSide } from '../store/slices/news-slice';
 
 
 export const Search :FC=() =>{

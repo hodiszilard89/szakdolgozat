@@ -16,15 +16,15 @@ import {
   closeLogin,
   selectLogin,
   selectShowLogin,
-} from "../../store/news/login-slice";
-import { showReg } from "../../store/news/reg-slice";
+} from "../../store/slices/login-slice";
+import { showReg } from "../../store/slices/reg-slice";
 import { useFormik } from "formik";
 import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 import useSignIn from "react-auth-kit/hooks/useSignIn";
 import { useGetUser } from "../../store/hooks/use-get-user";
-import { setUser } from "../../store/news/auth-user-slice";
+import { setUser } from "../../store/slices/auth-user-slice";
 import { useGetToken } from "../../store/hooks/use-get-token";
-import { GetTokenQueryParams } from "../../store/news/news-api";
+import { GetTokenQueryParams } from "../../store/news-api";
 import { User } from "../../models/user";
 export interface Token {
   role: string;

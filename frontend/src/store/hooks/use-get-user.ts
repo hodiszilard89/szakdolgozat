@@ -1,6 +1,6 @@
 import {useMemo,FC} from 'react'
 import { useSelector } from "react-redux";
-import { newsApi, useGetUserQuery } from "../news/news-api"
+import { newsApi, useGetUserQuery } from "../news-api"
 import { User } from '../../models/user';
 
 

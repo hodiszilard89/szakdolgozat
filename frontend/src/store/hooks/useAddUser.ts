@@ -1,4 +1,4 @@
-import { useCreateUserMutation } from "../news/news-api"
+import { useCreateUserMutation } from "../news-api"
 
 export const useAddUser =()=>{
     const [addUser] = useCreateUserMutation();

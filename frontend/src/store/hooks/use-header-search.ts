@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useCallback, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSearchText, setSearchText } from "../news/search-slice";
+import { selectSearchText, setSearchText } from "../slices/search-slice";
 
 export const useHeaderSearch = () => {
   const stateSearch = useSelector(selectSearchText);

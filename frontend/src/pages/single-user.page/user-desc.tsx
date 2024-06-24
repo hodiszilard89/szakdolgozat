@@ -22,9 +22,9 @@ import { User } from "../../models/user";
 
 import { useUserChancages } from "../../store/hooks/use-user-chancages";
 import { useSelector } from "react-redux";
-import { selectAuthUser } from "../../store/news/auth-user-slice";
+import { selectAuthUser } from "../../store/slices/auth-user-slice";
 
-import { useUploadImageMutation } from "../../store/news/news-api";
+import { useUploadImageMutation } from "../../store/news-api";
 import { Navbar } from "../../componens/navbar";
 
 export interface UserDescProps {

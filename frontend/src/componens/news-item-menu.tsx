@@ -15,9 +15,9 @@ import {
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { useNewsChancages } from "../store/hooks/use-news-chancages";
-import { selectEditor, setNews, showEditor} from "../store/news/editor-slice";
+import { selectEditor, setNews, showEditor} from "../store/slices/editor-slice";
 import { useNavigate } from "react-router-dom";
-import { selectNews } from "../store/news/news-slice";
+import { selectNews } from "../store/slices/news-slice";
 import { News } from "../models";
 import { serializNews } from "../utils/news_factory";
 

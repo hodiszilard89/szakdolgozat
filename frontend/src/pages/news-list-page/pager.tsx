@@ -1,7 +1,7 @@
 
 import {FC} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectSide, setSide } from '../../store/news/news-slice';
+import { selectSide, setSide } from '../../store/slices/news-slice';
 import { Box, Flex, Button } from '@chakra-ui/react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 export const Pager : FC <{lastSide:boolean|undefined}>= ({lastSide})=>{

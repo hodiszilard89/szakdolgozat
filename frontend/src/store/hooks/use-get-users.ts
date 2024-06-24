@@ -1,4 +1,4 @@
-import { useGetUsersQuery } from "../news/news-api"
+import { useGetUsersQuery } from "../news-api"
 
 export const useGetUsers = ()=>{
 

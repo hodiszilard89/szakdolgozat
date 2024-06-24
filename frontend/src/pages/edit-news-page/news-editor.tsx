@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 
 
-import {  selectNews, setNews, showEditor } from "../../store/news/editor-slice";
+import {  selectNews, setNews, showEditor } from "../../store/slices/editor-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { News } from "../../models/news";
 import { useNewsTypes } from "../../store/hooks/use-news-types";
@@ -24,7 +24,7 @@ import { GenreSelector } from "../../componens/genre-selector";
 import { Image } from "@chakra-ui/react";
 import { newsEditValidationSchema } from "./news-edit-validation.schema";
 
-import { selectAuthUser } from "../../store/news/auth-user-slice";
+import { selectAuthUser } from "../../store/slices/auth-user-slice";
 
 import { useNewsChancages } from "../../store/hooks/use-news-chancages";
 export interface NewsEditorProps {

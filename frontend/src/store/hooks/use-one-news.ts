@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import {newsFactory} from "../../utils/news_factory"
 
 
-import { newsApi, useGetOneNewsQuery } from "../news/news-api";
+import { newsApi, useGetOneNewsQuery } from "../news-api";
 
 export const useOneNews = (newsId: number | undefined) => {
   const { isLoading, isFetching, error } = useGetOneNewsQuery(newsId, {

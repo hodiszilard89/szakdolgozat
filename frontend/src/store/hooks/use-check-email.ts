@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import {newsApi, useCheckUniqueEmail} from '../news/news-api'
+import {newsApi, useCheckUniqueEmail} from '../news-api'
 export const useCheckEmail=(email:string)=>{
     const {isLoading,isFetching} = useCheckUniqueEmail(email)
     const select = newsApi.endpoints.checkUniqueEmail.select(email)

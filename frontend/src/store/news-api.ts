@@ -6,13 +6,13 @@ import {
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
 
-import { Like } from "../../models/like";
-import { User } from "../../models/user";
-import { Comment } from "../../models/comment";
-import { RawNews, News } from "../../models";
+import { Like } from "../models/like";
+import { User } from "../models/user";
+import { Comment } from "../models/comment";
+import { RawNews, News } from "../models";
 
-import { Type } from "../../models/type";
-import { Token } from "../../models/token";
+import { Type } from "../models/type";
+import { Token } from "../models/token";
 
 import {
   BaseQueryFn,
@@ -85,6 +85,17 @@ export const newsApi = createApi({
   tagTypes: [newsTag, userTag],
 
   endpoints: (builder) => ({
+    getNewsList: builder.query<RawNews[] | undefined, GetNewsQueryParams>({
+      query: (filter: GetNewsQueryParams) => ({ url: `http://${SERVERHOST}:8080/news`, method: "GET" }),
+      providesTags: (result?: RawNews[]) => {
+        return result && Array.isArray(result)
+          ? [
+              ...result.map(({id }) => ({ type: newsTag, id }))
+            ]
+          : [{ type: newsTag, id: "LIST" }];
+      },
+    }),
+
     getToken: builder.query<Token, GetTokenQueryParams>({
       query: (params: GetTokenQueryParams) => ({
         url: `http://${SERVERHOST}:8080/authentication`,
@@ -99,17 +110,6 @@ export const newsApi = createApi({
         },
       }),
     
-    }),
-    getNewsList: builder.query<RawNews[] | undefined, GetNewsQueryParams>({
-      query: (filter: GetNewsQueryParams) => ({ url: `http://${SERVERHOST}:8080/news`, method: "GET" }),
-      providesTags: (result?: RawNews[]) => {
-        return result && Array.isArray(result)
-          ? [
-              ...result.map(({ id }) => ({ type: newsTag, id })),
-              { type: newsTag, id: "LIST" },
-            ]
-          : [{ type: newsTag, id: "LIST" }];
-      },
     }),
 
     getNewsByType: builder.query<ResponseForNewsQuery, GetRequestParamsForNewsQuery>({
@@ -134,6 +134,7 @@ export const newsApi = createApi({
     getUsers: builder.query<User[], void>({
       query: () => ({
         url: `http://${SERVERHOST}:8080/users`,
+        method: "GET",
       }),
       providesTags: (result?: User[]) => {
         return result && Array.isArray(result)
@@ -173,10 +174,6 @@ export const newsApi = createApi({
       query: (news: RawNews) => ({
         url: `http://${SERVERHOST}:8080/news`,
         method: "PUT",
-        headers: {
-          "Content-Type": "text/plain; charset=utf-8",
-          Accept: "application/json; charset=utf-8",
-        },
         body: JSON.stringify(news),  
       }),
       invalidatesTags: (_result,_error, {id,})=> [{ type: newsTag, id:id }],
@@ -211,15 +208,10 @@ export const newsApi = createApi({
       query: ({ user, image }) => ({
         url: `http://${SERVERHOST}:8080/users`,
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          Accept: "application/json; charset=utf-8",
-        },
-        body: JSON.parse(JSON.stringify({ usersDTO: user, image: image })),
-        invalidatesTags: [{ type: userTag, id: user.id }],
-        // invalidatesTags: [{ type: userTag, id: user.id }],
+         body: { usersDTO: user, image: image },
       }),
-      invalidatesTags:(_resut, error, {user})=>{return [{ type: userTag, id: user.id }]} ,
+      invalidatesTags:(_resut, error, {user})=>{
+        return [{ type: userTag, id: user.id }]} ,
     }),
     deleteNews: builder.mutation<void, News["id"]>({
       query: (newsId: number) => ({

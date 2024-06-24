@@ -18,8 +18,8 @@ import {
 } from "@chakra-ui/react";
 import { RegValidationSchema } from "./reg-validation.schema";
 import { CheckCircleIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { showLogin } from "../../store/news/login-slice";
-import { closeReg, selectShowReg } from "../../store/news/reg-slice";
+import { showLogin } from "../../store/slices/login-slice";
+import { closeReg, selectShowReg } from "../../store/slices/reg-slice";
 import { useFormik } from "formik";
 import { useAddUser } from "../../store/hooks/useAddUser";
 import { createUser } from "../../utils/create-user";

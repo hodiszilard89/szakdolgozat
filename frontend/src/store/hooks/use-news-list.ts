@@ -1,7 +1,7 @@
-import { GetNewsQueryParams, useGetNewsQuery, newsApi } from "../news/news-api";
+import { GetNewsQueryParams, useGetNewsQuery, newsApi } from "../news-api";
 import {useSelector} from 'react-redux'
 import { News } from "../../models/news"
-import { selectSearchText } from "../news/search-slice";
+import { selectSearchText } from "../slices/search-slice";
 import { newsFactory } from "../../utils/news_factory";
 import { RawNews } from "../../models";
 

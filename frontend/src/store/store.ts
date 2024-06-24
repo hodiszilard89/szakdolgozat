@@ -1,12 +1,12 @@
  import {combineReducers, configureStore} from "@reduxjs/toolkit"
-import { newsPath, newsReducer, newsMiddleware } from "./news/news-api"
-import { searchPath, searchReducer } from "./news/search-slice"
-import {newsEditorPath, newsEditorReducer} from "./news/editor-slice"
-import { loginModalPath, loginModalReducer } from "./news/login-slice"
-import { authUserPath, authUserReducer } from "./news/auth-user-slice"
-import { regModalPath, regModalReducer } from "./news/reg-slice"
-import { newsSliceReducer, newsSlicePath } from "./news/news-slice"
-import {usesSlicePath, usesSliceReducer} from "./news/users-slice"
+import { newsPath, newsReducer, newsMiddleware } from "./news-api"
+import { searchPath, searchReducer } from "./slices/search-slice"
+import {newsEditorPath, newsEditorReducer} from "./slices/editor-slice"
+import { loginModalPath, loginModalReducer } from "./slices/login-slice"
+import { authUserPath, authUserReducer } from "./slices/auth-user-slice"
+import { regModalPath, regModalReducer } from "./slices/reg-slice"
+import { newsSliceReducer, newsSlicePath } from "./slices/news-slice"
+import {usesSlicePath, usesSliceReducer} from "./slices/users-slice"
  
  const appReducer = combineReducers({
     [newsPath] : newsReducer,
@@ -16,7 +16,7 @@ import {usesSlicePath, usesSliceReducer} from "./news/users-slice"
     [regModalPath]:regModalReducer,
     [newsSlicePath]:newsSliceReducer, 
     [usesSlicePath] : usesSliceReducer,
-    authUser:authUserReducer,
+    [authUserPath]:authUserReducer,
  }) 
 
 

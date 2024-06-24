@@ -11,12 +11,12 @@ import {
 import { BiLeftArrowAlt, BiRightArrowAlt } from "react-icons/bi";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { setNews } from "../../store/news/editor-slice";
+import { setNews } from "../../store/slices/editor-slice";
 import { News } from "../../models/news";
 import { useDispatch, useSelector } from "react-redux";
 import { newsFactory, serializNews } from "../../utils/news_factory";
 import { useNavigate } from "react-router-dom";
-import { selectNews } from "../../store/news/news-slice";
+import { selectNews } from "../../store/slices/news-slice";
 
 // interface ImageSliderProps {
 //   news: News[];

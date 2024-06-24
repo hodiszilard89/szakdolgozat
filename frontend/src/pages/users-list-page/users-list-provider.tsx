@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { UsersList } from "./users-list";
 import { useSelector } from "react-redux";
-import { selectOnlineUser } from "../../store/news/auth-user-slice";
+import { selectOnlineUser } from "../../store/slices/auth-user-slice";
 import { Text } from "@chakra-ui/react";
 import { Navbar } from "../../componens/navbar";
 import { Footer } from "../../componens/footer";

@@ -3,7 +3,7 @@ import {FC} from 'react'
 import { useSelector } from 'react-redux'
 
 import {UserDesc} from './user-desc'
-import {selectUser} from '../../store/news/users-slice'
+import {selectUser} from '../../store/slices/users-slice'
 
 
 

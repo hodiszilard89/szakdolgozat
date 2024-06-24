@@ -1,4 +1,4 @@
-import { GetRequestParamsForNewsQuery, newsApi, useGetNewsByTypeQuery } from "../news/news-api"
+import { GetRequestParamsForNewsQuery, newsApi, useGetNewsByTypeQuery } from "../news-api"
 import { useSelector } from "react-redux";
 export const useGetNewsByType =  (params:GetRequestParamsForNewsQuery)=>{
 

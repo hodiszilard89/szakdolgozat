@@ -4,7 +4,7 @@ import { useMultiStyleConfig } from "@chakra-ui/react";
 import { Comment } from "../../models/comment";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { setNewsTypeId } from "../../store/news/news-slice";
+import { setNewsTypeId } from "../../store/slices/news-slice";
 
 import { News } from "../../models/news";
 export interface NewsDescProps {

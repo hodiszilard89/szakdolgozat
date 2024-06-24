@@ -10,13 +10,13 @@ import { newsFactory, serializNews } from "../utils/news_factory";
 import {
   useCreateLikeMutation,
   useGetOneNewsQuery,
-} from "../store/news/news-api";
-import { selectNews, updateNewsItem } from "../store/news/news-slice";
+} from "../store/news-api";
+import { selectNews, updateNewsItem } from "../store/slices/news-slice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectAuthUser,
   selectOnlineUser,
-} from "../store/news/auth-user-slice";
+} from "../store/slices/auth-user-slice";
 import { createRawNews } from "../utils/create-raw-news";
 import { createNews } from "../utils/create-news";
 export interface LikeButtonProps {

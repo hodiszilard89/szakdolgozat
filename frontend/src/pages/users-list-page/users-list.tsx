@@ -20,14 +20,14 @@ import {
   Image,
 } from "@chakra-ui/react";
 
-import { setEditUser } from "../../store/news/users-slice";
+import { setEditUser } from "../../store/slices/users-slice";
 import { useGetUsers } from "../../store/hooks/use-get-users";
 import { useUserChancages } from "../../store/hooks/use-user-chancages";
 
 import { useDispatch, useSelector } from "react-redux";
 import { User } from "../../models/user";
 import { Navbar } from "../../componens/navbar";
-import { authUserSlice, selectOnlineUser } from "../../store/news/auth-user-slice";
+import { authUserSlice, selectOnlineUser } from "../../store/slices/auth-user-slice";
 import { Footer } from "../../componens/footer";
 
 export const UsersList: FC = () => {

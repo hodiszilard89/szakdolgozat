@@ -3,10 +3,10 @@ import { FC } from "react";
 import { UserMenu } from "./user-menu";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { showLogin } from "../store/news/login-slice";
+import { showLogin } from "../store/slices/login-slice";
 import { useNewsTypes } from "../store/hooks/use-news-types";
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
-import { setNewsTypeId, setSide } from "../store/news/news-slice";
+import { setNewsTypeId, setSide } from "../store/slices/news-slice";
 
 
 import {
@@ -29,14 +29,14 @@ import {
 } from "@chakra-ui/react";
 
 import { HamburgerIcon, CloseIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import { selectOnlineUser } from "../store/news/auth-user-slice";
-import { showReg } from "../store/news/reg-slice";
-import { outUser } from "../store/news/auth-user-slice";
+import { selectOnlineUser } from "../store/slices/auth-user-slice";
+import { showReg } from "../store/slices/reg-slice";
+import { outUser } from "../store/slices/auth-user-slice";
 import { FaNewspaper } from "react-icons/fa";
 import { Type } from "../models/type";
 import { useHeaderSearch } from "../store/hooks/use-header-search";
-import { setNews, showEditor } from "../store/news/editor-slice";
-import { setEditUser } from "../store/news/users-slice";
+import { setNews, showEditor } from "../store/slices/editor-slice";
+import { setEditUser } from "../store/slices/users-slice";
 import { NewsIcon } from "./news-icon";
 import { Search } from "./search";
 import { IconProvider } from "./icon-provider";

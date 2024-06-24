@@ -6,14 +6,14 @@ import { Footer } from "../../componens/footer";
 import {
   useCreateCommentMutation,
   useGetOneNewsQuery,
-} from "../../store/news/news-api";
+} from "../../store/news-api";
 import { Box, Text } from "@chakra-ui/react";
 import { useOneNews } from "../../store/hooks/use-one-news";
 import { Error } from "../Error";
 import { CommentForm } from "./comment-form";
 import { MyComment } from "../../componens/my-comment";
 import { useSelector } from "react-redux";
-import { selectAuthUser } from "../../store/news/auth-user-slice";
+import { selectAuthUser } from "../../store/slices/auth-user-slice";
 
 
 export const NewsDescProvider: FC = () => {

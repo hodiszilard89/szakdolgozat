@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { GetTokenQueryParams, useGetTokenQuery, newsApi } from "../news/news-api";
+import { GetTokenQueryParams, useGetTokenQuery, newsApi } from "../news-api";
 import { isConstructorDeclaration } from "typescript";
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useEffect, useMemo } from "react";

@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { useSelector } from "react-redux";
-import { selectEditor } from "../../store/news/editor-slice";
+import { selectEditor } from "../../store/slices/editor-slice";
 import NewsEditor from "./news-editor";
 import { newsFactory } from "../../utils/news_factory";
 import { Box,  Text } from "@chakra-ui/react";
@@ -9,7 +9,7 @@ import { Footer } from "../../componens/footer";
 import {
 
   selectOnlineUser,
-} from "../../store/news/auth-user-slice";
+} from "../../store/slices/auth-user-slice";
 import { Error } from "../Error";
 
 

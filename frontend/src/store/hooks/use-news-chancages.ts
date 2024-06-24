@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 
-import {useCreateCommentMutation, useCreateNewsMutaion, useDeleteNewsMutaion, useUpdateNewsMutaion} from "../news/news-api";
+import {useCreateCommentMutation, useCreateNewsMutaion, useDeleteNewsMutaion, useUpdateNewsMutaion} from "../news-api";
 import {News} from "../../models/news"
 import {serializNews } from "../../utils/news_factory";
 

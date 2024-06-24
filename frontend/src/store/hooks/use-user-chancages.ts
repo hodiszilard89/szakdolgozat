@@ -1,4 +1,4 @@
-import { useDeleteUserMutation, useUpdateUserMutaion } from "../news/news-api"
+import { useDeleteUserMutation, useUpdateUserMutaion } from "../news-api"
 
 export const useUserChancages=()=>{
     const [deleteUser] = useDeleteUserMutation();

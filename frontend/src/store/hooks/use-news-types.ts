@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { newsApi, useGetTypesQuery } from "../news/news-api";
+import { newsApi, useGetTypesQuery } from "../news-api";
 import { Type } from "../../models/type";
 
 export const useNewsTypes = () => {

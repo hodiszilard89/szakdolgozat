@@ -1,8 +1,8 @@
 import { FC, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSide, selectTypeId, setNews } from "../../store/news/news-slice";
+import { selectSide, selectTypeId, setNews } from "../../store/slices/news-slice";
 import { useGetNewsByType } from "../../store/hooks/use-get-news-by-type";
-import { selectSearchText, setSearchText } from "../../store/news/search-slice";
+import { selectSearchText, setSearchText } from "../../store/slices/search-slice";
 import { serializNews } from "../../utils/news_factory";
 import { NewsList } from "./news-list";
 import { Box, Text } from "@chakra-ui/react";

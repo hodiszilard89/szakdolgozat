@@ -3,7 +3,7 @@ import { createComment } from "../../utils/create-comment";
 import { Comment, News } from "../../models";
 import { useFormik } from "formik";
 import { serializNews } from "../../utils/news_factory";
-import { selectAuthUser } from "../../store/news/auth-user-slice";
+import { selectAuthUser } from "../../store/slices/auth-user-slice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Text,

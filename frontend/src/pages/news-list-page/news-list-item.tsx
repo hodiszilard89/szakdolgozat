@@ -13,10 +13,10 @@ import { Link } from "react-router-dom";
 
 import { News } from "../../models/news";
 import { useDispatch, useSelector } from "react-redux";
-import { setNews as setNewsEditSlice } from "../../store/news/editor-slice";
+import { setNews as setNewsEditSlice } from "../../store/slices/editor-slice";
 import {  serializNews } from "../../utils/news_factory";
 import { NewsItemMenu } from "../../componens/news-item-menu";
-import { selectAuthUser } from "../../store/news/auth-user-slice";
+import { selectAuthUser } from "../../store/slices/auth-user-slice";
 
 import { LikeButton } from "../../componens/like-button";
 

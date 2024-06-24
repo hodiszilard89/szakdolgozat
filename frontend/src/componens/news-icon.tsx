@@ -9,8 +9,8 @@ import {
 } from "@chakra-ui/react";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import {  NavLink, useNavigate } from "react-router-dom";
-import { setSearchText } from "../store/news/search-slice";
-import { setSide, setNewsTypeId } from "../store/news/news-slice";
+import { setSearchText } from "../store/slices/search-slice";
+import { setSide, setNewsTypeId } from "../store/slices/news-slice";
 import { FaNewspaper } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 export const NewsIcon: FC<{onClick:()=>void}> = ({onClick}) => {
