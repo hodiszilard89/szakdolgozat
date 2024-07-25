@@ -9,16 +9,16 @@ public class RolesDTO {
     private Long id;
     private String title;
 
-    private List<Users> users;
-
-
-    public List<Users> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<Users> users) {
-        this.users = users;
-    }
+//    private List<Users> users;
+//
+//
+//    public List<Users> getUsers() {
+//        return users;
+//    }
+//
+//    public void setUsers(List<Users> users) {
+//        this.users = users;
+//    }
 
 
 

@@ -13,10 +13,10 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { setNews } from "../../store/slices/editor-slice";
 import { News } from "../../models/news";
-import { useDispatch, useSelector } from "react-redux";
-import { newsFactory, serializNews } from "../../utils/news_factory";
+import { useDispatch } from "react-redux";
+import {  serializeNews } from "../../utils/news_factory";
 import { useNavigate } from "react-router-dom";
-import { selectNews } from "../../store/slices/news-slice";
+
 
 // interface ImageSliderProps {
 //   news: News[];
@@ -38,7 +38,7 @@ const Carousel: React.FC<{news:News[]}> = ({news}) => {
 
   };
   const handleImageClick = (news: News) => {
-    dispatch(setNews(serializNews(news)));
+    dispatch(setNews(serializeNews(news)));
     navigate("/news");
   };
 

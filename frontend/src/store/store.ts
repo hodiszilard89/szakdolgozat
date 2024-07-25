@@ -18,9 +18,6 @@ import {usesSlicePath, usesSliceReducer} from "./slices/users-slice"
     [usesSlicePath] : usesSliceReducer,
     [authUserPath]:authUserReducer,
  }) 
-
-
-
  export const store=configureStore({
     reducer:appReducer,
     middleware: (getDefaultMiddleware) =>

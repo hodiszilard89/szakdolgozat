@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectSide, selectTypeId, setNews } from "../../store/slices/news-slice";
 import { useGetNewsByType } from "../../store/hooks/use-get-news-by-type";
 import { selectSearchText, setSearchText } from "../../store/slices/search-slice";
-import { serializNews } from "../../utils/news_factory";
+import { serializeNews } from "../../utils/news_factory";
 import { NewsList } from "./news-list";
 import { Box, Text } from "@chakra-ui/react";
 import { Pager } from "./pager";
@@ -17,7 +17,7 @@ export const NewsListProvider: FC = () => {
   const typeId = useSelector(selectTypeId);
   const searchText = useSelector(selectSearchText);
   const { types } = useNewsTypes();
-  const { news: allNews } = useGetNewsByType({
+  const { news,lastSide } = useGetNewsByType({
     limit: itemsPerPage,
     typeId: typeId!,
     side: side,
@@ -29,21 +29,21 @@ export const NewsListProvider: FC = () => {
   }, [typeId]);
 
   useEffect(() => {
-    allNews && dispatch(setNews(allNews.newsList.map(serializNews)));
-  }, [allNews, dispatch, searchText, side]);
+    news && dispatch(setNews(news.map(serializeNews)));
+  }, [news, dispatch, searchText, side]);
 
   return (
     <>
-      {allNews?.newsList ? (
+      {news ? (
         <>
           <Box textAlign={"center"}>
             <Text fontSize={"xx-large"} fontWeight={"bold"} mb={"5"}>
               {typeId !== -1 ? types[typeId! - 1].title : "ÖSSZES"}
             </Text>
           </Box>
-          <NewsList news={allNews?.newsList} />
+          <NewsList news={news} />
           <Box mt={10} textAlign={"center"} width={"80%"} margin={"auto"}>
-            <Pager lastSide={allNews?.lastSide} />
+            <Pager lastSide={lastSide} />
           </Box>
         </>
       ) : (

@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 @EnableTransactionManagement
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
-
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
 
@@ -28,39 +27,26 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
     }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
         try {
             doAuthorization(request);
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-
-            throw new EntityNotFoundException("Authorization error");
+            throw new EntityNotFoundException("Authorization error hiba a JWT ből");
         }
-
-
     }
 
     private void doAuthorization(HttpServletRequest request) {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-
-
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-
                 String jwt = authorizationHeader.split(" ")[1];
-
                 String email = jwtUtil.verifyAndDecodeToken(jwt);
-
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-                System.out.println("jmlémnjl"+userDetails.getAuthorities());
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()
                 );
-
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-
     }
-
 }

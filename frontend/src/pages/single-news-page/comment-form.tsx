@@ -2,7 +2,7 @@ import { FC, useRef } from "react";
 import { createComment } from "../../utils/create-comment";
 import { Comment, News } from "../../models";
 import { useFormik } from "formik";
-import { serializNews } from "../../utils/news_factory";
+import { serializeNews } from "../../utils/news_factory";
 import { selectAuthUser } from "../../store/slices/auth-user-slice";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -41,7 +41,7 @@ export const CommentForm: FC<NewsDescProps> = ({
       resetForm();
 
       values.releasedate = new Date();
-      values.news = serializNews(news);
+      values.news = serializeNews(news);
       if (user !== undefined) {
         try {
           values.writer = user;

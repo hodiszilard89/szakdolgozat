@@ -112,7 +112,7 @@ public class NewsController {
         newsDTO.setReleasedate(dt);
         newsService.save(newsDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(newsDTO
+        return ResponseEntity.status(HttpStatus.CREATED).body(null
                 );
     }
 

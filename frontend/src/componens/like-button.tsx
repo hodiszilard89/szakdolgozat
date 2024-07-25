@@ -1,28 +1,17 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Box, Link } from "@chakra-ui/react";
 import { FaThumbsUp } from "react-icons/fa";
-//import { Link } from "react-router-dom";
+
 import { News } from "../models/news";
 import { User } from "../models/user";
 import { Like } from "../models/like";
 import { useCallback } from "react";
-import { newsFactory, serializNews } from "../utils/news_factory";
-import {
-  useCreateLikeMutation,
-  useGetOneNewsQuery,
-} from "../store/news-api";
-import { selectNews, updateNewsItem } from "../store/slices/news-slice";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  selectAuthUser,
-  selectOnlineUser,
-} from "../store/slices/auth-user-slice";
-import { createRawNews } from "../utils/create-raw-news";
-import { createNews } from "../utils/create-news";
+import { newsFactory, serializeNews } from "../utils/news_factory";
+import { useCreateLikeMutation } from "../store/news-api";
 export interface LikeButtonProps {
   id: number;
-  newsProp:News;
-  onLineUser:User|undefined;
+  newsProp: News;
+  onLineUser: User | undefined;
 }
 
 export const LikeButton: FC<LikeButtonProps> = ({
@@ -37,28 +26,27 @@ export const LikeButton: FC<LikeButtonProps> = ({
   //const newsFromState = newsFactory(useSelector(selectNews)[id]);
   const [news, setNews] = useState<News>(newsProp);
   const [addLike] = useCreateLikeMutation();
-  useEffect(()=>{setUser(onLineUser)},[onLineUser])
-  
-  const userDidLike = useCallback(
-    (news: News, user: User) => {
-      setNews({
-        ...news,
-        likes: news.likes?.find((item) => item.id === user?.id)
-          ? news.likes.filter((item) => item.id !== user?.id)
-          : news.likes?.concat(user),
-      });
-      user &&
-        setUser({
-          ...user,
-          likednews: user?.likednews?.find((item) => item.id === news.id)
-            ? user.likednews.filter((item) => item.id !== news.id)
-            : user.likednews.concat(news),
-        });
+  useEffect(() => {
+    setUser(onLineUser);
+  }, [onLineUser]);
 
-      addLike({ user: user, news: serializNews(news) } as Like);
-    },
-    []
-  );
+  const userDidLike = useCallback((news: News, user: User) => {
+    setNews({
+      ...news,
+      likes: news.likes?.find((item) => item.id === user?.id)
+        ? news.likes.filter((item) => item.id !== user?.id)
+        : news.likes?.concat(user),
+    });
+    user &&
+      setUser({
+        ...user,
+        likednews: user?.likednews?.find((item) => item.id === news.id)
+          ? user.likednews.filter((item) => item.id !== news.id)
+          : user.likednews.concat(news),
+      });
+
+    addLike({ user: user, news: serializeNews(news) } as Like);
+  }, []);
 
   return (
     <Box display={"inline-flex"}>

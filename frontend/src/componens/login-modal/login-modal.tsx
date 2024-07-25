@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback, useEffect, useMemo } from "react";
+import React, { FC, useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { decodeJwt } from "jose";
 import {
@@ -25,7 +25,7 @@ import { useGetUser } from "../../store/hooks/use-get-user";
 import { setUser } from "../../store/slices/auth-user-slice";
 import { useGetToken } from "../../store/hooks/use-get-token";
 import { GetTokenQueryParams } from "../../store/news-api";
-import { User } from "../../models/user";
+
 export interface Token {
   role: string;
   iss: string;
@@ -49,15 +49,18 @@ const LoginModal: FC = () => {
     useState<GetTokenQueryParams>(initParam);
 
   const auth = useAuthUser();
-  const authUserInStorage = auth as {email:string, role:string[], id:number};  
-  const {data } = useGetUser(authUserInStorage?.id);
-  
-  useEffect(() => {
-    dispatch(setUser(data));
-  }, [data]);
+  const authUserInStorage = auth as {
+    email: string;
+    role: string[];
+    id: number;
+  };
+  const { user } = useGetUser(authUserInStorage?.id);
 
-  const { serverErrors, tokenValue } =
-    useGetToken(tokenParams);
+  useEffect(() => {
+    dispatch(setUser(user));
+  }, [dispatch,user]);
+
+  const { serverErrors, tokenValue } = useGetToken(tokenParams);
   const [error, setError] = useState(serverErrors?.data?.messages);
 
   useEffect(() => {
@@ -78,7 +81,7 @@ const LoginModal: FC = () => {
     } else {
       setError(serverErrors?.data.messages);
     }
-  }, [tokenValue, serverErrors, tokenParams]);
+  }, [dispatch, tokenValue, serverErrors, tokenParams]);
 
   //FORMIK RÉSZ
   const { errors, values, setFieldValue, handleSubmit, setValues } = useFormik({
@@ -105,7 +108,6 @@ const LoginModal: FC = () => {
 
   useEffect(() => {
     setShowModal(showLogin);
-   
   }, [showLogin]);
 
   useEffect(() => {

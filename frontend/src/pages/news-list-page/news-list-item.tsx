@@ -14,8 +14,8 @@ import { Link } from "react-router-dom";
 import { News } from "../../models/news";
 import { useDispatch, useSelector } from "react-redux";
 import { setNews as setNewsEditSlice } from "../../store/slices/editor-slice";
-import {  serializNews } from "../../utils/news_factory";
-import { NewsItemMenu } from "../../componens/news-item-menu";
+import {  serializeNews } from "../../utils/news_factory";
+import { NewsItemMenu } from "./news-item-menu";
 import { selectAuthUser } from "../../store/slices/auth-user-slice";
 
 import { LikeButton } from "../../componens/like-button";
@@ -34,7 +34,7 @@ export const NewsListItem: FC<NewsListItemProps> = ({
   const userInState = useSelector(selectAuthUser).user;
 
   const onClick = useCallback(() => {
-    dispach(setNewsEditSlice(serializNews(news)));
+    dispach(setNewsEditSlice(serializeNews(news)));
   }, [news, dispach]);
   
   return (

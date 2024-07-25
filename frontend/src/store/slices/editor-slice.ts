@@ -13,7 +13,6 @@ const initialState:NewsEditorState ={
     newsId: undefined,
 }
 export const newsEditorSlice = createSlice({
-    
     name: "newsEditor",
     initialState,
     reducers:{

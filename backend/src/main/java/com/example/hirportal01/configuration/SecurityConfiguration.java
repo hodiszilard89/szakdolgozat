@@ -38,17 +38,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-
-
         http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers("/uploads/**").permitAll()
-                .antMatchers("/authentication").permitAll()
-                //.antMatchers("/news/**").permitAll()
+                .antMatchers("/authentication/**").permitAll()
                 .antMatchers("/users/delete/**").hasAnyAuthority("ADMIN")
                 .antMatchers("/users/**").permitAll()
                 .antMatchers("/news/delete/**").hasAnyAuthority("ADMIN")
@@ -59,11 +55,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
         .cors(Customizer.withDefaults());
     }
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder(12);
-//    }
-
     private static final String[] AUTH_WHITELIST = {
             "*",
             // -- Swagger UI v2

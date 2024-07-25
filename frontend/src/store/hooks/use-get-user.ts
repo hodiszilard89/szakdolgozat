@@ -10,12 +10,12 @@ export const useGetUser = (userId : User["id"]) => {
 
     const select = newsApi.endpoints.getUser.select(userId );
     const { data } = useSelector(select);
-    
+    const user=useMemo(()=>data,[data])
  
 
     return {
         isLoading: isLoading || (!data && isFetching),
         error,  
-        data,
+        user,
       };
 }

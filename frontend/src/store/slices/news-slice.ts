@@ -17,7 +17,8 @@ const initialState: NewsState = {
   news: [],
   typeId: -1,
   side:0,
-};
+}; 
+
 
 export const newsSlice = createSlice({
   name: "newsSlice",

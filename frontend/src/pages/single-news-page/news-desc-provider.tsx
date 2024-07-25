@@ -1,12 +1,9 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { NewsDescription } from "./news-description";
 import { Comment } from "../../models/comment";
-import { Footer } from "../../componens/footer";
-import {
-  useCreateCommentMutation,
-  useGetOneNewsQuery,
-} from "../../store/news-api";
+
+import { useCreateCommentMutation } from "../../store/news-api";
 import { Box, Text } from "@chakra-ui/react";
 import { useOneNews } from "../../store/hooks/use-one-news";
 import { Error } from "../Error";
@@ -15,12 +12,11 @@ import { MyComment } from "../../componens/my-comment";
 import { useSelector } from "react-redux";
 import { selectAuthUser } from "../../store/slices/auth-user-slice";
 
-
 export const NewsDescProvider: FC = () => {
-  const   {id}  = useParams();
- 
+  const { id } = useParams();
+
   const [addComment] = useCreateCommentMutation();
-  const { data: news } = useOneNews(Number(id));
+  const { news } = useOneNews(Number(id));
   const [comments, setComments] = useState<Comment[]>(
     news?.comments ? news.comments : []
   );
@@ -29,7 +25,9 @@ export const NewsDescProvider: FC = () => {
     addComment(comment);
   }, []);
   const user = useSelector(selectAuthUser).user;
-  useEffect(()=>{setComments(news?.comments? news.comments:[])},[news])
+  useEffect(() => {
+    setComments(news?.comments ? news.comments : []);
+  }, [news]);
   return (
     <>
       {news ? (
@@ -41,7 +39,7 @@ export const NewsDescProvider: FC = () => {
             </Text>
 
             <Box>
-            {comments.map((comment, id) => (
+              {comments.map((comment, id) => (
                 <MyComment key={id} comment={comment} />
               ))}
             </Box>

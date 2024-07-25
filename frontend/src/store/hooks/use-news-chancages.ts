@@ -3,7 +3,7 @@ import { useCallback } from "react";
 
 import {useCreateCommentMutation, useCreateNewsMutaion, useDeleteNewsMutaion, useUpdateNewsMutaion} from "../news-api";
 import {News} from "../../models/news"
-import {serializNews } from "../../utils/news_factory";
+import {serializeNews } from "../../utils/news_factory";
 
 
 export const useNewsChancages = () =>{
@@ -16,8 +16,7 @@ export const useNewsChancages = () =>{
     const save = useCallback(
         async (news: News) => {
           const mutation = news.id ? updateNews : createNews;
-          //const rawMovie = serializeMovie(movie);
-          const rawNews = serializNews(news);
+          const rawNews = serializeNews(news);
           const result = await mutation(rawNews);
           if ("error" in result) {
        

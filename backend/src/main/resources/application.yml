@@ -6,3 +6,4 @@ jwt:
   issuer: user
   tokenValidityInMinutes: 120
 
+

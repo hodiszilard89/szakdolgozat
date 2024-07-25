@@ -31,7 +31,6 @@ public class AuthenticationController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<TokenDTO> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
-        System.out.println(authenticationRequest.getEmail()+":"+authenticationRequest.getPassword());
         authenticateUser(authenticationRequest);
 
 //        username = a felhasználó email címe

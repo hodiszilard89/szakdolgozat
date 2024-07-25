@@ -1,4 +1,4 @@
-import { date } from "yup";
+
 import { RawNews, News, Comment, RawComment } from "../models";
 
 export const newsFactory = (rawNewsData: RawNews) => {
@@ -19,7 +19,7 @@ export const newsFactory = (rawNewsData: RawNews) => {
     } as News;
   };
 
-  export const serializNews = (news: News): RawNews => {
+  export const serializeNews = (news: News): RawNews => {
 
       return {
         ...news,

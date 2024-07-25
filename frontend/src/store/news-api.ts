@@ -1,7 +1,9 @@
 
 import {
   FetchArgs,
+  
   FetchBaseQueryError,
+  
   createApi,
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
@@ -32,28 +34,12 @@ interface customError {
   status: number;
 }
 
-export interface GetNewsResponse {
-  id: number;
-  imgPath: string;
-  text: string;
-  title: string;
-  subtitle: string;
-  writer: User;
-  likes?: User[];
-  comments?: Comment[];
-  releasedate: Date;
-}
+
 export interface GetTokenQueryParams {
   email: string;
   password: string;
 }
-export interface GetNewsQueryParams {
-  type?: Type[];
-  offset?: number;
-  limit?: number;
-  id?: number;
-  search?: string;
-}
+
 export interface GetRequestParamsForNewsQuery {
   typeId: Type["id"];
   limit: number;
@@ -69,8 +55,10 @@ const storage = window.localStorage;
 const SERVERHOST =process.env.REACT_APP_SERVERHOST;
 const newsTag: string = "NEWS";
 const userTag: string = "USER";
+
 export const newsApi = createApi({
   reducerPath: "newsPath",
+ 
   baseQuery: fetchBaseQuery({
     baseUrl: "",
     prepareHeaders: (headers) => {
@@ -85,17 +73,121 @@ export const newsApi = createApi({
   tagTypes: [newsTag, userTag],
 
   endpoints: (builder) => ({
-    getNewsList: builder.query<RawNews[] | undefined, GetNewsQueryParams>({
-      query: (filter: GetNewsQueryParams) => ({ url: `http://${SERVERHOST}:8080/news`, method: "GET" }),
-      providesTags: (result?: RawNews[]) => {
-        return result && Array.isArray(result)
+    //---------------NEWS
+
+    getNewsByType: builder.query<ResponseForNewsQuery, GetRequestParamsForNewsQuery>({
+      query: (params: GetRequestParamsForNewsQuery) => ({
+        url: `http://${SERVERHOST}:8080/news/type/${params.typeId}/${params.limit}/${params.side}/${params.search}`,
+        method: "GET",
+      }),
+     
+      providesTags: (result?: ResponseForNewsQuery) => {
+        return result?.newsList && Array.isArray(result.newsList)
           ? [
-              ...result.map(({id }) => ({ type: newsTag, id }))
+              ...result.newsList.map(({ id }) => ({ type: newsTag, id })),
+              { type: newsTag, id:"LIST" }
             ]
-          : [{ type: newsTag, id: "LIST" }];
+          : [{ type: newsTag, id:"LIST" }];
       },
     }),
+    createNews: builder.mutation<RawNews, RawNews>({
+      query: (news: RawNews) => ({
+        url: `http://${SERVERHOST}:8080/news`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          Accept: "text/plain; charset=utf-8",
+        },
+        body: news,
+      }),
+      invalidatesTags: [{ type: newsTag, id: "LIST" }],
+    }),
+    updateNews: builder.mutation<RawNews, RawNews>({
+      query: (news: RawNews) => ({
+        url: `http://${SERVERHOST}:8080/news`,
+        method: "PUT",
+        body: JSON.stringify(news),  
+      }),
+      invalidatesTags: [{ type: newsTag, id:"LIST" }],
+    }),
 
+    getOneNews: builder.query<News, RawNews["id"]>({
+      query: (newsId: RawNews["id"]) => ({
+        url: `http://${SERVERHOST}:8080/news/${newsId}`,
+      }),
+      providesTags: (news ) => ([{ type: newsTag, id:news?.id }]),
+    }),
+  
+    deleteNews: builder.mutation<void, News["id"]>({
+      query: (newsId: number) => ({
+        url: `http://${SERVERHOST}:8080/news/delete/${newsId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (_resut, error, id) => {
+        const tags = [];
+        if (!error) {
+          tags.push({ type: newsTag, id });
+        }
+        tags.push({ type: newsTag, id:"LIST" });
+        return tags;
+      },
+    }),
+  //-------USER
+  getUsers: builder.query<User[], void>({
+    query: () => ({
+      url: `http://${SERVERHOST}:8080/users`,
+      method: "GET",
+    }),
+    providesTags: (result?: User[]) => {
+      return result && Array.isArray(result)
+        ? [
+            ...result.map(({ id }) => ({ type: userTag, id }))
+          ]
+        : [{ type: userTag, id: "LIST" }];
+    },
+  }),
+  getUser: builder.query<User, User["id"]>({
+    query: (userId: User["id"]) => ({
+      url: `http://${SERVERHOST}:8080/users/${userId}`,
+    }),
+    providesTags: [{ type: userTag, id: "LIST" }],
+  }),
+  getTypes: builder.query<Type[], void>({
+    query: () => ({
+      url: `http://${SERVERHOST}:8080/news/gettypes`,
+      method: "GET",
+    }),
+    //providesTags: (_result, _error, id) => ([{ type: MovieTag, id }]),
+  }),
+  deleteUser: builder.mutation<void, number>({
+    query: (userId: number) => ({
+      url: `http://${SERVERHOST}:8080/users/${userId}`,
+      method: "DELETE",
+    }),
+    invalidatesTags: (_resut, error, id) => {
+      const tags = [];
+      if (!error) {
+        tags.push({ type: userTag, id });
+      }
+      tags.push({ type: userTag, id: "LIST" });
+      return tags;
+    },
+  }),
+  createUser: builder.mutation<void, User>({
+    //első paraméter amit visszakapunk 2. amit küldünk
+
+    query: (user: User) => ({
+      url: `http://${SERVERHOST}:8080/users`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        accept: "application/json; charset=utf-8",
+      },
+
+      body: JSON.parse(JSON.stringify(user)),
+    }),
+  }),
+  //-------TOKEN
     getToken: builder.query<Token, GetTokenQueryParams>({
       query: (params: GetTokenQueryParams) => ({
         url: `http://${SERVERHOST}:8080/authentication`,
@@ -111,74 +203,7 @@ export const newsApi = createApi({
       }),
     
     }),
-
-    getNewsByType: builder.query<ResponseForNewsQuery, GetRequestParamsForNewsQuery>({
-      query: (params: GetRequestParamsForNewsQuery) => ({
-        url: `http://${SERVERHOST}:8080/news/type/${params.typeId}/${params.limit}/${params.side}/${params.search}`,
-        method: "GET",
-      }),
-      providesTags: (result?: ResponseForNewsQuery) => {
-        return result?.newsList && Array.isArray(result.newsList)
-          ? [
-              ...result.newsList.map(({ id }) => ({ type: newsTag, id }))
-            ]
-          : [{ type: newsTag, id:"LIST" }];
-      },
-    }),
-    getOneNews: builder.query<News, RawNews["id"]>({
-      query: (newsId: RawNews["id"]) => ({
-        url: `http://${SERVERHOST}:8080/news/${newsId}`,
-      }),
-      providesTags: (news ) => ([{ type: newsTag, id:news?.id }]),
-    }),
-    getUsers: builder.query<User[], void>({
-      query: () => ({
-        url: `http://${SERVERHOST}:8080/users`,
-        method: "GET",
-      }),
-      providesTags: (result?: User[]) => {
-        return result && Array.isArray(result)
-          ? [
-              ...result.map(({ id }) => ({ type: userTag, id }))
-            ]
-          : [{ type: userTag, id: "LIST" }];
-      },
-    }),
-
-    getUser: builder.query<User, User["id"]>({
-      query: (userId: User["id"]) => ({
-        url: `http://${SERVERHOST}:8080/users/${userId}`,
-      }),
-      providesTags: [{ type: userTag, id: "LIST" }],
-    }),
-    getTypes: builder.query<Type[], void>({
-      query: () => ({
-        url: `http://${SERVERHOST}:8080/news/gettypes`,
-        method: "GET",
-      }),
-      //providesTags: (_result, _error, id) => ([{ type: MovieTag, id }]),
-    }),
-    createNews: builder.mutation<RawNews, RawNews>({
-      query: (news: RawNews) => ({
-        url: `http://${SERVERHOST}:8080/news`,
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          Accept: "text/plain; charset=utf-8",
-        },
-        body: news,
-      }),
-      invalidatesTags: [{ type: newsTag, id: "LIST" }],
-    }),
-    updateNews: builder.mutation<News, RawNews>({
-      query: (news: RawNews) => ({
-        url: `http://${SERVERHOST}:8080/news`,
-        method: "PUT",
-        body: JSON.stringify(news),  
-      }),
-      invalidatesTags: (_result,_error, {id,})=> [{ type: newsTag, id:id }],
-    }),
-
+    //----EMAIL
     checkUniqueEmail: builder.query<boolean, string>({
       query: (email: string) => ({
         url: `http://${SERVERHOST}/users/checkemail/${email}`,
@@ -190,7 +215,7 @@ export const newsApi = createApi({
         body: JSON.stringify({ email: { email } }),
       }),
     }),
-
+    //----IMAGE
     uploadImage: builder.mutation<void, string>({
       query: (image: string) => ({
         url: `http://${SERVERHOST}:8080news/uploadimage`,
@@ -213,48 +238,8 @@ export const newsApi = createApi({
       invalidatesTags:(_resut, error, {user})=>{
         return [{ type: userTag, id: user.id }]} ,
     }),
-    deleteNews: builder.mutation<void, News["id"]>({
-      query: (newsId: number) => ({
-        url: `http://${SERVERHOST}:8080/news/delete/${newsId}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: (_resut, error, id) => {
-        const tags = [];
-        if (!error) {
-          tags.push({ type: newsTag, id });
-        }
-        tags.push({ type: newsTag, id: id });
-        return tags;
-      },
-    }),
-    deleteUser: builder.mutation<void, number>({
-      query: (userId: number) => ({
-        url: `http://${SERVERHOST}:8080/users/${userId}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: (_resut, error, id) => {
-        const tags = [];
-        if (!error) {
-          tags.push({ type: userTag, id });
-        }
-        tags.push({ type: userTag, id: "LIST" });
-        return tags;
-      },
-    }),
-    createUser: builder.mutation<void, User>({
-      //első paraméter amit visszakapunk 2. amit küldünk
-
-      query: (user: User) => ({
-        url: `http://${SERVERHOST}:8080/users`,
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          accept: "application/json; charset=utf-8",
-        },
-
-        body: JSON.parse(JSON.stringify(user)),
-      }),
-    }),
+   
+   //----  COMMENT
     addComment: builder.mutation<void, Comment>({
 
       query: (comment: Comment) => ({
@@ -269,6 +254,7 @@ export const newsApi = createApi({
       }),
       invalidatesTags:(_result, error,{news})=> [{ type: newsTag, id:news.id }],
     }),
+    //----- LIKE
     addLike: builder.mutation<void, Like>({
 
       query: (like: Like) => ({
@@ -278,8 +264,8 @@ export const newsApi = createApi({
           "Content-Type": "application/json; charset=utf-8",
           Accept: "application/json; charset=utf-8",
         },
-
-        body: JSON.parse(JSON.stringify(like)),
+        body:like
+        //body: JSON.parse(JSON.stringify(like)),
       }),
 
       // invalidatesTags: [
@@ -296,7 +282,7 @@ export const useGetTypesQuery = newsApi.endpoints.getTypes.useQuery;
 export const useGetUsersQuery = newsApi.endpoints.getUsers.useQuery;
 export const useGetNewsByTypeQuery = newsApi.endpoints.getNewsByType.useQuery;
 export const useGetUserQuery = newsApi.endpoints.getUser.useQuery;
-export const useGetNewsQuery = newsApi.endpoints.getNewsList.useQuery;
+// export const useGetNewsQuery = newsApi.endpoints.getNewsList.useQuery;
 export const useGetOneNewsQuery = newsApi.endpoints.getOneNews.useQuery;
 export const useDeleteUserMutation = newsApi.endpoints.deleteUser.useMutation;
 export const useCreateCommentMutation =

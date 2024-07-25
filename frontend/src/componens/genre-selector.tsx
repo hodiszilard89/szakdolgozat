@@ -48,7 +48,7 @@ export const GenreSelector: FC<GenreSelectorProps> = ({
     },
     []
   );
-  useEffect(()=>{return()=>{console.log("unmont")}},[])
+
 
   useEffect(() => {
     Array.isArray(value) && setSelectedItems(value);
