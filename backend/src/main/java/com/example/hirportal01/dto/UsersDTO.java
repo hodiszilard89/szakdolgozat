@@ -15,7 +15,7 @@ public class UsersDTO {
     private Boolean locked;
     private Long Id;
 
-//    private List<News> news;
+    private List<News> news;
     @NotBlank
     private String email;
     @NotBlank
@@ -28,7 +28,7 @@ public class UsersDTO {
     private String firstName;
     @NotBlank(message = "nem lehet üres")
     private String secName;
-    private List<News> likednews;
+    private List<NewsDTO> likednews;
 
     private List<Roles> roles;
 
@@ -40,13 +40,13 @@ public class UsersDTO {
         this.locked = locked;
     }
 
-//    public List<News> getNews() {
-//        return news;
-//    }
+    public List<News> getNews() {
+        return news;
+    }
 
-//    public void setNews(List<News> news) {
-//        this.news = news;
-//    }
+    public void setNews(List<News> news) {
+        this.news = news;
+    }
 
     public String getImagePath() {
         return imagePath;
@@ -126,11 +126,11 @@ public class UsersDTO {
         this.secName = secName;
     }
 
-    public List<News> getLikednews() {
+    public List<NewsDTO> getLikednews() {
         return likednews;
     }
 
-    public void setLikednews(List<News> likednews) {
+    public void setLikednews(List<NewsDTO> likednews) {
         this.likednews = likednews;
     }
 

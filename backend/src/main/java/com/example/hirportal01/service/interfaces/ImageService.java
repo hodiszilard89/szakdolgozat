@@ -1,4 +1,4 @@
-package com.example.hirportal01.service;
+package com.example.hirportal01.service.interfaces;
 
 import org.springframework.core.io.Resource;
 

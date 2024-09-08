@@ -1,7 +1,6 @@
 package com.example.hirportal01.controller;
 
 import com.example.hirportal01.dto.RolesDTO;
-import com.example.hirportal01.service.RolesService;
 import com.example.hirportal01.service.impl.RolesServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -5,7 +5,7 @@ import com.example.hirportal01.dto.TypeOfNewsDTO;
 import com.example.hirportal01.dto.UsersDTO;
 import com.example.hirportal01.entity.TypeOfNews;
 import com.example.hirportal01.entity.Users;
-import com.example.hirportal01.service.GenerationService;
+import com.example.hirportal01.service.interfaces.GenerationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

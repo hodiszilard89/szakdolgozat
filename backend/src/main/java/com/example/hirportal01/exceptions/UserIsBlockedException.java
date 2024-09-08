@@ -1,19 +1,17 @@
-package com.example.hirportal01.exception;
+package com.example.hirportal01.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityNotFoundException extends RuntimeException{
+public class UserIsBlockedException extends RuntimeException {
     private List<String> messages = new ArrayList<String>();
-    public EntityNotFoundException(String message, List<String> messages) {
-
+    public UserIsBlockedException(String message, List<String> messages){
         super(message);
         this.messages=messages;
     }
-    public EntityNotFoundException(String message){
-        throw new EntityNotFoundException(message,this.messages);
+    public UserIsBlockedException(String message){
+       throw new UserIsBlockedException(message,this.messages);
     }
-
     public List<String> getMessages() {
         return messages;
     }

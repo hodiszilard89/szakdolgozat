@@ -1,12 +1,11 @@
 package com.example.hirportal01.controller;
 
 
-import com.example.hirportal01.exception.InvalidEntityException;
-import com.example.hirportal01.exception.EntityNotFoundException;
-import com.example.hirportal01.exception.UserIsBlockedException;
+import com.example.hirportal01.exceptions.InvalidEntityException;
+import com.example.hirportal01.exceptions.EntityNotFoundException;
+import com.example.hirportal01.exceptions.UserIsBlockedException;
 import com.example.hirportal01.response.ErrorResponse;
 
-import com.example.hirportal01.service.impl.UsersServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.ArrayList;
 import java.util.List;
 
-//@RestControllerAdvice(assignableTypes = {UsersServiceImpl.class})
+
 @RestControllerAdvice
 public class EntityControllerAdvice {
 

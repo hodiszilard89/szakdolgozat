@@ -10,6 +10,7 @@ export interface User{
     likednews:News[],
     email:string
     chatName:string,
+    enabled?:boolean,
     imagePath:string,
     roles?:Roles[],
     comments:[]

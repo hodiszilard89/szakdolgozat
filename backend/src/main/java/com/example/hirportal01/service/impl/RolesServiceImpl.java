@@ -2,10 +2,10 @@ package com.example.hirportal01.service.impl;
 
 import com.example.hirportal01.dto.RolesDTO;
 import com.example.hirportal01.entity.Roles;
-import com.example.hirportal01.exception.EntityNotFoundException;
+import com.example.hirportal01.exceptions.EntityNotFoundException;
 
 import com.example.hirportal01.repository.RolesRepository;
-import com.example.hirportal01.service.RolesService;
+import com.example.hirportal01.service.interfaces.RolesService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.example.hirportal01.controller;
 
-import com.example.hirportal01.service.ImageService;
+import com.example.hirportal01.service.interfaces.ImageService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

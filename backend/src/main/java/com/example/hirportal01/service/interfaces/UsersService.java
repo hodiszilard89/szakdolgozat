@@ -1,8 +1,7 @@
-package com.example.hirportal01.service;
+package com.example.hirportal01.service.interfaces;
 
 import com.example.hirportal01.dto.CommentDTO;
-import com.example.hirportal01.dto.LikeDTO;
-import com.example.hirportal01.dto.UserDTOForRegistration;
+import com.example.hirportal01.dto.UserDTOForUpdate;
 import com.example.hirportal01.dto.UsersDTO;
 import com.example.hirportal01.entity.Users;
 
@@ -17,7 +16,7 @@ public interface UsersService {
     Optional<UsersDTO> findById(Long id);
     boolean checkEmail(String email);
     UsersDTO update(UsersDTO usersDTO);
-    UsersDTO update(UserDTOForRegistration userDTOForRegistration) ;
+    UsersDTO update(UserDTOForUpdate userDTOForUpdate) ;
     void delete(Long id);
     UsersDTO findUser(String username, String password);
     void addComment(CommentDTO commentDTO);

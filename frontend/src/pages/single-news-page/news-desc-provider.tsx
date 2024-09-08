@@ -22,6 +22,7 @@ export const NewsDescProvider: FC = () => {
   );
 
   const onSubmit = useCallback(async (comment: Comment) => {
+    console.log("Hello ",comment)
     addComment(comment);
   }, []);
   const user = useSelector(selectAuthUser).user;

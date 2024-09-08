@@ -2,7 +2,7 @@ package com.example.hirportal01.controller;
 
 import com.example.hirportal01.dto.UsersDTO;
 import com.example.hirportal01.dto.TokenDTO;
-import com.example.hirportal01.exception.EntityNotFoundException;
+import com.example.hirportal01.exceptions.EntityNotFoundException;
 import com.example.hirportal01.request.AuthenticationRequest;
 import com.example.hirportal01.security.UserDetailsServiceImpl;
 import com.example.hirportal01.service.impl.UsersServiceImpl;

@@ -10,7 +10,8 @@ export const Error: FC<{msg:string}> = ({msg}) => {
         <Text fontSize={"2xl"} fontWeight={"bold"}>
           {msg}
         </Text>
-        <Button border={"solid 1px"} onClick={() => navigate("/")}>Vissza a Főoldalra</Button>
+      
+        <Button border={"solid 1px"} onClick={() => window.location.reload()}>Frissítés</Button>
       </Box>
     </Center>
   );

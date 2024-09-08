@@ -1,4 +1,4 @@
-package com.example.hirportal01.exception;
+package com.example.hirportal01.exceptions;
 
 import java.util.List;
 

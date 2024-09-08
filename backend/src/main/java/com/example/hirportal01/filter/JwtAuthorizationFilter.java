@@ -1,6 +1,6 @@
 package com.example.hirportal01.filter;
 
-import com.example.hirportal01.exception.EntityNotFoundException;
+import com.example.hirportal01.exceptions.EntityNotFoundException;
 import com.example.hirportal01.util.JwtUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

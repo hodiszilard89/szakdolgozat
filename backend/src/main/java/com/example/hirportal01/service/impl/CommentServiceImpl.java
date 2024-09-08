@@ -3,7 +3,7 @@ package com.example.hirportal01.service.impl;
 import com.example.hirportal01.dto.CommentDTO;
 import com.example.hirportal01.entity.Comment;
 import com.example.hirportal01.repository.CommentRepository;
-import com.example.hirportal01.service.CommentService;
+import com.example.hirportal01.service.interfaces.CommentService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

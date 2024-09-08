@@ -1,11 +1,11 @@
 package com.example.hirportal01.dto;
 
-public class UserDTOForRegistration
+public class UserDTOForUpdate
 {
     private UsersDTO usersDTO;
     private String image;
 
-    public UserDTOForRegistration() {
+    public UserDTOForUpdate() {
     }
 
     public UsersDTO getUsersDTO() {

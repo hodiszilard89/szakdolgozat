@@ -1,23 +1,16 @@
 package com.example.hirportal01.security;
 
-import com.example.hirportal01.dto.UsersDTO;
 import com.example.hirportal01.entity.Users;
-import com.example.hirportal01.exception.EntityNotFoundException;
-import com.example.hirportal01.exception.UserIsBlockedException;
-import com.example.hirportal01.repository.UsersRepository;
+import com.example.hirportal01.exceptions.EntityNotFoundException;
+import com.example.hirportal01.exceptions.UserIsBlockedException;
 import com.example.hirportal01.service.impl.UsersServiceImpl;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 
 @Service

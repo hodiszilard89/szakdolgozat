@@ -78,10 +78,7 @@ export const NewsEditor: FC<NewsEditorProps> = ({ news }) => {
 
  
   
-  return (
-  
-     
-     
+  return (     
         <form onSubmit={handleSubmit}>
           {values.imgPath && (
             <Image

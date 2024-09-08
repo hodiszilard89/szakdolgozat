@@ -1,26 +1,23 @@
 package com.example.hirportal01.service.impl;
 
 import com.example.hirportal01.dto.CommentDTO;
-import com.example.hirportal01.dto.UserDTOForRegistration;
+import com.example.hirportal01.dto.UserDTOForUpdate;
 import com.example.hirportal01.dto.UsersDTO;
 import com.example.hirportal01.entity.Comment;
 import com.example.hirportal01.entity.Roles;
 import com.example.hirportal01.entity.Users;
-import com.example.hirportal01.exception.EntityNotFoundException;
-import com.example.hirportal01.exception.UserIsBlockedException;
+import com.example.hirportal01.exceptions.EntityNotFoundException;
+import com.example.hirportal01.exceptions.UserIsBlockedException;
 
 import com.example.hirportal01.repository.RolesRepository;
 import com.example.hirportal01.repository.UsersRepository;
-import com.example.hirportal01.service.ImageService;
-import com.example.hirportal01.service.UsersService;
+import com.example.hirportal01.service.interfaces.UsersService;
 import com.example.hirportal01.service.emial.EmailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -65,20 +62,15 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public UsersDTO create(UsersDTO userDTO) {
         Long l= 2L;
-
         userDTO.setId(null);
         Optional<Roles> readerRoles = rolesRepository.findById(l);
-
         Users resultUsers =   usersRepository.save(
                modelMapper.map(userDTO,Users.class)); //egylépésben alakítja át entityvé és menti el
-
-
         UsersDTO usersDTO = modelMapper.map(resultUsers,UsersDTO.class);
         if (readerRoles.isPresent())
         {
             readerRoles.get().getUsers().add(resultUsers);
             rolesRepository.save(readerRoles.get());
-
         }
         emailService.sendEmail(userDTO.getEmail(),"Fake News Regisztáció", "Köszöntünk "+userDTO.getChatName()+" a tagok között");
         return usersDTO;
@@ -116,16 +108,14 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public UsersDTO update(UserDTOForRegistration userDTOForRegistration) {
-        UsersDTO usersDTO = userDTOForRegistration.getUsersDTO();
-        String image=userDTOForRegistration.getImage();
-
+    public UsersDTO update(UserDTOForUpdate userDTOForUpdate) {
+        UsersDTO usersDTO = userDTOForUpdate.getUsersDTO();
+        String image= userDTOForUpdate.getImage();
         // képküldés
-        if (userDTOForRegistration.getImage().isEmpty()){
+        if (userDTOForUpdate.getImage().isEmpty()){
             usersDTO.setImagePath(IMAGE_PATH);
              }else {
             String oldImagePath = usersDTO.getImagePath();
-            System.out.println(oldImagePath);
             if (usersDTO.getImagePath().equals(IMAGE_PATH)) {
                 usersDTO.setImagePath(imageService.add(image));
             } else {
@@ -133,7 +123,6 @@ public class UsersServiceImpl implements UsersService {
                 usersDTO.setImagePath(imageService.add(image));
             }
         }
-
         return update(usersDTO);
     }
 

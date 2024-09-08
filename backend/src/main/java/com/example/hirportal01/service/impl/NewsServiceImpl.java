@@ -6,12 +6,12 @@ import com.example.hirportal01.entity.Comment;
 import com.example.hirportal01.entity.News;
 
 import com.example.hirportal01.entity.Users;
-import com.example.hirportal01.exception.EntityNotFoundException;
-import com.example.hirportal01.exception.InvalidEntityException;
+import com.example.hirportal01.exceptions.EntityNotFoundException;
+import com.example.hirportal01.exceptions.InvalidEntityException;
 import com.example.hirportal01.repository.NewsRepository;
 import com.example.hirportal01.repository.TypeOfNewsRepository;
 import com.example.hirportal01.repository.UsersRepository;
-import com.example.hirportal01.service.NewsService;
+import com.example.hirportal01.service.interfaces.NewsService;
 import com.example.hirportal01.service.emial.EmailService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
