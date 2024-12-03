@@ -33,17 +33,14 @@ public class UsersServiceImpl implements UsersService {
     final String IMAGE_PATH="./uploads/image.jpeg";
     private final EmailService emailService;
     private final ImageServiceImpl imageService;
-    private final ObjectMapper objectMapper;
-    private final ResourceLoader resourceLoader;
     private final ModelMapper modelMapper;
     private final RolesRepository rolesRepository;
     private final UsersRepository usersRepository;
 
-    public UsersServiceImpl(EmailService emailService, ImageServiceImpl imageService, ObjectMapper objectMapper, ResourceLoader resourceLoader, ModelMapper modelMapper, RolesRepository rolesRepository, UsersRepository usersRepository) {
+    public UsersServiceImpl(EmailService emailService, ImageServiceImpl imageService,  ModelMapper modelMapper, RolesRepository rolesRepository, UsersRepository usersRepository) {
         this.emailService = emailService;
         this.imageService = imageService;
-        this.objectMapper = objectMapper;
-        this.resourceLoader = resourceLoader;
+
         this.modelMapper = modelMapper;
         this.rolesRepository = rolesRepository;
         this.usersRepository = usersRepository;
@@ -111,19 +108,34 @@ public class UsersServiceImpl implements UsersService {
     public UsersDTO update(UserDTOForUpdate userDTOForUpdate) {
         UsersDTO usersDTO = userDTOForUpdate.getUsersDTO();
         String image= userDTOForUpdate.getImage();
-        // képküldés
+        Optional<Users> usersOptional=usersRepository.findById(usersDTO.getId());
+        System.out.println((usersDTO.getId()));
+        Users  user = new Users();
+        if (usersOptional.isPresent())
+        {
+            user=usersOptional.get();
+            System.out.println(user.getImagePath());
+        }else{
+            System.out.println("nem,található");
+        }
+         // képküldés
         if (userDTOForUpdate.getImage().isEmpty()){
-            usersDTO.setImagePath(IMAGE_PATH);
+            user.setImagePath(IMAGE_PATH);
              }else {
-            String oldImagePath = usersDTO.getImagePath();
-            if (usersDTO.getImagePath().equals(IMAGE_PATH)) {
-                usersDTO.setImagePath(imageService.add(image));
+            String oldImagePath = user.getImagePath();
+
+            if (user.getImagePath().equals(IMAGE_PATH)) {
+                user.setImagePath(imageService.add(image));
             } else {
+                try{ imageService.delete(oldImagePath);} catch (Exception ignored) {
+                }
                 imageService.delete(oldImagePath);
-                usersDTO.setImagePath(imageService.add(image));
+                user.setImagePath(imageService.add(image));
             }
         }
-        return update(usersDTO);
+      //  usersDTO=modelMapper.map()
+
+        return update(modelMapper.map(user,UsersDTO.class));
     }
 
     @Override
@@ -131,6 +143,7 @@ public class UsersServiceImpl implements UsersService {
         Optional<Users> optionalUser = usersRepository.findUser(email,password);
         if (optionalUser.isPresent()){
             System.out.println("cset név  "  +optionalUser.get().getChatName());
+
             if (optionalUser.get().getLocked())
                throw  new UserIsBlockedException( optionalUser.get().getChatName() +" blokkoltuk");
 

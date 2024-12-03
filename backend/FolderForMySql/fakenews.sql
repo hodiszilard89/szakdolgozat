@@ -2,12 +2,11 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Gép: localhost
--- Létrehozás ideje: 2024. Már 15. 16:44
--- Kiszolgáló verziója: 10.4.28-MariaDB
--- PHP verzió: 8.2.4
+-- Gép: 127.0.0.1
+-- Létrehozás ideje: 2024. Nov 29. 23:43
+-- Kiszolgáló verziója: 10.4.32-MariaDB
+-- PHP verzió: 8.2.12
 
-SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -21,21 +20,29 @@ SET time_zone = "+00:00";
 --
 -- Adatbázis: `fakenews`
 --
+CREATE DATABASE IF NOT EXISTS `fakenews` DEFAULT CHARACTER SET utf16 COLLATE utf16_bin;
+USE `fakenews`;
 
 -- --------------------------------------------------------
 
 --
 -- Tábla szerkezet ehhez a táblához `comment`
 --
-CREATE DATABASE fakenews;
-USE fakenews;
+
 CREATE TABLE `comment` (
   `id` bigint(20) NOT NULL,
   `release_date` datetime DEFAULT NULL,
   `text` text DEFAULT NULL,
   `news_id` bigint(20) DEFAULT NULL,
-  `users_id` bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_hungarian_ci;
+  `writer_id` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_bin;
+
+--
+-- A tábla adatainak kiíratása `comment`
+--
+
+INSERT INTO `comment` (`id`, `release_date`, `text`, `news_id`, `writer_id`) VALUES
+(4, '2024-11-29 17:48:18', 'Nagyon hasznos cikk', 3, 1);
 
 -- --------------------------------------------------------
 
@@ -45,14 +52,14 @@ CREATE TABLE `comment` (
 
 CREATE TABLE `hibernate_sequence` (
   `next_val` bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_bin;
 
 --
 -- A tábla adatainak kiíratása `hibernate_sequence`
 --
 
 INSERT INTO `hibernate_sequence` (`next_val`) VALUES
-(1);
+(37);
 
 -- --------------------------------------------------------
 
@@ -69,45 +76,44 @@ CREATE TABLE `news` (
   `text` text DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `users_id` bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_bin;
 
 --
 -- A tábla adatainak kiíratása `news`
 --
 
 INSERT INTO `news` (`id`, `img_path`, `priority`, `releasedate`, `subtitle`, `text`, `title`, `users_id`) VALUES
-(2, 'https://assets.4cdn.hu/kraken/811jG4Lo3wkylMXXs-xl.jpeg', b'0', '2024-03-07 05:04:17', 'Stratégiai nyugalom után stratégiai tanácsadás.', '„A veszélyek korában Magyarország békéjének és biztonságának erősítése, valamint a magyar emberek életfeltételeinek javítása a Kormány legfontosabb célkitűzése. Ennek a munkának a támogatása érdekében született döntés a Kormány mellett állandó jelleggel működő Stratégiai Tanácsadó Testület megalakításáról” - közölte hétfő este a Kormányzati Tájékoztatási Központ.\n„A testület célja, hogy elemzésekkel és tanácsokkal segítse a kormány és a miniszterelnök munkáját a kormányzás egyes területeinek stratégiai szempontból történő áttekintésén keresztül, különös tekintettel a kormányzati működés szuverenitási, társadalmi, gazdasági, biztonsági, kulturális és egyéb kockázatokkal szembeni ellenálló képességére,”', 'Orbán megalakította a Stratégiai Tanácsadó Testületet', 1),
-(10, 'https://behaviour.hu/wp-content/uploads/2023/05/okovacs_szilveszter_2022_foto_emmer_laszlo.jpg', b'1', '2024-03-05 12:03:31', 'Jelenleg is perelnek.', 'Jogellenesen, mondvacsinált indokkal mondta fel az Operaház a büféket/bárokat és az Opera Cafét is üzemeltető céggel fennálló szerződését, állítja a vállalkozás, ami emiatt be is perelte az intézményt. Vasárnap derült ki, hogy Ókovács Szilveszter főigazgató utasítására félórás szünettel kell játszani a Carmina Buranát, hogy növeljék az Opera büféjének bevételét. A büfét korábban üzemeltető Opera Gasztronómia Kft. szerint egy mondvacsinált indokkal rakták ki őket, és vette saját hatáskörbe az üzemeltetést az intézmény.\n„2023 októberben nem csak hogy felmondták a szerződést, de önhatalommal kizárták kollégáinkat az Operaház területéből, bírósági döntés bevárása nélkül átvették a kizárólagosan társaságunkat megillető területeket, ingóságainkat ott tartották, beruházásainkkal nem számoltak el”', 'Az Opera büféjét korábban üzemeltető cég szerint 100 millióval tartoznak nekik.', 1),
-(11, 'https://assets.4cdn.hu/kraken/816NIre6yXKhGWB0s-xs.jpeg', b'0', '2024-03-07 04:59:59', 'Az amerikai Legfelsőbb Bíróság egyhangú döntéssel hatályon kívül helyezte a coloradói legfelsőbb bíróság döntését,', 'Az amerikai Legfelsőbb Bíróság egyhangú döntéssel hatályon kívül helyezte a coloradói legfelsőbb bíróság döntését, amely szerint a volt elnök nem indulhatott volna a választásokon, mivel 2021. január 6-án a Capitolium ostromakor felkelési kísérletet hajtott végre volt, írja a Guardian. „Nagy győzelem Amerika számára!!!” – reagált Trump a Truth Socialon.\n\nA coloradói döntés alapját a 14. alkotmánymódosítás 3. szakaszának egy újszerű értelmezése adta, amely tiltja a felkelők számára, hogy hivatalt vállaljanak. Trump a döntés után a Legfelsőbb Bírósághoz fellebbezett.', 'Amerikai Legfelsőbb Bíróság: Trump nem zárható ki az előválasztásról', 1),
-(14, 'https://assets.4cdn.hu/kraken/80zzqZ8jsAa9fINEs-xl.jpeg', b'0', '2024-03-04 22:29:43', 'Debreczeni József naplóregénye, a Hideg krematórium eredetileg', 'Debreczeni József naplóregénye, a Hideg krematórium eredetileg 1951-ben jelent meg Belgrádban. A következő kiadásra 1975-ben került sor Újvidéken a Fórum Kiadónál. A mű ismertsége mindmáig szűk körre korlátozódott, nem volt része a holokausztirodalom nemzetközi kánonjának. Most azonban európai és amerikai nagy napilapokban méltatják, köszönhetően annak, hogy 80 évvel azután, hogy a szerzőt a bácstopolyai gettóból Auschwitzba hurcolták, és 46 évvel a halála után, a könyv 15 nyelven vált vagy válik olvashatóvá. Magyarul is újra megjelent, ezúttal Budapesten a Jelenkor Kiadónál.\n\nA holokauszt emlékezete a második világháború utáni közös európai tudat és kultúra fundamentális rétege. Megkerülhetetlen történelmi mítosszá vált, amely beleszól a jelen alakításába. A hozzá fűződő viszony azonban országról-országra, korról-korra dinamikusan változik, és ma is a mítosz újraíródásának részesei vagyunk. Az újraíródás egyik oka a növekvő időbeli távolság. Mostanában halnak meg az utolsó személyes tanúk, akik gyerekként vagy kamaszként átélői voltak a holokausztnak, és megjelenésükkel nyomatékot tudtak adni a közös emlékezetnek. Az ő hangjuk azonban lassan elnémul, emlékké válik az arcuk, elenyészik a mosolyuk, és a történeteiket kizárólag felvételek, könyvoldalak őrzik. Ezzel a holokauszt emlékezetének etikai talapzata változik meg. E képletes talapzat visszavonhatatlanul emlékművek, múzeumok, művészeti alkotások szemléleti, értelmezési terébe költözik. A mítosz elveszíti az életanyag közvetlenségének erejét.', 'A halál nem esemény', 1),
-(15, 'https://cdn.nemzetisport.hu/2024/03/BfIdSRt09QZQFaPUph6UXBm7d6hc_70FmHVGR1gx1lo/fill/1347/758/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50LzBmN2EyYzgyODNiYjQzMjQ4OWNiNGI2NDZiNDA5NDA3.jpg', b'1', '2024-03-05 09:48:54', 'Kilencven percre vannak a kisebb csodától a római „sasok”, de ezúttal aligha ússzák meg kaput eltaláló Bayern-lövés nélkül.', 'Túlzás lenne azt állítani, hogy a Bayern München elleni Bajnokok Ligája-nyolcaddöntő visszavágójával foglalkozna az olasz és a Lazio-közeli sportsajtó, ugyanis még mindig nem ültek el a pénteki, Milan elleni bajnoki mérkőzés hullámai, amelyen három Lazio-játékost is kiállított a játékvezető, s még mindig ez a legforróbb téma arrafelé. Pedig most már talán a római „kékek” is jobban tennék, ha előretekintetének, hiszen óriási lehetőség kapujában állnak a nemzetközi porondon: „csupán” meg kell őrizniük a hazai pályán kiharcolt 1–0-s előnyüket, és kiverhetnek egy igazi nagyágyút, a Bayern Münchent. Ezzel pedig bejutnának a BL negyeddöntőjébe, amelyben legutóbb 2000-ben, tehát huszonnégy esztendeje szerepeltek. Továbbá revansot is vehetnének a bajorokon, akik elbúcsúztatták őket a legutóbbi nyolcaddöntős szereplésükkor, 2021-ben, ráadásul 6–2-es összesítéssel.\n\nMost aligha várhatjuk, hogy a müncheni visszavágón a Bayern hat gólt bevág az olasz együttesnek, miután Rómában a kaput sem találta el. Sok szempontból fordulópont volt az a meccs a Bayern idényében, hiszen a Bayer Leverkusen ellen 3–0-ra elveszített Bundesliga-rangadó után kapott ki Rómában, s utána jelentette be a klub vezetősége, hogy az idény végén távozik Thomas Tuchel vezetőedző. A legfrissebb német sajtóhírek szerint viszont ha kiesik a csapat a Lazio ellen, nem várja meg az idény végét, azonnal meneszti Tuchelt.\n\nA visszavágón természetesen nem játszik az első meccs bűnbakja, a kiállított és tizenegyest „előidéző” Dayot Upamecano − akit minden bizonnyal Matthijs de Ligt helyettesít −, rajta kívül nem szerepelhet a sérült Kingsley Coman, Nuszir Mazraui, Leroy Sané és Serge Gnabry.\n\n„Egy olasz klub ellen kell felállnunk és fordítanunk, amelynek Maurizio Sarri az edzője, tehát nagyon nehéz feladatunk lesz – fogalmazott Thomas Tuchel a meccset felvezető sajtótájékoztatón. – Jól ismerjük Sarrit, és tudjuk, milyen nehéz két gólt szerezni a csapatai ellen. Nem lesz könnyű helyzetbe kerülni sem. Annak most nincs jelentősége, hogy a Bundesligában hogyan teljesítettünk az elmúlt hetekben. Akár tetszik, akár nem, a klub meghozta a döntést a jövőmmel kapcsolatban, ezt el kell fogadnunk, és megpróbálunk a következő feladatra koncentrálni, ami a továbbjutás kiharcolása a Lazio ellen.”', 'HUSZONNÉGY ÉV UTÁN JUTHATNA A LAZIO BL-NEGYEDDÖNTŐBE', 1),
-(16, 'https://cdn.nemzetisport.hu/2024/03/4bUPC53zSJG79m0MWEA3TjzASGUtgXsm2ALaINHQ0dQ/fill/1347/758/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50LzJkODUzMWI3NmU3ODQ0MzVhOWU1ZmE3ZTk0NGE3NDZi.jpg', b'0', '2024-03-05 09:50:36', 'A Real Sociedad borzalmas mélyrepülésben van, a szupergazdag PSG ellen kétgólos vereséget kellene ledolgoznia, mégis bizakodva várja a visszavágót.', 'A lehető legrosszabb időszakban került mély gödörbe a sokkal jobb teljesítményre képes Real Sociedad, amely jelen helyzetében aligha lesz képes megfordítani a Paris Saint-Germain elleni BL-párharcot.\n\nJanuár végéig tulajdonképpen minden rendben volt a baszkok háza táján – a Celta Vigót a bajnokságban, majd a Király-kupában is legyőzték idegenben –, de utána valami eltört, a csapat pedig zsinórban öt mérkőzésen volt képtelen betalálni az ellenfelek kapujába, és ugyan így is játszott három döntetlent, de az Osasuna (0–1), majd épp a PSG ellen (0–2) már vereség lett a vége.\n\nEzután úgy tűnt, hogy rendeződtek a sorok a mallorcai győzelemmel (2–1), ám feltámadás helyett még durvább mélyrepülés következett: sima vereség hazai pályán a Villarrealtól (1–3), kiesés tizenegyesrúgásokkal a Mallorca ellen a Király-kupa elődöntőjében, szombaton pedig újabb vereség, ezúttal az alsóházhoz tartozó Sevilla otthonában (2–3).\nÉs ezek után érkezik San Sebastiánba a Paris Saint-Germain!\n\n„Nálunk nincsenek pesszimisták, és sosem sajnálkozunk. Továbbra is bíznunk kell abban, hogy ismét kivívjuk az európai kupaszereplés jogát, és hiszünk abban is, hogy meg tudjuk fordítani a párharcot a PSG-vel szemben” – mondta a Sevilla elleni vereséget követő sajtótájékoztatón Imanol Alguacil, a Real Sociedad vezetőedzője.\n\nKétségtelen, hogy Alguacil már a BL-meccsre gondolva több kezdőjátékosát is pihentette a bajnokin, de így is kénytelen lemondani Carlos Fernándezről (porcsérülés), Alvaro Odriozoláról (keresztszalag-húzódás), és Aihen Munozról (keresztszalag-szakadás).\n\nA PSG ugyan az utóbbi két fordulóban csak egy pontra volt jó a Rennes és a Monaco ellen, de így is toronymagasan vezeti a Ligue 1-t, és a legnagyobb gondja Kylian Mbappé várható nyári távozása. Az európai mércével is hosszú keret miatt a csapat aligha érzi meg a sérültek – Milan Skriniar (boka), Sergio Rico (fej), Layvin Kurzawa (hát), Danilo Pereira, Marco Asensio (comb), és Presnel Kimpembe (Achilles) – hiányát a visszavágón.\n\n', 'BL-NYOLCADDÖNTŐ: A MÉLYPONTON LÉVŐ BASZKOK HISZNEK A FORDULATBAN', 1),
-(17, 'https://kultura.hu/uploads/media/default/0003/06/thumb_205929_default_big.jpg', b'0', '2024-03-05 10:09:53', 'Novák Péter országjáró körútra indult stábjával, hogy belevesse magát a magyar falvak kalandos életébe. ', '„Bolondulok a faluért” – mondta Novák Péter rendező-koreográfus, és a főváros forgatagából kiszakadva, stábja kíséretében belekóstolt a sokszínű vidéki életbe. Új barátok, új élmények, számtalan tanulság és összességében egy sokak számára élhetőbb, ha úgy tetszik, emberibb élet várta.\n\nA falu bolondja második epizódjában Novák a Veszprém vármegyei Kiscsőszre érkezik. A százfős kis faluban azonnal magával rántják őt a mozgalmas hétköznapok: traktorra pattan, istállót gondoz, válogat a vásári portékák közt, tésztát dagaszt. A teendők között régi barátja, Kovács Norbert Cimbi hagyományőrző néptáncos és polgármester kalauzolta el őt, akivel a sok munka mellett azért jutott idő arra is, hogy belekóstoljanak a helyi ízekbe, hogy tegyenek egy-egy sétát a településen és a természetben, és hogy elbeszélgessenek Kiscsősz fejlődéséről, kulturális életéről. Szóba kerül a helyi kuriózumként álló Pajtafesztivál, a vidéki falvak jövője és mindenekelőtt: a közösségépítés.\n\n„A régi idők focijában mondja Minarik Ede, hogy »Kell egy csapat!«, és tényleg kell! Én sok közösséghez köthetem magam, vagyok itt is, ott is, de valójában, akik úgy igazán az enyémek lennének, olyanok nincsenek. Jó érzés volt, hogy egy kicsit közéjük tartozhattam” – vallotta Novák Péter kiscsőszi kalandjai után.\n\nÉs vajon mit ajánl a helyi füvesasszony a torokgyulladásra és a sebekre? Milyen veszélyek leselkedtek a múlt században a magyar falvakra, és miből élhetnek meg a kis közösségek tagjai? Kiderül A falu bolondja második epizódjából.', 'Novák Péter a traktoron, míg a sütőben sül a nyújtott kőtt', 2),
-(18, 'https://kultura.hu/uploads/media/default/0003/06/thumb_205412_default_big.jpg', b'0', '2024-03-05 10:30:47', 'Ai Weiwei korunk egyik legjelentősebb művésze, fáradhatatlan aktivista és a hatalom kritikusa.', 'A művész egyik legismertebb műve ez, amelyet ő maga „kulturális readymade-nek” nevezett. A három elemből álló sorozat azt a pillanatot rögzíti, amikor Ai Weiwei ledob egy kétezer éves szertartási urnát, amely a padlóra zuhan a lába előtt. A műtárgynak szimbolikus és kulturális értéke volt: a Han-dinasztia korszakból származó tárgy összetörése a kulturális örökség eldobását jelenti. Ai Weiwei ekkor kezdte el beépíteni a műveibe a tradicionális tárgyakat, világossá téve  ambivalens hozzáállását azzal kapcsolatban, hogyan és kik teremtik a kulturális értékeket. Mit jelent a kultúra fogalma ebben a túldigitalizált korban?\n\nÚgy gondolom, hogy a kultúra alapvetően az emberi viselkedésre adott válasz és annak dokumentálása. Még a mi hiperdigitalizált világunkban is létrejöhetnek új esztétikai formák vagy a világra reflektáló új nézőpontok, ezeknek azonban gyakran időre és széles körű elfogadásra van szükségük ahhoz, hogy jelentős hatást gyakoroljanak az emberi életre. Ezt az átalakító hatást nevezzük kultúrának.\n\nMao Ce-tung azt mondta, hogy csak akkor építhetünk új világot, ha a régit leromboljuk. Hogyan kellene ma a hagyományainkra, gyökereinkre tekintenünk? \n\nHogyan tudjuk lebontani a régit, hogy helyet csináljunk az újnak? Lehetséges-e egyáltalán a régit teljesen kiirtani? Olyan kérdés ez, amelyen érdemes elmélkedni. A régi lerombolásának szándéka a múlt elavult és irreleváns elemeire vonatkozik: amikor valami újat vezetünk be, gyakran szükség van bizonyos idejétmúlt vagy lejárt részek eltávolítására. A kulcsfontosságú kérdés azonban az, hogy megvalósítható-e a régi teljes eltörlése. Az emberi lények emlékekkel és érzelmekkel rendelkeznek, és fejlődésünk több millió éves evolúciót, változást ölel fel. A régi destruálásának folyamata sokkal hosszabb lehet, mint az új létrehozása. Amikor új világ teremtéséről beszélünk, bizonytalanok vagyunk abban, hogy ez milyen következményekkel járhat, ám tetteink hatékonyságát és hasznát csak a régi eltörlésével tudjuk érvényesíteni. Az úgynevezett új világ kialakulása a legtöbb esetben megfoghatatlan marad.\n\n', 'A művészet soha nem a vég, hanem a kezdet – Exkluzív interjú Ai Weiwei-jel', 2),
-(19, 'https://storage.googleapis.com/naphire/orosz-ukran-haboru-ukran-katona.inbox800x450.webp', b'0', '2024-03-05 10:32:41', 'A gyors orosz előrenyomulások sorozata kihívás elé állította Ukrajna új védelmi vonalát, amelyet a kulcsfontosságú Avdijivka városból való kivonulásuk után állítottak fel. ', 'Ukrajna február 17-én jelentette be, hogy kivonulnak Avdijivkából. Azóta azonban három apró falu is az orosz erők kezére került, miközben Kijev ragaszkodik ahhoz, hogy soha nem állt szándékában megvédeni ezeket a településeket. De az a védelmi vonal, ahová visszavonultak azóta súlyos orosz támadás alá került, és az oroszbarát források szerint Moszkva részben már mindhárom települést elfoglalta. Ukrajna azonban tagadja ezeket az állításokat. \n\nAz orosz előrenyomulás az ukrán hadsereg lőszerellátásának mély válsága közepette történik, ami szinte élet-halál kérdéssé vált a frontvonalbeli csapatok számára, akiknek be kell osztaniuk a lőszert, és kérdéses, hogy meddig tudnak ellenállni az orosz nyomásnak. A növekvő nyugtalanság másik jele, hogy az ukrán hadsereg új parancsnoka, Olekszandr Szirszkij vezérezredes az elmúlt héten kétszer is megdorgálta beosztott tisztjeit a kulcsfontosságú frontvonalon nyújtott gyenge teljesítmény miatt.', 'Egyre nagyobb a baj Ukrajnában: már a fronton harcoló katonák is pesszimisták', 2),
-(21, 'https://www.hwsw.hu/kepek/hirek/2024/03/applemusic.jpg?1709555596070', b'0', '2024-03-05 12:50:28', 'Hétfőn kihirdette határozatát az Európai Bizottság abban az eljárásban,', 'Hétfőn kihirdette határozatát az Európai Bizottság abban az eljárásban, mely 2020-ban indult az Apple ellen és azt próbálta feltérképezni, hogy az amerikai multi valóban visszaélt-e erőfölényével a zeneistreaming-platformok piacán. A határozat szerint igen, a cupertinóiakat 1,8 milliárd euróra büntették.\nBrutális összegre büntette az Európai Bizottság az Apple-t azért, mert a cég több mint egy évtizeden keresztül jogellenesen korlátozta a zeneistreaming-piac prominens helyi szereplőit - elsősorban nyilvánvalóan a Spotify-t - abban, hogy az iPhone-felhasználókat közvetlenül előfizetőkké konvertálják.\n\nA cégnek most tisztességtelen kereskedelmi gyakorlata miatt 1,8 milliárd eurót kell kifizetnie - jelentette be ma délben Margrethe Vestager, digitális politikáért felelős uniós biztos Brüsszelben.\n\nAz ügy egészen 2019-ig nyúlik vissza és a sokat vitatott Apple-adót állítja a célkeresztbe, vagyis azt a gyakorlatot, amikor az Apple a saját platformjairól egyrészt nem engedi ki a fejlesztőket, másrészt a különböző pénzügyi tranzakciókért jutalékot szed.\n\nAz Apple-adó ellen öt évvel ezelőtt nyújtott be panaszt az Európai Bizottsághoz a világ legnagyobb online zenestreaming-szolgáltatója, a Spotify, majd a Bizottság az ilyenkor szokásos köröket megfutva 2020-ban hivatalos vizsgálatot indított a cupertinói céggel szemben.\n\n', 'Gigászi büntetést akasztott az Apple nyakába Brüsszel', 2),
-(22, 'https://www.hwsw.hu/kepek/hirek/2024/03/opensignal_2402_hu.png?1709541508529', b'0', '2024-03-05 13:01:09', 'Egyértelműen a Telekom-Yettel duó uralja a hazai mobilpiacot mind a hálózatok lefedettségét', 'Ha valaki minél nagyobb területen kíván igénybe venni 5G-szolgáltatást, akkor a Telekomot kell választania, ha viszont a lehető leggyorsabb 5G-s elérést szeretné magának, illetve okostelefonjának, akkor a Yettellel kell szerződnie ma Magyarországon - zanzásítva nagyjából ez szerepel az OpenSignal első 2024-es hazai országjelentésében.\n\nA crowdsourcing alapokon működő cég immár sokadik alkalommal tesz közzé különböző metrikák alapján felállított benchmarkokat a hazai piacról, melyek többé-kevésbé jól szemléltetik, hogy az egyes operátorok milyen stratégia mentén fejlesztik mobilhálózatukat. Az idei első közzétett adatsor felvétele tavaly október eleje és december vége között történt.\n\nA cég tavaly augusztusban jelentős mértékben változtatott metrikáin, így  bekerültek az 5G-s hálózatokra vonatkozó statisztikák a jelentésbe, mely elsősorban járult hozzá ahhoz, hogy a jellemzően a C-sávban fejlesztő Yettel Magyarország élre ugrott az \"elnyert\" kategóriákat illetően.\nA tavalyi év végéről kirajzolódott kép sem különbözik ettől jelentős mértékben, így a Yettel Magyarország adathálózata az összesen 15 kategóriából hat esetében bizonyult a legjobbnak, három kategóriában a Telekommal egyező szintet képviselt, míg a Telekom három elsőséget vitt el hat holtverseny mellett.\n\nFontos változás a legutóbbi adatsor közzététele óta, hogy a Yettel immár nem csak az 5G-s mérések, hanem a 4G-s sebességtesztek szerint is a leggyorsabb hazai hálózattal rendelkezik, míg a Telekom az év végén az 5G-s hálózati elérés - azaz praktikusan a valós 5G-s lefedettség - tekintetében lehagyta a Vodafone Magyarországot és a Yettelt egyaránt.\n\nA különböző paraméterek értékelése alapján továbbra is a Magyar Telekomé a legkonzisztensebb hálózat Magyarországon - derül ki a jelentésből.', '5G: A Telekom fedésben, a Yettel sebességben bajnok', 2),
-(23, 'https://www.hwsw.hu/kepek/hirek/2024/03/githubmalware.jpg?1709556314526', b'0', '2024-03-05 13:02:20', 'Nehezen megállíthatónak tűnik a tavaly indult támadássorozat', 'Milliónyi fejlesztőt és felhasználót érintő támadássorozat alatt áll a GitHub fejlesztői kollaborációs platform az Apiiro biztonsági cég szakértői szerint, az eddigi vizsgálatok alapján több mint 100 ezer projektet veszélyeztethetnek a rosszindulatú felek. Az elkövetők többrétegű obfuszkációs technikát alkalmaznak: klónozzák a legitim repository-kat, és azokat kártékony kódokkal kiegészítve ismét feltöltik és elérhetővé teszik a platformon szinte megegyező néven, majd különféle social engineering módszerekkel próbálnak minél több felhasználót rávenni a letöltésre.\n\nA manipulált adattárak letöltése után az elhelyezett malware-ek potenciálisan kompromittálhatják a felhasználók eszközét. A szakértők szerint az elkövetők a BlackCap-Grabber módosított változatát használják, ami különböző alkalmazások bejelentkezési adatait, jelszavakat és cookie-kat, valamint egyéb bizalmas adatokat képes begyűjteni.\n\nA jelentés több tényezőre is rávilágít a GitHub sebezhetőségével kapcsolatban, és kiemeli, hogy a platform könnyű kezelhetősége, a könnyen elérhető API-k és a számos rejtett adattár jelenléte ideális környezetet teremt a támadók számára az úgynevezett watering hole támadások indításához.\nA \"watering hole\" támadásoknál a megcélzott személyek és vállalatok érdeklődési körébe tartozó és feltehetőleg gyakran felkeresett felületeket fertőzik meg a támadók, és az alkalomra várnak, hogy a gyanútlan áldozat felkeresse az általa megbízhatónak tartott weboldalt. Ez esetben a támadók a gyakran letöltött és népszerű repository-kba fecskendeztek rosszindulatú kódokat, amiknek az elérését a manipulált forkok terjesztésével próbálták növelni többek közt a közösségi médián, online fórumokon és más csatornákon keresztül, így rávéve a felhasználókat a letöltésükre.\n\nA szakértők bejelentése után a GitHub a legtöbb rosszindulatú kódot tartalmazó adattárat már eltávolította, de a jelek szerint a támadók továbbra is próbálkoznak, és aktívan használják a módszert. A művelet a jelek szerint 2023. május óta tart és azóta folyamatosan megfigyelhető a rosszindulatú aktivitás, korábban a Python Package Index (PyPI) felületén találtak kompromittált kódokat. A platform ezért óvatosságra inti a felhasználókat, különösen az ismeretlen eredetű repository-k letöltését nem javasolja, érdemes meggyőződni előtte a kód forrásáról és legitimitásáról a projektekhez való felhasználás előtt.\n\nA GitHub szóvivője szerint a platformon már több mint 420 millió repository található, a visszaéléseket és spameket az automatizált módszerek mellett manuális felülvizsgálattal is próbálják szűrni. A szakértők szerint mivel a támadássorozat rendkívül kiterjedt és automatizált módon zajlik, ezért mértékéből adódóan akkor is ezres nagyságrendben sikerül áldozatokat szednie az elkövetőknek, ha csak a módosított csomagok egy százalékának sikerül túljutnia a szűrőkön.', 'Vírusokkal szórták meg a GitHubot', 2),
-(24, 'https://cdn.vg.hu/2024/03/l3g8S8tMKAt1e9XbxzfYkoAPgApsHkO0G-lh9x5_438/fill/700/394/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50L2VkYWYwYjY5Zjk2ZjQ2MmRhZWJhNzE4NzYzODlkN2Y1.jpg', b'0', '2024-03-05 13:11:45', 'Tizenkilenc emeletes KISS villamos motorvonat már jöhet, két továbbinak még várnia kell.', 'Kiemelt a kormány néhány legfontosabbat a kiemelt közlekedési projektekből, hogy az érintett beruházásokon már az uniós támogatási döntés megszületése előtt is lehessen dolgozni\nHuszonöt közlekedési beruházás valósulhat meg az év első napjától külön kötelezettségvállalás nélkül az idei költségvetés terhére abból az 56-ból, amely az Integrált Közlekedésfejlesztés OP előirányzata a hazai társfinanszírozáson felül egy új kormányhatározat szerint.\nA lehetőség az érintett támogatói határozat meghozataláig érvényes. A kiválasztott projektekben közös, hogy a támogatási kérelmüket már tavaly beadták egy kivételével. Ez az egy viszont a felsorolásnak éppen a legnagyobb értékű beruházása is: a Déli körvasút II. ütemének a CEF2 keretében történő, nem támogatott elemeiről van szó, nevezetesen a nádorkerti és a közvágóhídi új megálló, valamint a kiegészítő létesítmények építéséről. A munka 210,1 milliárd forintba kerülne, a támogatási kérelem beadása mellett pedig 2024-es dátum szerepel.\nA most hátszelet kapott beruházások közül a második legnagyobb értékű – 112,9 milliárd forintos – annak a 19 nagy kapacitású Stadler gyártmányú KISS villamos motorvonatnak a beszerzése, amely majd a MÁV-Start flottáját fogja erősíteni. A szerelvények 600 ülőhelyesek lesznek, óránként 160 kilométeres sebességgel kell tudniuk haladni, kerékpárt is lehet majd rajtuk szállítani, és akadálymentesen lesznek.  Indulhatnak az elővárosi vonalfejlesztések előkészítései is, ezek a Rákospalota–Újpest–Vác–Vácrátót vonalé (3,3 milliárd forint) és a Kőbánya–Kispest–Lajosmizse vonalé (4,1 milliárd forint). Hasonló munka a gödöllői és a csömöri HÉV rekonstrukciója és az M2 metróval való összeköttetése, ideértve az üzemképes járművek beszerzését is (7 milliárd forint). \n', 'Hatalmas hátszelet kapott a Déli körvasút építése', 2),
-(25, 'https://cdn.vg.hu/2024/03/cxaG-x3uk6D8tYIZBs6QFGcsfZJuTN1l0KRMmK9CKCM/fit/1024/682/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50Lzc5Y2VlODkwYjcxOTQyN2E4OWVhMWZlMjNiMmI1NzVj.jpg', b'0', '2024-03-05 13:15:41', 'Közeledik a ramadán és a határidő, de nincs jele áttörésnek, Áttörés nélkül szakadtak ⁠⁠meg kedden a tárgyalások Kairóban a Hamász és a közvetítők között.', 'A Hamász egyik magas rangú illetékese, Basszem Náim elmondta a Reutersnek, hogy a kétnapos egyeztetés során benyújtottak egy tűzszüneti javaslatot, és most várják a választ Izraeltől, amely nem küldött delegációt az egyiptomi fővárosba erre a fordulóra, de folyamatos kapcsolatban állt az egyiptomiakkal.\n\nBenjamin Netanjahu kormányfő nem akar egyezségre jutni, és a labda most az amerikaiak térfelén van\n\n– közölte Náim. Washington viszont azt tudatta, hogy már az asztalon van egy, az izraeliek által jóváhagyott megállapodás, és a Hamásznak már csak el kell fogadnia azt. \nIzrael nem kommentálta a tárgyalások hírét, egy forrás azonban korábban azt mondta a hírügynökségnek, hogy azért nem vettek részt a megbeszélésen, mert a Hamász nem volt hajlandó átadni listát a még életben lévő túszokról. Náim szerint azonban ezt képtelenség összeállítani tűzszünet nélkül, mert a túszok több helyen vannak fogva tartva  a háborús övezetben, különböző önálló egységek őrizetében.  \nA kairói tárgyalásokat tartották az utolsó esélynek ahhoz, hogy a jövő héten kezdődő ramadán előtt elérjék az első hosszabb, negyven napos tűzszünetet, amelynek során több tucatnyi túsz szabadulna, és segélyeket juttatnának Gázába, hogy megakadályozzák az éhínséget. Joe Biden amerikai elnök már korábban beharangozta a sikert, bár senki sem értette, hogy mire alapozta az optimizmusát. \n\nAz Egyesült Államok – Izrael legközelebbi szövetségese és támogatója – ugyanakkor felszólította a zsidó államot, hogy tegyen meg többet a gázai humanitárius katasztrófa enyhítése érdekében. Az övezet egész térségeibe nem jut egyáltalán élelmiszer, \n\na még működő kórházakban egyre több az éhhalál küszöbén lévő gyerek.\n\nA Reuters beszámolt egy Ahmed nevű kisgyerekről, aki a⁠⁠ kirobbanűása előtti súlyának felét elveszítette és már csak hat kilós. A helyzet Gáza északi részén a legrosszabb, ahová nem jutnak el a segélyszervezetek és az újságírók. A Hamász vezette egészségügyi minisztérium szerint 15 gyerek halt meg egyetlen kórházban alultápláltság és kiszáradás miatt.', 'Megszakadtak a tűzszüneti tárgyalások a Hamásszal', 2),
-(26, 'https://cdn.vg.hu/2024/03/dlwKPF0ZIy-0GlvGHHfitfFFl3YWAMP4WPxVulOgBcE/fit/1200/795/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50L2M5ZjhkY2EyMjAyMTRlZjliN2IyMDRiNmVlMjExYWRk.jpg', b'0', '2024-03-05 13:17:22', 'A sajtóban megjelent, hogy a kormány lakásbiztosításokat érintő kampánya nem az ügyfeleknek lesz jó.', 'Ahogy arról lapunk is beszámolt, március elsejével elindult az első magyarországi lakásbiztosítási kampány, amelynek köszönhetően a következő egy hónapban – az évforduló időpontjától függetlenül – újraköthetők lesznek a lakásbiztosítási szerződések.\n\n„Egyelőre teljesen értetlenül állok a HVG állításai előtt, ugyanis a családok megvédése, a lakásbiztosítások fejlesztése érdekében életre hívott kampányt úgy beállítani, hogy azokkal az ügyfelek nem járnak jól, teljes lehetetlenség” – fejtette ki a Világgazdaság megkeresésére Kovács Zsolt. A Nemzetgazdasági Minisztérium (NGM) nemzeti biztosítási stratégiáért és egyes pénzügyi szolgáltatásokért felelős miniszteri biztosa a portál cikkében megjelent állításokra reagált, amelyben azt írták, nem jó az ügyfeleknek, hogy a kormány belenyúl a lakásbiztosítási piacba. \nA miniszteri biztos szerint azonban a valóság ezzel ellenkezőleg az, hogy az életre hívott kampányban az ügyfelek csak jól járhatnak, mert fejleszthetik lakásbiztosításaikat, így azonos díjszint mellett több és jobb fedezetet kaphatnak, vagy változatlan fedezeti kör mellett olcsóbb biztosításhoz juthatnak. \n\nSzerinte a Nemzetgazdasági Minisztérium és a Magyar Nemzeti Bank is kihangsúlyozta: a kampánynak nem az a fő célja, hogy olcsóbb biztosítások jöjjenek létre, hanem hogy korszerűbb, jobb ár-érték arányú lakásbiztosítások legyenek a piacon \n\nSzámomra az is felháborító és visszautasítandó, hogy az állampolgárokat valaki ennyire lenézi. Ugyanis a vagyonbiztosítások tekintetében, amikor az ember saját vagyontárgyára köt biztosítást, nagy gondossággal és körültekintéssel szokott eljárni. Kiemelem, hogy a kgfb-kampány csak a technikai lebonyolítás kapcsán volt hasonló a mostanihoz, a lakásbiztosítással valódi tartalmi döntési analógiát mutató casco biztosítást illene inkább ide idézni\n\n– ha már gépjárműves példát hozott a HVG.\n\nKovács Zsolt rávilágított, hogy azt a cikk írója is elismeri, a lakásbiztosítások egy része elavult, ráadásul az elmúlt évek jelentős vagyongyarapodása okán alulbiztosítottá váltak. Ehhez nyújt szerinte óriási segítséget, hogy márciusban ingyenes lehetőség nyílik a biztosítások megújítására.\n\nNe feledjük, jelenleg 3,3 millió lakásbiztosításon keresztül mintegy 200 ezermilliárd forintnyira tehető a biztosított összvagyon. Így nemcsak egyéni, hanem nemzetgazdaságilag is jelentős kérdés a megfelelő biztosítások megléte\n\n– mondta a miniszteri biztos. \n\nKözismert tény az is, hogy évente csak a teljes lakásbiztosítási szerződéses állomány átlagosan alig több mint 10 százaléka fordul meg a piacon, ráadásul az egyik felmérésből az is kiderül, hogy az ügyfeleik többsége átlagosan 3-5 évente tekinti át és frissíti a biztosítási feltételeit. Ennek kiküszöbölésére kínál most remek lehetőséget az életre hívott kampány.\n\nA minősített fogyasztóbarát otthonbiztosításokat (MFO) érintő kritika kapcsán a miniszteri biztos nyomatékosította, hogy az MFO egy olyan szakmai minimum, amely garantálja az ügyfeleknek, hogy minden szükséges elemet megtalálnak a termékben. Ilyen például az elemi kár is, így a biztosítók időben fizetik a kárt, és nem bújnak ki a szolgáltatási kötelezettségük alól. Ráadásul – mint ahogy a piaci termékek – az MFO mellé is köthető számos extra fedezet.', 'Lakásbiztosítási kampány: ízekre szedte a kifogásokat a miniszteri biztos', 2),
-(27, 'https://img.hvg.hu/Img/da658e97-86c0-40f3-acd3-b0a850f32c30/1e70e4fb-d287-495e-870c-013239e04c8b.jpg', b'0', '2024-03-05 13:42:43', 'Titokzatos tanácsadó testületet verbuvált Orbán Viktor.', 'Orbán Viktornak ad majd “stratégiai kérdések széles skáláján” tanácsokat az a hétfőn létrejött miniszterelnöki tanácsadó testület, amely hivatalosan csak március 15-én bont zászlót és kezdi meg formálisan is a munkát, mint javaslattevő, nem pedig döntéshozó testület – tudta meg a hvg.hu.\n\nA grémiumról Panyi Szabolcs, a VSquare és a Direkt36 újságírója közölt kormányközeli forrásaira hivatkozva először részleteket egy vasárnap bejegyzésében az X-en. Azt írta, a tagok közt magas rangú biztonsági/hírszerzési tanácsadók, és “tekintélyes” jobboldali személyiségek lehetnek.\n\nPanyi neveket is közzétett: Kovács József nemzetbiztonsági- és Bakondi György belbiztonsági főtanácsadó, Papp Károly titkosszolgálatokat felügyelő államtitkár, Maróth Miklós akadémikai kutatóhálózati elnök, Stumpf István volt alkotmánybíró és Kovács Árpád a Költségvetési Tanács elnöke.\nKözülük a hvg.hu elérte a néhány hete még államfőjelöltként, Novák Katalin utódaként is felmerült Stumpf Istvánt, az első Orbán-kormány kancelláriaminiszterét, volt alkotmánybírót, aki kérdésünkre nem cáfolta a testület tervét és azt sem, hogy tag lesz, de részleteket nem mondott, csak annyit:\n\nakkor tudok erről nyilatkozni, ha hivatalossá válik.”\n\nA hvg.hu-nak sikerült elérnie egy másik tagot is, aki név nélkül, de a Panyi által írt többi személyt is megerősítette, sőt azt állította: lényegében, informálisan már ma, hétfőn megalakult az új tanácsadó testület, amelynek létrejöttét a kormányfő politikai igazgatója, Orbán Balázs is egyengette.\n\nArról, hogy mikor lehet a tanácsadó testületről részleteket is megtudni, Stumpf lapunknak azt mondta, “hamarosan, de ez a miniszterelnökön múlik”. A másik, név nélkül nyilatkozó tagtól úgy tudjuk, csak a jövő héten jelenik majd meg az erről szóló kormánydöntés, várhatóan 14-én, mivel\n\na tervek szerint ünnepélyesen a nemzeti ünnepre, március 15-re időzítenék a testület “zászlóbontását”.\n\nA hvg.hu-hoz eljutott információk szerint ez klasszikus tanácsadó testületként működne, tehát a grémiumnak javaslattételi joga lesz, döntéshozatali jogosítványt, ilyen formális jogot nem kap. Viszont nemcsak egy félévente összeülő dísztestület lenne az elképzelések szerint. Ehelyett\n\negy rendszeres, operatív tevékenységet végző testület jönne létre.\n\nA tervek szerint a következő napokban véglegesítik a testület működésének jogszabályi kereteit, így többek között azt is, hogy milyen tiszteletdíj jár majd a tagoknak, vagy éppen milyen lesz a munkájukat segítő apparátus. A részletekről szóló kormányrendelet pedig még március 15-e, a működés hivatalos startja előtt megjelenik.\n\nA tanácsadó testület létrehozásáról egyébként az X-en közzétett posztjában Panyi Szabolcsa azt írta, kettős célja van. Egyrészt a pedofilbotrányban deffenzívába szorult Orbán erős vezetői imázsát segítené: a miniszterelnök mindig kézben tartja a dolgokat és komoly emberekkel veszi körül magát.\n\nMásrészt – említett egy másik fontos szempontot Panyi – a testület létrehozása komoly változásokat jelezne a magyar nemzetbiztonsági szervek politikai felügyeletében is, hiszen jelenlegi posztjáról Papp és Kovács is távozhat, átadva helyüket “egy politikailag lojálisabb új generációnak”.\n\nFRISSÍTÉS: Cikkünk megjelenése után a Kormányzati Tájékoztatási Központ (KTK) kiadott egy közleményt, melyben hivatalosan is bejelentették a stratégiai tanácsadó testület megalakulását. Azt írták: “A veszélyek korában Magyarország békéjének és biztonságának erősítése, valamint a magyar emberek életfeltételeinek javítása a kormány legfontosabb célkitűzése. Ennek a munkának a támogatásáért született döntés a kormány mellett állandó jelleggel működő stratégiai tanácsadó testület megalakításáról. A testület célja, hogy elemzésekkel és tanácsokkal segítse a kormány és a miniszterelnök munkáját a kormányzás egyes területeinek stratégiai szempontból történő áttekintésével, különös tekintettel a kormányzati működés szuverenitási, társadalmi, gazdasági, biztonsági, kulturális és egyéb kockázatokkal szembeni ellenálló képességére”.\n\nA testület elnöke Orbán Balázs, a miniszterelnök politikai igazgatója. A testület működésével összefüggő feladatok ellátásáról a Miniszterelnöki Kabinetiroda szervezeti keretei között működő titkárság gondoskodik, amelyet a miniszterelnök politikai igazgatója irányít.\n\nA testület többi tagját a miniszterelnök kérte fel hétfőn. A tanácsadó szervezet 2024. március 14-i dátummal, az alábbi tagokkal kezdi meg működését:\n\nBakondi György,\nKovács Árpád,\nMaróth Miklós,\nPapp Károly,\nés Stumpf István.', 'Új tanácsadó testületet gyűjtött maga köré Orbán, benne Stumpffal, Bakondival és Maróthtal', 2),
-(28, 'https://img.hvg.hu/Img/da658e97-86c0-40f3-acd3-b0a850f32c30/6b953b5a-d169-419f-aada-7896537260fd.jpg', b'0', '2024-03-05 13:46:38', 'Egy partizános podcast műsorvezetőjét indítaná el a Szikra Horváth Csaba székéért.', 'Sudár Orsolyát akarja polgármesterjelöltként indítani a Szikra Mozgalom Zuglóban – közölte a Jámbor Andrást parlamentbe juttató baloldali szervezet hétfőn a Facebookon.\n\n„Úgy érzem, hogy az önkormányzat elkényelmesedett. Azt gondoljuk, hogy Zugló erős ellenzéki bástya, de ez csak akkor maradhat így, ha foglalkozunk azokkal, akik az erőt adják: a zuglóiakkal, magunkkal” – közölte a szikrás polgármester jelölt. A kampányígéretei között az szerepel, hogy\n\nmini-Dubaj helyett élhető parkvárost akar Rákosrendezőn;\nhatékonyan működő kerületi szociális ellátórendszert ígér;\nés azt állítja, hogy nem saját magáért, hanem Zuglóért fog dolgozni, ha bejut.\nA Szikra Mozgalom saját meghatározása szerint „egy rendszerkritikus baloldali, szociális és zöld ügyeket képviselő politikai szervezet”, amely az országos politikában többek között azzal vált ismerté, hogy ez a mozgalom indította képviselőjelöltként Jámbor Andrást, aki 2022-ben meg is szerezte Budapest 6. választókerületének országgyűlési képviselői helyét.\n\nA szervezet tagjai korábban Baranyi Krisztina, Pikó András és Karácsony Gergely kampányát segítették már a 2019-es önkormányzati választásokon.\n\nSudár Orsolya korábban a Szikra elnökségi tagja is volt, 2021 óta a Partizánon futó, A város másik oldalán című urbanisztikai podcastnak az egyik műsorvezetője.\nAhogy arról korábban már beszámoltunk, Zuglóban egyelőre elég kevéssé tűnik esélyesnek az, hogy előválasztáson dőljön el a közös ellenzéki jelölt.\n\nEbben a kerületben a regnáló polgármester az MSZP-s Horváth Csaba, akit a DK is támogat, és aki írásba adta, hogy nem kíván részt venni előválasztáson.\n\nA másik, korábban már ismert jelölt Rózsa András momentumos (ex)alpolgármester. Őt a pártján kívül a CivilZugló Egyesület és Hadházy Ákos képviselő is támogatja.\n', 'Jámbor Andrásék is előválasztást akarnak Zuglóban', 2),
-(29, 'https://img.hvg.hu/Img/da658e97-86c0-40f3-acd3-b0a850f32c30/fe86911b-7c89-4b86-a98e-ec1e5e310739.jpg', b'0', '2024-03-05 13:48:19', 'A Zara és a H&M éppen a gyakran frissülő kínálattal és az alacsony árakkal tört be a divatiparba', 'Alapjaiban rajzolták újra a divatipar erőviszonyait az ultrafast-fashion képviselői, a filléres árakkal és szinte folyamatosan frissülő kínálattal kecsegtető, főleg Kínából szállító webáruházak. Itthon a Shein 2020 óta hódít, a Temu pedig tavaly érkezett meg elődjét is túlszárnyaló lendülettel, még agresszívebb influenszer-marketinggel és legalább annyira problémás munkakörülményekkel.\nA klasszikus fast-fashion áruházak, mint amilyen a spanyol Inditex tulajdonában lévő Zara vagy a svéd H&M, így most annak a meccsnek a másik oldalán találják magukat, amelyet az 1990-es és 2000-es években sikerrel vívtak meg a luxusmárkákkal szemben. Akkor ők voltak azok, akik gyakrabban megújuló kínálattal és megfizethető árakkal nyerték meg maguknak a vásárlókat, új kihívóikkal szemben viszont már ők tűnnek drágának és lassúnak.\n\nA Magyarországon is népszerű divatcégek nem akarják tétlenül nézni, ahogy fogyasztóik átpártolnak az új riválisokhoz. Néhány esetben akár az árversenyt is megpróbálják felvenni a néhány ezer forintos kínai termékekkel, ha ez nem lehetséges, célba veszik a némileg fizetőképesebb fogyasztói rétegeket. Fegyverként ott van a kezükben a luxustermékekhez ugyan nem fogható, de a filléres áruknál magasabb minőség, illetve az új szereplők felé irányuló, fenntarthatósággal és a kizsákmányoló körülményekkel kapcsolatos kritikák. Igaz, ezeken a területeken ők sem feddhetetlenek, és a Shein és a Temu mellett a használtruha-piaccal szemben is védekezni kényszerülnek.\n\nAz Inditex a divatipar legnagyobb szereplője világszinten, 2022-ben 32,6 milliárd euró (mintegy 12,8 ezer milliárd forint) értékében adott el ruhatermékeket, ez közel ötöde az az évi magyar GDP-nek. Az eladások mintegy háromnegyede a legismertebb márkához, az itthon is sokak által kedvelt Zarához köthető, de jelentős részt vállal az értékesítésből a Pull&Bear, a Bershka, a Stradivarius, és a Massimo Dutti is.\n\nAz alapító Amancio Ortega 1963-ban kezdett ruhagyártással foglalkozni, a Zara 1975-ben született meg, a nemzetközi piacra pedig az 1980-as évek végén lépett ki. Ortega annak ellenére él visszahúzódó életet, hogy időközben a világ egyik leggazdagabb embere lett. Egy darabig vezette is a legnagyobb vagyonnal rendelkezők listáját, jelenleg pedig Európa harmadik leggazdagabbja, több mint 100 milliárd dolláros vagyonnal (több mint 36 ezer milliárd forint). Az irányítása alatt álló divatcégeket 1985-ben vonta össze az Inditex létrehozásával, a cég úgy lépett a madridi tőzsdére 2001-ben, hogy két évvel korábban még csak fénykép sem jelent tulajdonosáról a sajtóban.\nA bejáratott márkáknak van egy kevésbé ismert mostohatestvére is. A Leftiesnek már a neve (balkezesek) is árulkodó: az Inditex 1993-ban azért indította útjára a márkát, hogy megszabaduljon az előző szezonokból raktárban maradt Zara-termékektől. Egészen 2014-ig saját honlapja sem volt, mindössze néhány spanyolországi és portugáliai üzletben csaphattak le a vásárlók a kedvező áron kínált ruhadarabokra. Azt pedig, hogy az Inditex még most sem tekint a Leftiesre divatportfóliójának teljes jogú tagjaként, az is jól jelzi, hogy a csoport honlapján továbbra sem szerepel a márkák között.\n\nAzt már 10 évvel ezelőtt felismerte a spanyol ruhaipari cég, hogy a Lefties többre hivatott, mint a raktárban maradt Zara-darabok rásózása a vékonyabb pénztárcájú vagy a trendekre kevésbé fogékony vásárlókra. Az internetes értékesítés megindulásával párhuzamosan ekkor kezdett saját, alacsony árkategóriás kollekciókat piacra dobni a márka. Azóta Spanyolországban elérte az évi 5 millió vásárlót, Portugáliában pedig tavaly népszerűbb volt, mint a Zara. Az elmúlt években pedig óvatosan, de kitette a lábát az Ibériai-félszigetről is, a Reuters szerint jelenleg 17 országban van üzlete.\n\nHazánkba még nem érkezett meg, de a szomszédba már igen: a délnyugat-romániai Craiovában tavaly októberben nyílt meg a Lefties üzlete. Bár bőségben nem tudja felvenni a versenyt a Lefties a Sheinnel, árakban igen: egy sima fehér pólóhoz akár 15 lej (1200 forint) alatt is hozzájuthatnak a romániai vásárlók, ennél olcsóbbat a kínai vetélytárs sem igazán tud ajánlani számukra. A Zara román webáruházában egy hasonló termék 3000 forint körül kezdődik, a Leftiesnél és a Sheinnél ennyiért már egy farmernadrághoz is hozzájuthatunk. Az is beszédes, hogy a Lefties oldalán – szemben a Zaráéval – a termékeket ár szerint is sorba rendezhetjük.\n\nA kiszállítás árát és sebességét tekintve Romániában veri a Lefties a Sheint. Előbbi 19 lejért 3-5 napos kiszállítást vállal, utóbbi 11-15 nap alatt és némileg magasabb áron viszi házhoz a rendelt terméket, bár 44,55 lej (3500 forint) ingyenes a kiszállítás. A Lefties házhozszállítási tarifája és tempója ugyanakkor nem jelent újdonságot a Zarához képest, amely ugyanezt tudja kínálni, kiegészítve egy valamivel drágább, de még gyorsabb opcióval, ezt a Leftiesről rendelve nem tudjuk igénybe venni.\n\nArról nincs hír, hogy a közeljövőben Magyarországra hozná a márkát az Inditex. Szüksége lenne rá: a Google Trends adatait vizsgálva az elmúlt 12 hónapban 15 megyében már népszerűbb volt a Shein, mint akár a Zara, akár a H&M, a spanyol márka pedig csak a fővárosban váltott ki nagyobb érdeklődést, mint kínai és svéd riválisa.', 'Raktárban maradt és olcsó ruhákkal versenyezne a Zara a Shein ellen', 2),
-(30, 'https://img.hvg.hu/Img/da658e97-86c0-40f3-acd3-b0a850f32c30/14804ee6-1c7a-4824-a94f-f0514bf69d3d.jpg', b'0', '2024-03-05 13:53:46', 'Dúsgazdag üzletemberek tucatjai alakítottak vagyonkezelő alapítványokat az elmúlt hónapokban,', 'A milliárdosok új hóbortjának egyik első képviselője lett tavaly nyáron ifjabb Sánta János. A hódmezővásárhelyi Sánta család már tíz évvel ezelőtt is úttörő volt, amikor aktív szerepet vállalt az olyan kistulajdonosok javainak újraelosztásában, mint a trafikosok. Lázár János akkori fideszes frakcióvezető ismerőseként az üzletember részt vehetett a jogszabályi környezet kialakításában, majd a dohánykoncessziók egyik kedvezményezettje, sőt a dohányboltokat ellátó monopólium haszonélvezője lett.\n\nSántáék a 40 milliárd forintosra becsült vagyonukkal tavaly már az ország 53. leggazdagabb családjának számítottak, úgyhogy időszerű volt gondoskodniuk arról, mi legyen ezzel a jószággal. Júliusban és augusztusban az ifjabb Sánta létre is hozta a Solidium Capital és a Project Six Pro Vagyonkezelő Alapítványt, amivel ismét úttörő lett a családja. A milliárdosok ugyanis tavaly nyáron találtak rá tömegesen a bizalmi vagyonkezelés intézményére, és néhányan már akkor rákaptak az alapítványi formára, a többségük pedig az ősszel követte őket. Úgy tűnik, ez utóbbinak van néhány pótlólagos előnye.\n\n', 'A NER titkolózó milliárdosai újabban nem bizalmi, hanem alapítványi vagyonkezelőknél rejtik el a pénzüket', 2),
-(31, 'https://i.cdn29.hu/apix_collect_c/ngg_images/2403/05/elon_musk_milliardos_083345_1_original_760x425_cover.webp', b'0', '2024-03-05 14:06:06', 'Az egykori vezérigazgató Parag Agrawal és más magas rangú ex-fejesek szerint a milliárdos nem adta meg nekik, ami járt volna.', 'A jövő hónapban lesz másfél éve, hogy hónapokig tartó pereskedést követően az üzletből kihátrálni próbáló Elon Musk végül kénytelen volt felvásárolni a Twittert, a közösségi média történetének legdrágább üzlete keretében 44 milliárd dollárt fizetve a 2006-ban útjára indított mikroblogért.\n\nA Tesla és a SpaceX tulajdonosa azóta számos változtatást eszközölt a manapság már X néven futó oldalon, a legelső intézkedése azonban az volt, hogy kirúgta a platform mögött álló cég korábbi vezetőit. A kapun kívül került fejesek most visszatámadtak, mivel véleményük szerint Musk súlyos összegekkel tartozik nekik.\nA Reuters hírügynökség beszámolója szerint az egykori vezérigazgató Parag Agrawal, a pénzügyi igazgató Ned Segal, a jogi igazgató Vijaya Gadde és a korábbi általános jogtanácsos Sean Edgett csoportos perben mentek neki a világ leggazdagabb emberének, aki állítólag 128 millió dollárnyi, vagyis közel 47 milliárd forintnyi végkielégítéssel maradt adósuk.\n\nA San Franciscóban benyújtott kereset alapján Musk koholt vádakkal bocsátotta el az egykori vezetőket, amelyekre hivatkozva megtagadta a számukra évekkel korábban beígért végkielégítésük kifizetését. A felperesek azt állítják, hogy a korábbi egyezség szerint a milliárdos egy teljes évnyi fizetéssel és több százezer részvényopcióval tartozik nekik.\n\nA per érdekessége, hogy Agrawalék szerint Elon Musk tavaly megjelent életrajzi könyve is bizonyítékokkal szolgál arra nézve, hogy a mágnás visszaélésszerűen járt el a kirúgásukkor. A kötetet az a Walter Isaacson jegyzi, aki korábban Henry Kissinger és Steve Jobs életrajzát is elkészítette, egy ponton pedig leírja, hogy Muskék miként előzték meg Agrawal felmondását, hogy inkább ők rúghassák ki, és így a saját értelmezésük szerint ne kelljen végkielégítést fizetniük.\n\nA kereset arra is felhívta a figyelmet, hogy mióta a Twitter/X a mágnás birtokában van, a mögötte álló X Corpnak szokásává vált megtagadni a partnereket illető kifizetéseket, ami miatt olyan sok per indult a vállalat ellen, hogy azt már egy külön weboldal tartja nyilván.  ', 'Egy rakás pénzt követelnek Elon Musktól a Twitter kirúgott vezetői', 2);
-INSERT INTO `news` (`id`, `img_path`, `priority`, `releasedate`, `subtitle`, `text`, `title`, `users_id`) VALUES
-(32, 'data:image/jpeg;base64,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', b'0', '2024-03-05 14:22:48', 'Miközben Christian Horner Max Verstappen menedzserén keresztül próbálja csillapítani a kedélyeket', 'Egy végtelennek tűnő szappanoperává alakult a Red Bull csapatának krízise. Minden nap láthatunk belőle egy-két részt, ami éberen tartja a figyelmet, de magát a lényeget nem ismerhetjük meg. A találgatásokat már követni is nehéz, annyi és annyiféle van belőlük.\n\nA Bahreini Nagydíj után nagy port kavart Jos Verstappen nyilatkozata. Max Verstappen édesapja a nyilvánosság előtt fordult Christian Horner csapatfőnök ellen, és kijelentette: amíg a belső vizsgálat alá vont, de végül felmentett brit a Red Bullnál van, nem lesz nyugalom, a sikercsapat darabjaira fog hullani. Miközben a hírek szerint a múlt hétvégén együtt vacsorázott Toto Wolff-fal, az éppen új versenyzőt kereső Mercedes csapatfőnökével, egyes források tudni vélik, hogy a volt versenyző baráti körökben már azt mondogatja: amennyiben Horner marad a Red Bullnál, Max csapatot fog váltani.\nA háromszoros világbajnoknak 2028 végéig szól a szerződése a Red Bull-lal, ám létezik kilépési záradék a megállapodásában. Az F1-Insider úgy tudja, Verstappen a maradását nem Christian Horner, hanem a Red Bull-tanácsadó Helmut Marko személyéhez kötötte: abban az esetben, ha a 80 éves szakember távozna a csapattól, előtte is megnyílna a lehetőség ugyanerre.\nA német lap szerint a Red Bull két táborra szakadt. Az egyik oldalon Horner és az őt támogató többségi tulajdonos, a thaiföldi Yoovidhya család áll, akik gondoskodtak róla, hogy a belső vizsgálat után a brit a pozíciójában maradhasson. A másik oldalon a Red Bull osztrák vezetői állnak, Mark Mateschitzcel, Oliver Mintzlaff-fal, Helmut Markóval. És az F1-Insider szerint Jos Verstappen mellett Adrian Newey is velük ért egyet, és már rég szabadultak volna a szexuális zaklatással vádolt Hornertől, de tehetetlenek, mivel Salzburg a 49%-os részesedésével', 'Marko: „Én nem fogok Verstappen útjába állni”', 2),
-(33, 'https://cdn.nemzetisport.hu/2024/03/DbHsKJIucDEAwVGKqGWPDx42tGFKN1rb9aFGBqaiEv0/fill/1347/758/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50L2FlZWQ4YTI5YjVlMjQ3YzRiZmRiNWYzNjYxN2IxNjE3.jpg', b'0', '2024-03-05 17:55:10', 'A Ferencváros 21 éves jobbszélsője a januári Eb-n hívta fel magára a figyelmet.', 'A négyszeres BL-győztes északnémet klubtól nyáron távozik a svéd klubikon, Niclas Ekberg, illetve honfitársa, Sven Ehrig is – Imre az ő pótlásukra szerződik Kielbe, akárcsak a német válogatottban szereplő Lukas Zerbe. \n\nAz olimpiai ezüstérmes kézilabdázó Kökény Bea, illetve az olimpiai ezüstérmes vívó, Imre Géza fiát már jó ideje nagy tehetségként tartják számon. Imre Bence a januári Európa-bajnokságon robbant be a nemzetközi köztudatba, ahol érett és gólerős játékkal segítette Chema Rodríguez csapatát. \n\n„Amint minden részletben megegyeztünk és hivatalosan is aláírtuk a papírokat, nyilvánosságra hozzuk Imre Bence szerződtetését” – nyilatkozta a fent említett forrásnak Szilágyi Viktor, a Kiel magyar származású ügyvezetője. \n\nLapunk ezzel kapcsolatban úgy értesült, hogy a transzfer bejelentésére napokon belül sor kerülhet.', 'FÉRFI KÉZI: NÉMET SZTÁRCSAPATHOZ SZERZŐDIK IMRE BENCE – SAJTÓHÍR', 4),
-(34, 'https://privatbankar.hu/i/b/e/1/0/7/9/2/6/4/3/1/6/e/0/8/a/5/1/f/b/li-csiang-az-elso-aki-nem-tart-evertekelot-eleg-furcsa-dolog-ez-a-hagyomanyokhoz-ragaszkodo-kinaban-foto-mtiepa_lgc.jpg', b'0', '2024-03-05 18:08:24', 'Három évtized óta először fordul elő, hogy a kínai miniszterelnök nem tart sajtótájékoztatót az éves parlamenti ülés végeztével.', 'Ma kezdődik Pekingben az Országos Népi Kongresszus (NPC), az ország legfelsőbb törvényhozásának éves ülésszaka. Ezen a kormányzó Kommunista Párt (KKP) rendszeresen fontos gazdasági és politikai bejelentéseket tesz.\n\nAz NPC mindig fontos esemény a kínai politikai naptárban, de nem azért, mert valódi vitát és politikai vitát foglal magában, hanem azért, mert a kormány vezetése itt határozza meg az egész évre vonatkozó napirendjét. Az idei kongresszus azért lesz különösen jelentős, mert a Hszi Csin-ping-rezsim egyre romló gazdasági helyzettel néz szembe, és a fordulatnak semmi jele nincs a láthatáron.\n\nHidegzuhany a megfigyelőknek\nHárom évtized óta Li Csiang lesz az első kínai miniszterelnök, aki nem tart sajtótájékoztatót az éves parlamenti ülés végeztével, így a befektetők nem kapnak lehetőséget arra, hogy többet megtudjanak a nemzet politikai és gazdasági irányvonaláról.\n\nA változás tovább növelik a kínai politika átláthatóságával kapcsolatos szélesebb körű aggodalmakat, és tovább rontja a miniszterelnök megítélését, amelyet már eddig is aláásott Hszi elnök keményvonalas irányítása minden politikai területen, beleértve a gazdaságot is.', 'Aggasztja a befektetőket Kína titkolózása', 4),
-(37, 'https://cdn.nemzetisport.hu/2024/03/Verwjo69rx-qx5mYC3MKPIs6l0ydKru-3PGCKfOewSE/fill/700/394/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50LzVkNDc4YWNhNjY3MTRkYTE4ZjNjZjU0MzZlMmUyMDlk.jpg', b'0', '2024-03-05 18:38:12', '„Leírhatjátok ezt, de tegyétek mellé azt is, amit előtte mondtam” ', 'A manchesteriek norvég klasszisa az esetleges jövőbeni klubváltásáról, Lionel Messiről és a sikeréhségről is beszélt a City keddi sajtótájékoztatóján. \n\n„Én egyelőre csak arra koncentrálok, ami a pályán történik. Nagyon sok meccsünk van még hátra ebből az idényből. Két napja derbit vívtunk, holnap a Bajnokok Ligájában játszunk, hétvégén a Liverpool vár ránk – azt hiszem, van mire fókuszálni... Egyébként nagyon boldog vagyok a Citynél, elégedett vagyok a menedzserrel, a vezetőséggel, mindenkivel. Ettől függetlenül kimondom: sosem lehet tudni, mit hoz a jövő... Leírhatjátok ezt, de tegyétek mellé azt is, amit előtte mondtam!” – kezdte Haaland jó hangulatúan, majd rögtön kapott egy konkrét kérdés, amely arra vonatkozott, vajon vissza kell-e vonulnia ahhoz Lionel Messinek, hogy ő Aranylabdát kaphasson.\n\n„Jó kérdés! Nem tudom. Az igazság az, hogy ő megnyerte a világbajnokságot a múlt évadban, én nem... Mindent összevetve csak annyit mondanék, szerintem Messi minden idők legjobbja, aki valaha játszotta ezt a játékot.”\n\nAz aranycipős norvég klasszis arról is beszélt, mi motiválja a mindennapokban.\n\n„Huszonhárom éves vagyok, és klubszinten megízleltem, milyen megnyerni minden egyes trófeát. Tudom, hogyan és mennyit kell ehhez dolgoznom, dolgoznunk. Szóval igen, szeretnék újra és újra mindent megnyerni!”\n\n', 'BL: „SOSEM TUDHATOD, MIT HOZ A JÖVŐ” – ERLING HAALAND AZ ESETLEGES KLUBVÁLTÁSRÓL', 1),
-(38, 'https://kep.index.hu/1/0/5517/55179/551799/55179979_4078435_bb91d985fb71d26ab13e05a08a0e1050_wm.jpg', b'0', '2024-03-06 16:32:15', 'Az amerikaiaknak elegük van a bevándorlókból.', 'Alig nyolc hónappal az amerikai elnökválasztás előtt a migrációs válság lépett elő az elnöki kampány kulcskérdésévé. A kétpárti, demokrata-republikánus válságrendezés politikai okokból összeomlott. Mindeközben az Egyesült Államokba bevándortak által elkövetett gyilkosságok borzolják a kedélyeket, amelyek csak növelik az idegengyűlöletet, és ezzel Donald Trump volt elnök esélyeit az újraválasztásra.\nFebruár 22-én a Georgiai Egyetem egyik hallgatója, Laken Riley kocogni indult, azonban már sosem tért vissza a kollégiumi szobájába. Nem sokkal azután, hogy barátnője bejelentette eltűnését, a kampusz egyik erdős területén rábukkantak a 22 éves lány holttestére. A hatóságok megállapították, hogy az ápolónak tanuló Riley gyilkosság áldozata lett – tudósított róla az El País. \n\nA FIATAL NŐ ÉLETÉNEK KIOLTÁSÁVAL EGY 26 ÉVES VENEZUELAIT, BIZONYOS JOSÉ ANTONIO IBARRÁT GYANÚSÍTANAK, AKI MÉG 2022-BEN ÉRKEZETT AZ EGYESÜLT ÁLLAMOKBA, ILLEGÁLISAN.\n\nA dél-amerikai migráns által elkövetett bűncselekmény megrázta az egész amerikai közvéleményt, és tovább erősítette az általános bevándorlásellenes hangulatot az országban. De a gyilkosság olaj volt az alapvetően is idegenellenes jobboldali politikai kommunikáció tüzére is. A republikánusok legfontosabb véleményvezérének tekinthető korábbi elnök, Donald Trump azonnal reagált, és a fiatal nő haláláért a jelenlegi államfőt, a demokrata Joe Bident tette felelőssé.\n\nA republikánus elnökjelöltségre legesélyesebb ingatlanmágnás valószínűleg mindent el fog követni, annak érdekében, hogy az amerikai választók fejében elültesse azt a gondolatot, hogy a fő politikai riválisának alkalmatlansága nélkül a szörnyű gyilkosság, és más, bevándorlók által elkövetett bűncselekmények nem történhettek volna meg.\n\n„Biden határinváziója tönkreteszi országunkat és megöli polgárainkat!”\n\n– reagált a korábbi elnök a Truth Social közösségi oldalán.\n\nValami nagyon nincs rendben a határon\nIlyen és ehhez hasonló üzenetekkel bombázza a szavazókat a volt elnök, nem véletlenül. A legújabb közvéleménykutatások adatai alapján az amerikai polgárok a bevándorlást tartják az Egyesült Államok legégetőbb problémájának.\n\nAZ EGYIK VEZETŐ KÖZVÉLEMÉNYKUTATÁSOKKAL FOGLALKOZÓ INTÉZET, A GALLUP ÚJ FELMÉRÉSE SZERINT AZ ORSZÁG LAKOSSÁGÁNAK 28 SZÁZALÉKA ÚGY VÉLI, HOGY A MIGRÁCIÓ A LEGNAGYOBB BAJ AZ ORSZÁGBAN. \n\nKAPCSOLÓDÓ\nHiába hasít a gazdaság, Joe Biden továbbra sem népszerű\nHiába hasít a gazdaság, Joe Biden továbbra sem népszerű\nPedig még riválisai is elismerik, hogy kedvezőek a folyamatok.\n\nKAPCSOLÓDÓ\nAtlantába megy Donald Trump, hogy letartóztassák\nAtlantába megy Donald Trump, hogy letartóztassák\nÓvadéki megállapodás született az ügyében.\n\nKAPCSOLÓDÓ\nEurópának lehet, hogy egyedül kell megvédenie magát, ha Trumpot újraválasztják\nEurópának lehet, hogy egyedül kell megvédenie magát, ha Trumpot újraválasztják\nAz Európai Unió egyik vezető politikusa már nukleáris fegyverkezésre buzdítja a tagállamokat.\n\nEzzel a határkérdés vált a 2024-es amerikai elnökválasztási kampány központi témájává. A 2024-es versenyben számos olyan terület van, amely élénken foglalkoztatja a szavazókat. Iyen a gazdaság helyzete, az abortuszvita, Joe Biden elnök mentális állapota, a demokratikus intézmények veszélyeztetettsége, a volt elnökkel, Donald Trumppal szembeni büntetőeljárások, sőt még a külpolitika is – a NATO és az ukrán pénzügyi segély kérdésének formájában – a felsoroltakra adott politikai és kommunikációs válaszok természetesen mind befolyásolni fogják a november 5-én esedékes választás eredményét.\n\nA bevándorlás kérdése viszont régóta töréspont a jobboldali republikánus és a baloldali demokrata szavazók, valamint az őket képviselő és befolyásoló politikusok között. ', 'A következő elnököt a migránsok juttathatják a Fehér Házba', 4),
-(39, 'https://kep.index.hu/1/0/5519/55190/551905/55190553_4079253_36745b6e9a50c46d524764278b893304_wm.jpg', b'0', '2024-03-06 16:34:35', 'Az ukrajnai háborúról adott ki közleményeket szerdán Oroszország budapesti nagykövetsége. A két kommüniké alapvetően a már ismertetett orosz álláspontot közli, illetve szót ejt a NATO-val való esetleges eszkalációról is.', 'A budapesti orosz képviselet időről időre már adott ki közleményeket a háborúról vagy annak okairól.\n\nMost két közleményt is közzé tettek, amelyeket szerkesztőségünkhöz juttattak el e-mailben. Az egyik A nyugati országok szerepéről az ukrajnai konfliktusban címet viseli, míg a másik általánosságban „az Ukrajna körüli helyzetről” szól.\nMindkét közlemény alapvetően az utóbbi években már ismertetett orosz álláspontot ismétli meg. Az első közleményt azzal kezdik, hogy a Szovjetunió felbomlása után az Egyesült Államok és NATO-beli szövetségeseik elkezdtek befolyást szerezni a volt szovjet tagköztársaságokban, és szerintük „a »demokratizálódás« álcája alatt, a nemzeti érdekekre való bárminemű tekintet nélkül” igyekeztek átalakítani őket a saját céljaiknak megfelelően. \n\nTovábbra is állítják, hogy Oroszország nem támadta meg Ukrajnát \nÁlláspontjuk szerint Ukrajna mindig is különleges figyelmet kapott, és szerintük ennek volt az eredménye a 2004, majd a 2013–14-es ukrajnai forradalom is. Véleményük szerint 2014 után azzal lehetett volna elkerülni a további eszkalációt, ha a felek betartják azt a 2014. február 21-én, Viktor Janukovics elnök és ukrán ellenzéki politikusok közt született megállapodást, amely a belpolitikai krízis rendezését szolgálta, és létrejön a megegyezésben előírt egységkormány. A közleményben azt írták, hogy mindezt a nyugati politikusok akadályozták meg, akik a konszolidáció helyett a rezsimváltást szorgalmazták, és szerintük emiatt mérgesedett el a kelet-ukrajnai konfliktus később.\n\nKitértek arra is, hogy Zelenszkij 2019-es hatalomra kerülése sem javított a helyzeten, sőt szerintük ő is közrejátszott a minszki megállapodások „aláásásában”, és folytatódott az a folyamat, amelyben a nyugatiak segítségével „Ukrajnát oroszellenes országgá alakították át”.\n\nEzután állították azt a közleményben, hogy \n\nOroszország nem »támadta meg« Ukrajnát, ahogy azt a nyugatiak aktívan propagálják,\n\nhanem „különleges hadműveletet” indított, szerintük az ENSZ-alapokmány 7. fejezetének 51. cikkével összhangban és a donbászi köztársaságok kérésére (azt, hogy nem támadták meg Ukrajnát, már 2022 márciusában is hangoztatta az orosz külügy).\n\nVégül arra is kitértek, hogy a NATO államai F–16-os vadászgépeket is át akarnak adni Ukrajnának, ami szerintük eszkalációt eredményezne. Mint írták, ezek a repülőgépek képesek taktikai nukleáris fegyverek szállítására, és ezért szerintük „a NATO és Oroszország közötti közvetlen fegyveres összecsapás kockázatával járna”, ha átadnák őket az ukránoknak.\n\nSzerintük ezért nincs béke \nA másik közleményben – amelyben szintén az orosz narratíva korábban már hangoztatott tételei köszönnek vissza – arról írtak, hogy szerintük a nyugatiak és Volodimir Zelenszkij ukrán elnök által kidolgozott békeformula csak „a további ellenségeskedéseket” szítja, akadályozza a békefolyamatot, és nem több egy ultimátumnál.\n\n„Ukrajna szuverenitásának eredeti alapjait – a semleges, blokkmentes és atomfegyvermentes státuszát – meg kell erősíteni” – írták erről a közleményben. Más kérdés ország 1991-es függetlenségi nyilatkozatában például szó sem esett ilyesmikről. Sőt, az atomfegyverekről csak három évvel később, a budapesti memorandum keretében mondtak le (Kiegészítés: az orosz fél itt az 1990-es nyarán kiadott függetlenedési szándéknyilatkozatra, az úgynevezett Szuverenitási Nyilatkozatra utalhatott, abban még valóban szerepeltek a felsorolt feltételek. Viszont az említettt függetlenségi nyilatkozatba, vagy az 1991-ben elfogadott alkotmányba már nem kerültek bele ezek a kitételek). \n\nHozzátették azt is, hogy a Krím, a Donbász és a délkelet-ukrajnai területek függetlenedése szerintük kizárólag „a 2014-es államcsíny” eredménye volt. Végül azt írták, hogy szerintük Ukrajna területi integritását a kijevi rezsimnek azok a támogatói ásták alá, akik 2014. februárban „megbuktatták Ukrajna törvényes elnökét”, vagyis az akkor Oroszországba távozó Viktor Janukovicsot. \n\nAz orosz–ukrán háború fejleményeit szerdán is percről percre követjük – ebben a cikkünkben. ', 'Háborús eszkalációról adott ki közleményt a budapesti orosz nagykövetség', 4),
-(40, 'https://cdn.nemzetisport.hu/2024/03/DpPKu-NgPNIiTlCTcWC4N5ZFYlaJCuYdTBtXTnQFMTk/fill/700/394/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50LzM4YWFmZmVjMjlhOTQxZmE4NDc3N2U3YzNhMTBiNmQy.jpg', b'0', '2024-03-06 16:37:10', 'Megváltozott a kvalifikáció rendszere, a Hungarian Darts Trophy szeptember közepén lesz.', 'Pénteken kezdetét veszi a PDC dartsszervezet 13 állomásos European Tour-sorozata, amely immár negyedik alkalommal Budapestre is ellátogat, az MVM Dome szeptemberben ad otthont hazánk legrangosabb dartseseményének.\nPénteken Belgiumban kezdődik a hét európai országot érintő versenysorozat, amelynek tornái egyenként 175 ezer font összedíjazásúak.\n\nA PDC a versenyek lebonyolításán nem módosított, viszont megváltoztatta a kvalifikációt. Eddig csak a Players Championship- és European Tour-versenyek eredményei alapján kialakult Pro Tour-ranglista első 16 helyezettje kapott automatikus indulási jogot, a maradék 32 helyet selejtezők révén töltötték fel. Az idén már a világranglista első 16 helyezettje is lehetőséget kap arra, hogy ott legyen a versenyeken, plusz a Pro Tour-rangsorból a legjobb 16 is szerepelhet, akik alapból nem feltétlenül vannak bent ebben a 16-ban. A Tour-kártyás selejtezőből így a korábbi 24 helyett csak 10 versenyző kvalifikálja magát egy-egy fordulóra. A maradék hat helyet az észak-európai és a kelet-európai selejtezős, valamint a négy helyi versenyző kapja meg (a Challenge Touron indulók számára kiírt, versenyenként 2-2 kvótát adó általános selejtező megszűnt).\n\nA lebonyolítás megmaradt: pénteken 16 mérkőzést rendeznek, délután és este is nyolcat-nyolcat. A továbbjutókra a 16 kiemelt vár, ők szombaton játsszák első mérkőzésüket. Itt van egy kis csavar, hiszen a 16 kiemelt minden esetben a Pro Tour-ranglista első 16 helyezettje lesz.\nAzaz Belgiumban Nathan Aspinall és a friss Európa-bajnok Peter Wright ott lehet a mezőnyben az abszolút világranglista 4. és 8. helyezettjeként, de mivel a Pro Tour-rangsorban csak a 24., illetve a 17. helyen állnak, nekik már pénteken is a színpadra kell lépniük.\n\nA versenyek szervezőinek így a PDC garantálja a több sztárt a mindenkori mezőnyben – és a pénteki játéknapon –, ugyanakkor mivel több az automatikusan kiosztott indulási jog, félő, hogy az eddiginél több visszalépés is lesz egy-egy viadal előtt.\n\nLuke Littler nincs a fenti listán, neki még selejtezőn kellett indulnia, és a belgiumi versenyre sikeresen kvalifikálta is magát. A következő két versenyre viszont nem tudott bejutni, így legközelebb csak az áprilisi sindelfingeni ET-versenyen láthatja a közönség. Szeptemberre várhatóan már ő is az automatikusan indulók közé fog tartozni. Az első négy torna kelet-európai selejtezőjét megtartották már Budapesten, magyar dartsos egyik viadalra sem tudta kvalifikálni magát.\n\nA mérkőzések az egyik fél hatodik nyert legjéig tartanak, az elődöntőben hét, a döntőben nyolc játékot kell nyerni a győzelemhez. Pénteken az első, szombaton a 2. forduló mérkőzéseit játsszák, vasárnap délután lesz a nyolcaddöntő, este pedig a negyeddöntő, az elődöntő és a döntő. A délutáni szakasz minden esetben 13, az esti 19 órakor kezdődik.\n\nA 13 állomásból álló European Tour versenyeiből hatot Németországban, kettőt Belgiumban rendeznek meg, s lesz egy-egy verseny Ausztriában, Hollandiában, Magyarországon, Svájcban és Csehországban is. A versenyeken gyűjtött pontok alapján a legjobb 32 október végén részt vehet a dortmundi Európa-bajnokságon.\n\nAz alapszakasz versenyeit az előző évhez hasonlóan a Tv4 csoport közvetíti a Max4 csatornán, az Európa-bajnokság a Sport Tv-n lesz.', 'PÉNTEKEN RAJTOL A DARTS EUROPEAN TOUR, MINDEN EDDIGINÉL TÖBB SZTÁR JÖN BUDAPESTRE', 4),
-(41, 'https://cdn.nemzetisport.hu/2024/03/KhtsWHalYzPioAsefrlhDQ3nRvzORfMbrnntFqvnBcI/fill/1347/758/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50L2YwYjAzNzhlMjU4MDRkYjI5NDViZjVmODdjMDFiOGNl.jpg', b'0', '2024-03-06 16:40:43', 'Múlt héten arról számoltunk be, hogy a DVSC-től télen távozott Varga Józsefnek közös ajánlatot tett az NB I-es DVTK és az NB II-es Kazincbarcika. ', 'Igaznak bizonyult a Nemzeti Sport értesülése, és a 34-szeres válogatott középpályás, a DVSC-től télen távozott, így szabadon igazolható Varga József el is fogadta az NB II-es Kazincbarcika és az NB I-es DVTK közös ajánlatát. Ennek értelmében tavasszal az NB II-es csapatban fog futballozni, hosszabb távon pedig mentor lesz a két klub közötti kooperációs együttműködés részeként, illetve játékosmegfigyelőként fog dolgozni a DVTK-nál.\n \n\n„Szeretném megköszönni a DVTK vezetőinek, hogy partnerek voltak abban, hogy Varga József Kazincbarcikára szerződése ma megtörtént” – mondta a két klub szerdai sajtótájékoztatóján Vég Csongor, az NB II-es csapat sportigazgatója, aki kifejtette, hogy Varga Józsefre egyrészt sérülések miatt is szüksége van a kazincbarcikaiaknak, másrészt olyan karakter érkezett a csapatba, aki tudja segíteni a fiatal játékosok integrálását a felnőttfutballba. \n\nA DVTK Labdarúgó-akadémia szakmai igazgatója, Simon Miklós kifejtette, hogy a Kazincbarcika éppen ebben az integrációban tud nagy segítségére lenni a Diósgyőrnek a kooperációs együttműködés részeként.\n„Nagyon fontos, hogy az NB II-es tagság megőrzése mellett olyan játékosok futballozzanak Kazincbarcikán, akikre a mi játékosaink fel tudnak nézni, tudnak tőlük tanulni. Varga József személyében most sikerült egy válogatott labdarúgó szerződtetésével is megoldani ezt a feladatot – fogalmazott Simon Miklós, hangsúlyozva, hogy hosszú távon szeretnének segíteni Varga Józsefnek, hogy a profi futball befejezése után is megtalálja a helyét az életben, egyúttal hasznosítani szeretnék az ő tudását, tapasztalatait. – Amellett, hogy itt Kazincbarcikán most egy mentor lesz a fiatal játékosok számára, Diósgyőrben a megfigyelő részlegünkben fog dolgozni, erre próbáljuk felkészíteni őt, fiatal játékosok megtalálásában, mentorálásában szeretnénk az ő tudását, tapasztalatait és kapcsolatrendszerét igénybe venni.”\n\n„Köszönöm, hogy lehetőséget kapok arra, hogy a pályán is bizonyíthatok még és szeretném a mentalitásomat, a tapasztalataimat átadni a csapattársaimnak, a fiataloknak. Szeretnék élni ezzel a lehetőséggel, mindig magaménak éreztem a fiatalok mentorálását, ez egy belső indíttatás számomra, bízom a sikeres együttműködésben és hogy mindenki elégedett lesz ezzel” – nyilatkozta Varga József, aki a 33-as mezben fog játszani új csapatában, és szerda délután már be is kapcsolódik a Csábi József vezetőedző irányította együttes szakmai munkájába. \n\nA klubok a szerződés részleteiről, annak időtartamáról nem adtak tájékoztatást.\n\nAz NB II-ben 8. helyen álló Kazincbarcika vasárnap a Gyirmótot fogadja a bajnokságban.\n\nTÉLI JÁTÉKOSMOZGÁS A KOLORCITY KAZINCBARCIKA SC-NÉL\nÉrkezők: Dobozi Krisztián (román-magyar, Sepsi OSK – Románia – kölcsönbe), Patrick Ioan Gante (román, SV Lafnitz – Ausztria), Király Mátyás (Király SE), Megyeri Gábor (Kozármisleny – kölcsönből vissza), Pethő Bence (Gyirmót FC Győr), Varga József (Debreceni VSC) \nKooperációs kölcsön keretében szerepelhetnek: –\nTávozók: Bencze Antal (ESMTK), Csilus Ádám (Érd), Gyurkó Máté (Eger SE), Nicolas Morínigo (paraguayi-magyar – ETO FC Győr – kölcsönből vissza, onnan Tacuary FBC – Paraguay), Szekszárdi Tamás (PMFC), Szemere Balázs (?), Tóth Balázs (DVTK)', 'VARGA JÓZSEF ELFOGADTA A KAZINCBARCIKA ÉS A DVTK KÖZÖS AJÁNLATÁT – HIVATALOS', 4),
-(42, 'https://s.24.hu/app/uploads/2024/03/central-0851166416-e1709303110579-2048x1151-1-1024x576.jpg', b'0', '2024-03-06 16:48:05', 'Kiderült az is, volt olyan döntés, amit államfői feladatként Kövér László jóváhagyott.', 'Kiderült az is, volt olyan döntés, amit államfői feladatként Kövér László jóváhagyott.\nHIRDETÉS\nHIRDETÉS\nVezető brókercég által nyújtott online pénzügyi piaci tanfolyam »\nMegjelent a Magyar Közlönyben az új köztársasági elnök határozata arról, hogy Szabó Attila Lászlót nevezi ki a Sándor-palota főigazgatójává. Sulyok Tamás egyúttal azonnali hatállyal visszavonta lemondott elődje, Novák Katalin tavaly év végén hozott döntését, amelynek értelmében január 1-jétől a volt államtitkár, Schanda Tamás vezette főigazgatóként az elnöki hivatalt.\n\nSzabó Attila László korábban az Alkotmánybíróság elnöki stábjában volt Sulyok Tamás kabinetfőnöke. Néhány éve megkapta a Magyar Arany Érdemkereszt polgári tagozata kitüntetést.\n\nLehetnek még személyi változások\nNovák Katalin a Sándor-palotában történt szervezeti és személyi változásokról egy nappal a kegyelmi botrány kirobbanása előtt azt írta, hogy figyelmét még inkább rá akarja irányítani a leginkább rászorulókra, amiben segítségére lesz az újonnan létrejövő Kiemelt Figyelmet Érdemlőkért Felelős Igazgatóság. K. Endre ügye után külön érdekes lehet, hogy helyén meradhat-e Módos Mátyás, akinek az Alkotmányossági és Jogi Igazgatóság vezetőjeként egyebek mellett elő kellett készítenie a köztársasági elnök kegyelmi határozatait is.\n\nEz lehetett az új államfő első munkanapjának második döntése. Az első az volt, hogy aláírta az Országgyűlés Svédország NATO-csatlakozásáról hozott döntését, ami szintén megjelent a közlönyben. Ezt megtehetette volna Kövér László is, akihez ideiglenesen az államfői feladatok kerültek, hiszen közben kiderült az is, volt olyan döntés, amit jóváhagyott.\n\nAz átmeneti időszakban Kövér a köztársasági elnök feladat- és hatásköreit gyakorolva vonta vissza – Gulyás Gergely Miniszterelnökséget vezető miniszter előterjesztésére – egy beregforrási család három tagja, illetve egy beregszászi férfi és fia magyar állampolgárságát, amit mindannyian a jogszabályok megszegésével szereztek.', 'Sulyok Tamás azonnal lecserélte a Sándor-palota főigazgatóját', 4),
-(43, 'https://www.hwsw.hu/kepek/hirek/2024/03/unsafe.jpg?1709730106587', b'0', '2024-03-06 16:53:28', 'Ahol lehetséges, ott a keresőcég elszakad a C-től és a C++-tól, de az átállás nem fog egyik napról a másikra történni.', 'A Google Project Zero friss jelentése szerint a nulladik napi sérülékenységeket kihasználó exploitok kétharmada memóriabiztonsági probléma, és bár egyre aktívabban szorgalmazzák a szervezetek a memóriabiztonságos nyelvek használatát, az ilyen típusú biztonsági rések továbbra is a leggyakrabban kihasznált sebezhetőségek élén állnak. A keresőcég átfogó tanulmányban részletezte a memóriabiztonsággal kapcsolatos álláspontját, kitérve a Rust nyelvre: nemrég egymillió dolláros támogatást adott a nyelvet dolgozó Rust Foundationnek, amivel elmondása szerint egy robusztus, memóriabiztos ökoszisztéma fejlesztését, illetve a Rust és a C++ interoperábilitását javító fejlesztéseket szeretne elősegíteni..\n\nA Google álláspontja szerint a magas szintű memóriabiztonságot a Secure-by-Design megközelítéssel lehet elérni, ami megköveteli a szigorú memóriabiztonsági garanciákkal rendelkező nyelvek használatát. Ennek eredményeként a cég fontolja a fokozatos átállást az olyan nyelvekre, mint a Java, a Go és a Rust.\n\nAz elmúlt évtizedekben a Java és Go kódbázisok mellett a Google több száz millió sornyi, aktívan használatban lévő C++ kódot fejlesztett és halmozott fel, ami jelentős kihívást jelent a memóriabiztonságra való átállásban. A keresőcég elmondása szerint nem tartja valószínűnek, hogy a C++-nak sikerülhet nagyot fejlődnie memóriabiztonsági szempontból. Viszont az összes létező C++ kód átírása egy másik nyelvre nagy falatnak tűnik, ezért a Google fontosnak tartja, hogy az új kódok és a kritikus komponensek memóriabiztonságos nyelveire való átállást a meglévő C++ kódok biztonsági fejlesztéseivel egészítse ki.\n\n', 'Ráerősít a Google a memóriabiztos nyelvekre', 4),
-(44, 'https://www.hwsw.hu/kepek/hirek/2024/03/iosb%C3%B6ng%C3%A9sz%C5%91.jpg?1709724126640', b'0', '2024-03-06 16:57:04', 'Az iOS 17 legújabb verziója új lehetőségeket biztosít az Európai Unió lakosai ', 'Elérhetővé vált az iOS 17.4-es frissítése, ami nagy változásokat hoz az európai iPhone-felhasználók életében, lévén ez a kiadás tartalmazza azokat a fő változásokat, amivel az Apple igyekszik megfelelni a március 7-től kötelezően alkalmazandő, digitális piacokat szabályozó keretrendszerének, a Digital Markets Act-nek (DMA).\n\nA csomag egy sor olyan megkötést megszüntet a rendszerben, melyek a DMA-ban foglalt kötelezettségekkel ellentétesek, beleértve az alternatív alkalmazás-letöltési források teljes tiltását. Az Európai Gazdasági Térségben (EGT) alkalmazásokat terjesztő iOS-fejlesztők lehetőségei kiszélesednek, onnantól kezdve, hogy az appok alternatív alkalmazáspiacokról is beszerezhetők lesznek, ehhez új API-kat, keretrendszereket és eszközöket kapnak.\n\nLehetővé válik továbbá a WebKittől eltérő böngészőmotorok használata, így megnyílik az út az alternatív böngészők előtt is, így a Chrome és a Firefox új verzió már Chromium, illetve Gecko alapokon kerülhetnek a készülékekre. Szabadon választható az alapértelmezett böngésző is, a Safari a legelső indításakor figyelmeztet arra, hogy választhatunk helyette másik alapértelmezett szoftvert. A felhasználók továbbá alapértelmezettként állíthatnak be más alkalmazáspiacot, vagy fizetési alkalmazást. \n\nAz Apple megnyitja az iPhone-ok NFC-s hardverplatformját is a külső fizetési szolgáltatók számára. Korábban csak az Apple Pay tudta teljes mértékben elérni az alapfunkciókat az iPhone-on, de az új API-k lehetővé teszik a banki és pénztárca-alkalmazások fejlesztői számára, hogy ők is hozzáférést kapjanak a technológiához. ', 'Itt az iOS 17.4, ami új korszakot nyit az európai iPhone-okon', 4);
+(3, 'https://assets.4cdn.hu/kraken/87r3wmDQkizf1Ieqvs-md.jpeg', b'0', '2024-11-29 17:47:49', 'Alekszej Navalnij, Putyin legismertebb politikai ellenfele mindent', 'A zavarba ejtően ismerősen hangzó bejegyzést 2021. januárjában írta le börtönnaplójában Alekszej Navalnij. A hazájában és nemzetközileg is legismertebb orosz ellenzéki politikus nem sokkal korábban került börtönbe, miután az ellene elkövetett, mérgezéses merényletkísérlet utáni lábadozást követően úgy döntött, visszatér Oroszországba.\n\nNavalnij három évvel később, idén februárban halt meg egy szibériai büntetőtelepen, a hivatalos magyarázat szerint rosszullét következtében, de ezt sem családja, sem munkatársa, sőt, úgy általában senki nem hitte el. Az elmúlt évtizedben messze ő tett a legtöbbet azért, hogy megmutassa, Vlagyimir Putyin és a Kreml-közeli hatalmi elit hogyan halmozott fel döbbenetes, ép ésszel felfoghatatlan mennyiségű vagyont, miközben a Navalnij által vezetett politikai mozgalom egy rakás kellemetlenséget is tudott okozni a hivatalos orosz ellenzéket már rég elfoglaló rezsim számára.', 'Nem bírta tétlenül nézni, ahogy ellopják a hazája jövőjét, végül az életével fizetett érte', 1),
+(5, 'https://s.24.hu/app/uploads/2024/11/central-0596336930-e1732878433316-1140x641.jpg', b'0', '2024-11-29 17:55:12', 'A Nemzeti Választási Bizottság korábban már hitelesítette a Kereskedelmi Alkalmazottak ', 'A Nemzeti Választási Bizottság korábban már hitelesítette a Kereskedelmi Alkalmazottak Szakszervezetének népszavazási kezdeményezését, miszerint december 24-e legyen munkaszüneti nap. Egy magánszemély viszont az utolsó pillanatban megfellebbezte az NVB döntését – írják a Jobbik Magyarországért Mozgalom Facebook oldalán. A párt szerint ez „a Fidesz-KDNP kormány kommunikációjából következtetve várható volt, hogy a kezdeményezést meg fogják támadni a törvényes határidőn belül a Kúrián”.\n\nGulyás Gergely a kormányinfón arról beszélt, hogy meglepődött a december 24-i munkaszüneti napról szóló népszavazási kérdés hitelesítéséről. A miniszterelnök hozzátette: természetesen nem arról van szó, hogy a kormány ne örülne a több munkaszüneti napnak. Ennek jegyében bővítették is a munkaszüneti napok számát a Fidesz-kormány alatt, bevezetve a halottak napját és a nagypénteket is. Ugyanakkor fontos látni, hogy minden munkaszüneti nap csökkenti a gazdasági teljesítményt. Ha már a versenyképességről beszélünk: Európa valóban el van maradva az Egyesült Államoktól és Ázsiától a munkaórák számát tekintve – magyarázta.\n\nA Jobbik országgyűlési képviselőjének, Balassa Péternek a javaslatát a jövő héten tárgyalja a Vállalkozásfejlesztési Bizottság, azaz lehetőség lenne arra, hogy népszavazás nélkül törvénybe iktassák, hogy szentestén ne kelljen dolgozni.\n\n', 'Megtámadták a Kúrián a december 24-i munkaszüneti napról szóló népszavazást', 1),
+(6, 'https://s.24.hu/app/uploads/2024/11/gettyimages-142741736-e1731939743123-1140x640.jpg', b'0', '2024-11-29 18:03:46', 'Nagy Márton nemzetgazdasági miniszter korábban rendeletben pontosította, hogy mikor lesznek hosszú hétvégék jövőre, illetve az ünnepnapokat mikor kell szombaton ledolgozni.', 'Hosszú hétvégék 2025-ben\n\n2025-ben 5 hosszú hétvégére készülhetünk, 2024-gyel ellentétben jövőre nem lesz hatnapos hosszú hétvége.\n\nNégynapos hosszú hétvége 2025-ben eggyel több lesz, mint 2024-ben; háromnapos hosszú hétvége 2025-ben viszont hárommal is kevesebb lesz, mint 2024-ben volt – olvasható a portál összeállításában.\n\n2024-ben 4 háromnapos hosszú hétvége, illetve 2 négynapos hosszú hétvége volt, 2025-ben egy 3 napos hosszú hétvége lesz, három 4 napos hosszú hétvége mellett. Különbséget jelent még, hogy karácsonykor a 2024-es 6 napos hosszú hétvége után 2025-ben egy 5 napos hosszú hétvége jön.\n\nHáromnapos hosszú hétvégék 2025-ben\n\n2025. június 7-8-9. – szombat, vasárnap, hétfő\nNégynapos hosszú hétvégék 2025-ben\n\n2025. április 18-19-20-21. – péntek, szombat, vasárnap, hétfő\n2025. május 1-2-3-4. – csütörtök, péntek, szombat, vasárnap\n2025. október 23-24-25-26. – csütörtök, péntek, szombat, vasárnap\nÖtnapos hosszú hétvége 2025-ben\n\n2025. december 24-25-26-27-28. – szerda, csütörtök, péntek, szombat, vasárnap\nNemzeti ünnepek 2025-ben\n\nA kifejezetten magyar ünnepek közül 2025-ben március 15-e szombatra, október 23-a pedig csütörtökre esik, 2025-ben az államalapítás ünnepe, tehát augusztus 20. szerdára esik.\n\nHúsvét 2025-ben\n\nNagypéntek 2025-ben április 18-ra esik, így április 18-29-20-21. napjai alkotják majd a húsvéti, négynapos hosszú hétvégét.\n\n2025 pünkösd hétvége\n\nPünkösd hétvége 2025-ben június elejére, pünkösdhétfő június 9-re esik, így június 7-8-9. napjai alkotják majd a háromnapos hosszú hétvégét.\n\nMindenszentek 2025-ben\n\n2025-ben november 1-je szombatra esik, így akkor nem lesz háromnapos hosszú hétvége.\n\nKarácsony 2025-ben\n\n2025 karácsonya kettő munkanapra eső munkaszüneti napot jelent majd, mivel december 24. szerdára, december 25. csütörtökre esik. Ez azt jelenti, hogy december 24-25-26-27-28. alkotja majd a maratoni, ötnapos hosszú hétvégét.', 'Öt hosszú hétvége jön, íme a 2025-ös munkaszüneti és ünnepnapok listája', 2),
+(7, 'https://s.24.hu/app/uploads/2024/11/dvast20241119001-1-e1732884328818-1140x641.jpg', b'1', '2024-11-29 19:33:07', 'Fülöp Attila a Belügyminisztérium gondoskodáspolitikáért felelős államtitkárának ', 'Fülöp Attila a Belügyminisztérium gondoskodáspolitikáért felelős államtitkárának „volt szerencséje egy kicsit beletekinteni” Magyar Péter bicskei látogatásába. Fülöp Attila szerint „megengedhetetlen ez a fajta politikai show-műsor, amihez napok óta díszletnek használja a gyermekvédelmet és a benne dolgozókat az ellenzéki politikus”.\n\nHa bármelyik közszereplőnek információra van szüksége, azt meg fogják adni, szóban és írásban is megtették eddig is – mondta, hozzátéve: azt nem hagyhatják, hogy a gyermekvédelmet díszletként használja valaki saját politikai céljára.\n\nEz példa nélküli a magyar gyermekvédelem történetében\n\n– jelentette ki Fülöp Attila, aki szerint ennek révén megszaporodnak a gyermekvédelemben dolgozókat érintő vádaskodások, alaptalan hozzászólások.\n\n„Ebben a környezetben az a fontos, hogy béke legyen, a fejlődésnek mindig van helye. Szeretnének a továbbiakban még több erőforrást biztosítani a gyermekvédelem részére” – közölte.\n\nMagyar Péter szerdán látogatott el a bicskei gyermekotthonba, de az épületbe már nem jutott be. Magyart a kapunál Csizi Péter szociális ügyekért felelős helyettes államtitkár és Cséplőné Gönczi Veronika, a Szociális és Gyermekvédelmi Főigazgatóság vezetője fogadta.', '„Ez példa nélküli a magyar gyermekvédelem történetében” – kiakadt a gondoskodáspolitikáért felelős államtitkár Magyar bicskei látogatásán', 2),
+(9, 'https://s.24.hu/app/uploads/2024/11/central-0917609088-e1732870326246-1140x643.jpg', b'1', '2024-11-29 19:47:34', 'Magyar Péter pénteken elment a bicskei gyermekotthonba,', 'Magyar Péter pénteken elment a bicskei gyermekotthonba, de a kapunál nem jutott tovább. A helyszínen a Tisza Párt elnökét Csizi Péter szociális ügyekért felelős helyettes államtitkár, volt fideszes képviselő és Cséplőné Gönczi Veronika, a Szociális és Gyermekvédelmi Főigazgatóság vezetője fogadta.  Magyar élőben közvetítette az eseményt, amiből leginkább annyi volt követhető, hogy Magyar és Csizi egyszerre beszél és vitatkozik. Magyar a gyermekvédelemmel kapcsolatos adatokat szeretett volna kihúzni az államtitkárból, miközben Csizi politikai show-t emlegetett, Magyart arrogánsnak nevezte, és arra kérte, hogy írásban kérje ki az adatokat.  Nincs eltussolás a gyermekvédelmi rendszerben  – jelentette ki Csizi. Magyarnak annyit sikerült kicsikarnia az államtitkárból, hogy a gyermekvédelemben az átlagbér 460 ezer forint.  Folyamatban van az átvilágítás a gyermekvédelemben, erről már Cséplőné Gönczi Veronika beszélt.  Magyar Péter elmondta, hogy 15 otthonból kaptak jelzéseket a többi között bántalmazásokról is, Csizi pedig azt ismételte el, hogy mindent kivizsgálnak, és nem tussolnak el semmit. Magyar Péter arról is érdeklődött, hogy van-e olyan otthon, ami szabályosan működik. Természetesen, nagyon sok otthon szabályosan működik – válaszolta erre Csizi.  Az államtitkár a sajtó kérdéseire nem volt hajlandó válaszolni, inkább bement a gyermekotthonba.  Magyar Péter korábban több másik gyermekotthonba is megpróbált bejutni. Miskolcon képeket közölt az otthon épületének állapotáról, Tiszadobon hasonlóan, Nyírszőlősön viszont már nem engedték be az otthonba.  Magyar politikai pályafutása tulajdonképpen a bicskei gyermekotthonból indult. Novák Katalin tavaly adott kegyelmet az otthon egyik volt vezetőjének, akit azért ítéltek el, mert segített a gyermekek zaklatását eltussolni a másik elítélt vezetőnek. Az ügy miatt a kegyelem ellenjegyzője, Magyar volt felesége, Varga Judit volt igazságügyi miniszter visszavonult a politikától.', 'Magyar Pétert nem engedték be a bicskei gyermekotthonba', 8),
+(10, 'https://cdn.nemzetisport.hu/2024/11/XI_Li5xcHVxh41AV-PAdsrHPE37TfV2WP7Yt2YKNU5M/fill/1347/758/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50LzAzZDBlMTc1OWFlMzRjZmE5Y2JmNWU0ZGYwN2I4ZWZk.webp', b'0', '2024-11-29 19:55:40', 'Cristiano Ronaldo tizenegyesből és akcióból is betalált, az Al-Naszr 2–0-ra megverte a Damakot a szaúdi labdarúgó-bajnokság 14. fordulójában.', 'A pénteki korai meccsen az Al-Kvadiszija 1–0-ra legyőzte az Al-Haledzset, így az Al-Naszr is győzelmi kényszerben volt, ha vissza akarta szerezni a harmadik helyet.\n\nEz végül sikerült is Cristiano Ronaldo duplájának köszönhetően: a portugál klasszis a 17. percben büntetőből volt eredményes, majd a 80. percben Navaf Bu Vasl passza után hat méterről balról lőtt a kapuba, végleg eldöntve a meccset. A Damak ekkor már tíz emberrel játszott, Abdelkader Bedrant az 56. percben kiállította a francia Benoit Bastien játékvezető.\n\nCristiano Ronaldo ezzel a duplával már 915 gólnál jár pályafutása során.\n\nFÉRFI LABDARÚGÁS, SZAÚD-ARÁBIAI BAJNOKSÁG\n14. FORDULÓ\nAl-Naszr–Damak 2–0', 'Cristiano Ronaldo duplázott, nyert az Al-Naszr', 8),
+(11, 'https://cdn.nemzetisport.hu/2024/11/hu3Sm1heT_zcx7sdPpE62ykxGd0x-gY3qy09fEGinsM/fill/1347/758/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50LzQyOTA2YWY5OTI3MDQ1NzZiNTUyOWZlZmRlNzUyZjg4.webp', b'1', '2024-11-29 19:57:17', '   0 Tetszik Vágólapra másolva! Címkék sífutás téli sport sífutó-vk Kónya Ádám a 84., míg Büki Ádám a 87. helyen zárt pénteken 10 kilométeren a sífutók világkupa-sorozatának első versenyén.', 'A vk-sorozat nyitóállomásának a finnországi Ruka ad otthont, ahol pénteken a férfiaknak és a nőknek is 10 kilométeres klasszikus stílusú viadalt rendeztek. A nemzetközi szövetség honlapja szerint a férfiaknál 89-en rajtoltak el és az első helyet a hazaiak háromszoros olimpiai bajnoka, Iivo Niskanen szerezte meg.\n\n A magyarok közül Kónya a győztes idejétől 4:26.6 perccel elmaradva ért célba, míg Büki 6:16.9 perccel maradt el Niskanen eredményétől. \n\nRukában szombaton sprintversenyeket rendeznek, vasárnap pedig 20 kilométeres tömegrajtos számra kerül sor, melyen a férfiaknak és a nőknek is szabadstílusban kell majd síelniük.', 'A háromszoros olimpiai bajnok Niskanen győzött, a magyarok is célba értek az első sífutó vk-versenyen', 8),
+(12, 'https://cdn.nemzetisport.hu/2024/11/CqQBRiEVbnrXBoWXYs17tT9iZA7SS-xqmg-VlIypXZg/fill/1347/758/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50LzI3Y2Q4OTc5ZTBjMTRmMDZiYTU3M2ExZDA1ODJlMjA5.webp', b'1', '2024-11-29 19:59:55', 'A hónap utánpótlásedzőjének választott sportlövőtréner, Jákó Csaba igyekszik igazi közösséget építeni versenyzőiből.', 'Mint arról beszámoltunk, az alapítók döntése értelmében Jákó Csaba sportlövőtréneré lett A hónap utánpótlásedzője októberi díja. A zsombói Cél-Tudat SE-t „családi vállalkozásként” felépítő és vezető szakember az után részesült az elismerésben, hogy 20 éves lánya, egyben legsikeresebb tanítványa, Jákó Miriam a Peru fővárosában, Limában rendezett junior sportlövő-világbajnokságon az 50 méteres pisztolyos versenyszámban fantasztikus teljesítményt nyújtott: 546 körös korosztályos világcsúccsal nyert aranyérmert. Jákó Csabával a Magyar Sport Házában rendezett díjátadót követően beszélgettünk.\n\n– 2022 márciusában már elnyerte A hónap utánpótlásedzője díjat. Hogyan fogadta az újbóli elismerést?\n\n– Nem számítottam rá, de természetesen nagyon jólesik. Amikor az ember munkával van elfoglalva, nem gondolkozik azon, hogy milyen elismerésekre számíthat. Örülök, hogy az eredményeinket illetően mondhatom, a két és fél évvel ezelőtti díj óta még rátettünk egy lapáttal. Felejthetetlen élmény marad az akkori díjátadó is, hiszen azt a kitüntetést még példaképemtől, Hammerl Lászlótól vehettem át. Hiszem, hogy fentről most is büszkén tekint le ránk. Rengeteget köszönhetek neki, és azt a munkát igyekszem továbbvinni, mint amit évtizedeken keresztül ő is végzett. Puskás versenyzőként három olimpiai éremmel, közte egy arannyal gazdagította az országot, majd pályafutása után is elképesztő mértékben segítette a sportágat. Bár versenyzőként én nem jártam hozzá hasonló magaslatokban, edzőként arra törekszem, hogy a tanítványaim eljussanak arra a szintre.', 'Jákó Csaba: Az összes tanítványomra a gyerekemként tekintek', 8),
+(13, 'https://cdn.nemzetisport.hu/2024/11/au4uBBdsJDOZojYxgRcAosBHpAUJ3kmJ8WXdMkT-PXk/fill/1347/758/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50L2ZiN2ViOThjOTYyNTQ4YzNiM2RjMTU0ZjU5NTRkOTIw.webp', b'0', '2024-11-29 20:02:07', ' játékosok kulcsmeccsként készülnek ellenünk', 'Szombaton jön a Svédország elleni telt házas csoportrangadó női kézilabda-válogatottunk számára a részben hazai rendezésű Európa-bajnokságon. A mindkét csapat számára komoly téttel bíró mérkőzés előtt a skandinávok NB I-es légiósaival beszéltünk a várakozásaikról, miközben Tomas Axnér azzal próbálja levenni a terhet az együtteséről, hogy a mieinkre nehezedő nyomást hangsúlyozza.\n \n\nA legutóbbi hét évben két felkészülési mérkőzés mellett két olimpián, két világbajnokságon, egy Eb-n és az idei, sokáig emlékezetes debreceni olimpiai selejtezőtornán is megmérkőzött a magyar és a svéd együttes, öt svéd siker mellett három magyar győzelem született. \n\nAz utóbbi világversenyeken rendre az élmezőnyben záró skandinávok keretében három NB I-es légiós van: a győri Linn Blohm, valamint az egyaránt debreceni Jessica Ryde és Kristin Thorleifsdóttir. Mellettük fontos láncszem még a 2017–2018-as idényben Érden légióskodó Jamina Roberts, Johanna Bundsen, Jenny Carlson vagy Nathalie Hagman is.\n\nOtthon érezheti magát tehát Debrecenben Kristin Thorleifsdóttir, a svédek balátlövője, aki a 2024–2025-ös idény előtt csatlakozott a DVSC Schaefflerhez. \n\n„Kellemes érzések fogtak el, amikor a csapattal együtt megérkeztünk Debrecenbe – mintha hazajöttem volna. A nyáron nemcsak új klubhoz kerültem, hanem új országba és kultúrába is érkeztem, különösen a magyar nyelvvel gyűlt meg a bajom. A lányok és a DVSC körül dolgozók azonban az első perctől kezdve mindenben segítettek nekem, úgyhogy megkönnyítették a beilleszkedésemet. Elmondhatom, hogy igazán jól érzem magam Debrecenben.”', 'Női kézilabda Eb: az NB I-ben szereplő svéd játékosok kulcsmeccsként készülnek ellenünk', 8),
+(14, 'https://cdn.nemzetisport.hu/2024/11/Ebk_NDDFy8itBU-M5cU3mmAumhDUH9EOMeDEHvdzqww/fill/1347/758/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50L2QzZGIxY2YwNmY5MDQwYjQ5YzM3MGNkOGE3ZTEzM2Qz.webp', b'0', '2024-11-29 20:09:10', 'Azi vagy Desh', 'Közülük került-e a ki a befutó vagy egy harmadik előadó női kézilabda-válogatottunk irányítójának a kedvenc magyar előadója? Videónkból kiderül!', 'Azahriah vagy Desh? – Simon Petrának nehéz volt a választás', 8),
+(15, 'https://kultura.hu/uploads/media/default/0003/17/thumb_216555_default_medium.jpg', b'0', '2024-11-29 20:10:56', 'Mostantól mindenki megnézheti, hogyan tért vissza az AWS', 'Idén tavasszal jelent meg az AWS zenekar Innen szép nyerni című visszatérő nagylemeze, amelyet május 25-én a közönség élőben is meghallgathatott a Budapest Parkban. A csapat rajongói által régóta várt eseményt a Hajógyár stábja is megörökítette, két anyagot, egy százperces koncertfilmet és egy, a színfalak mögötti eseményeket rögzítő rövidfilmet is készítve a buliról. A Sófalvi-Kiss Csaba rendező, Szepesi Zsolt kreatív producer és Talum Fruzsina szerkesztő nevével fémjelzett Innen szép nyerni  című film – amely a Carson Coma, a Tankcsapda és Azahriah egy-egy nagy sikerű fellépéséről készült alkotás után a Hajógyár negyedik koncertfilmje – a forgatócsoport és a zenekar együttműködésének gyümölcse. Az alkotók szerették volna elkerülni a műfajban megszokott kliséket, nem akarták csupán közvetíteni a koncertet, hanem a csapat visszatérésének történetét is szerették volna vele együtt bemutatni, és ezzel üzenni mindenkinek: az újrakezdés igenis lehetséges.\n\n', 'Idén tavasszal jelent meg az AWS zenekar', 8),
+(16, 'https://cdn.nemzetisport.hu/2024/11/npTs1HrMuxqo7f1YOSJUp602o9uvDxUuKA86w6NCBa0/fill/1347/758/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50L2EyMWMyM2IwMzNjZTQyNWI4MTYwMjdmODE1ZDRiM2U5.webp', b'0', '2024-11-29 20:15:34', ' Az észak-amerikai profi amerikaifutball-bajnokságban (NFL) szereplő Chicago Bears saját hivatalos oldalain jelentette be Matt Eberflus vezetőedző menesztését.', 'A szakember irányítása alatt négyszer nyert a Chicago, nyolcszor kikapott, és az utolsó hat meccsén kivétel nélkül vereséget szenvedett.\n\nEberflus 2022-ben vette át a Chicagót, korábban három évig az Indianapolis Colts védelmi koordinátoraként dolgozott.\n\nAz 54 éves szakvezető helyét ideiglenes jelleggel Thomas Brown veszi át, aki a mostani idényben lett a csapat támadójáték-koordinátora.', '  0 Tetszik Vágólapra másolva! Címkék NFL Matt Eberflus Chicago Bears', 8),
+(17, 'https://www.hwsw.hu/kepek/hirek/2024/11/raspberry-pi-cm5-launched.jpg?1732796686404', b'0', '2024-11-29 20:24:13', 'Négy évvel az előd bemutatkozása után itt az újabb ipari környezetbe szánt, kompaktabb lapka.', 'Az ötödik generációs főterméknek megfelelően található rajta a szokásos 30 tűs GPIO csatoló, és támogatott a PCI Express perifériák közvetlen csatlakoztatása. A fedélzeten emellett Bluetooth 5.0-nak, és 802.11ac szabványokat támogató Wi-Finek is jutott hely.\n\nA lapka 2/4/8 GB SDRAM memóriával, valamint 16/32/64 GB MLC eMMC integrált háttértárral választható, de jövőre elérhetővé válik a 16 GB SDRAM memóriás változat is az ígéretek szerint. A hardver indulóára ezúttal kicsit magasabb mint az elődők esetében volt, nettó 45 dollár, ami Európában 55 euró körül alakul majd.\n\nSok vállalat használ Raspberry Pi számítási modulokat kereskedelmi termékekben, 2023-ban a hobbifejlesztők és oktatási szegmens az eladott lapkák 28%-át, míg az ipari és beágyazott szegmens szereplői az eladások 72%-át tették ki.\n\n Facebook\nHibát találtam\n', 'Bemutatkozott a Raspberry Pi Compute Module 5', 8),
+(18, 'https://raketa.hu/uploads/2024/11/GettyImages-1476359993-768x473.jpg', b'0', '2024-11-29 20:30:43', 'Múlt héten derült fény arra, hogy megsérült két,', 'A vezetékek Finnország és Németország, illetve Litvánia és a svéd Gotland sziget között futnak, az előbbi több mint ezer kilométer, az utóbbi valamivel több, mint kétszáz kilométer hosszú. Metszik egymást ugyan, de a sérülés nem azon a ponton keletkezett. A finn-német kapcsolat kiesése nem jelentett fennakadást az internetforgalomban, Litvániában szakértők szerint a lakosság szintén nem érezhette, hogy a kapacitás az ötödével esett vissza.\n\nAmint az köztudott, az internet felépítése szándékosan decentralizált, így ha egy csomópont vagy út kiesik, a forgalmat automatikusan át lehet terelni más irányokba, ám az infrastruktúra javítása rengeteg időbe és pénzbe kerül. A BBC a német védelmi minisztert, Boris Pistoriust idézte múlt kedden, aki szerint\n\n\"senki sem gondolja, hogy ezeket a vezetékeket véletlenül vágták át\".\n\nSvéd miniszterek azt nyilatkozták, hogy mindezt az Oroszország jelentette fenyegetettség tükrében kell értelmezni; ezzel egy időben rendőrségi vizsgálatok kezdődtek több érintett országban is. A The Verge egy hét elteltével már arról számolt be, hogy egy kínai kereskedelmi hajó, az orosz műtrágyát szállító Yi Peng 3 szándékosan leengedett horgonnyal közlekedett, így vágta át a kábeleket. A nyugati hírszerzők egyelőre azt feltételezik, hogy ennek ellenére nem a kínaiakat kell sejteni az akció mögött, a nyomozás célja, hogy kiderítsék, hogy az oroszok rendelték-e el a vezetékek megrongálását. Oroszország tagadja, hogy köze volna az eseményekhez. Az Északi Áramlat gázvezetéken két évvel ezelőtt, nem messze innen hajtottak végre robbantást. Idén augusztusban már arról jelentek meg hírek, hogy azt az akciót Ukrajna', 'Szándékosan leengedett horgonyával vághatta át a balti internetvezetékeket egy kínai hajó', 8),
+(19, 'https://magyarmezogazdasag.hu/app/uploads/2024/11/kis_voroshangya_izeltlabuak-1920x1288.jpg', b'0', '2024-11-29 20:36:10', 'Az kis vöröshangya (Formica polyctena) több lehet, mint egy rovar az erdőben. ', 'A Microbial Ecology-ban megjelent tanulmány arra mutat rá, hogy a kis vöröshangya képes kordában tartani több növénybetegséget, melyek többek közt az almára is veszélyesek. Emellett egy sor kártevő rovart is levadásznak, melyek közvetlenül a fákat támadnák meg.\n\nEnnek fényében a kutatók elindították az „AntFarm” (hangya farm) projektet, melynek keretében\n\nazt vizsgálják, hogyan tudnák tenyészteni a kis vöröshangyát annak érdekében, hogy a bio almáskertekben hasznosíthatóak legyenek A hangyák óriási kolóniákban élnek, meglehetősen közel egymáshoz. A nagy egyedsűrűség miatt a betegségek igen gyorsan terjedhetnének közöttük. Az evolúciós fejlődésük során azonban többféle védekezési mód is kialakult.\n\n„A hangyák extrém módon tiszták” – magyarázta Joachim Offenberg, az Aarhus Egyetem Ökotudományi karának szenior kutatója. Offenberg évek óta kutatja a hangyakolóniákat, és a mostani tanulmány társszerzője.\n\nPéldául saját trágyadombot tartanak fent, mely megfelelően távol van a fészektől. Sőt, saját „szemétszállítóik” is vannak.\nEgyes fajok nemcsak kiviszik a hulladékot a kolóniából, hanem a patatokba dobva azok messzire szállítódnak. A hangya az egyetlen olyan (jelenleg ismert) állat, melynek testében egy speciális szerv antibiotikus hatású anyagot választ ki.\n\nA hangyák és a baktériumok\nAz apró ízeltlábúaknak azonban még több trükk van a tarsolyában. A kutatók már korábban felfedezték, hogy erdei hangyafajok képesek csökkenteni például olyan betegségek megtelepedését az almaültetvényekben, mint a varasodás és a rothadás. Azt azonban eddig homály fedte, hogy miként.', 'Hangyák, mint a biokertészek barátai?', 8),
+(20, 'https://magyarmezogazdasag.hu/app/uploads/2024/11/disposal-1846033_1280-768x512.jpg', b'0', '2024-11-29 20:45:16', 'A norvég nemzetközi fejlesztési miniszter több mint 60 országot képvisel', 'Az ENSZ tárgyalásain, amelyeket a dél-koreai Busan városában tartanak november 27. és december 1. között, a világ első átfogó műanyag-szennyezést szabályozó egyezményéről döntenek. Tvinnereim elismerte, hogy az olajtermelő országok és a más nemzetek közötti megosztottság miatt a „tökéletes egyezmény” létrejötte nem valószínű. Ugyanakkor reméli, hogy születhet olyan megállapodás, amelyet idővel tovább lehet erősíteni.\n\nA műanyagok egészségügyi és környezeti hatásai egyre nagyobb aggodalomra adnak okot. Kutatások során mikroműanyagokat találtak emberi méhlepényekben, artériákban, valamint a herékben és a spermában, ami súlyos egészségügyi kockázatokra utal. A műanyagszennyezés fenyegeti továbbá a biodiverzitást és hozzájárul a klímaváltozáshoz.\n„Természetesen szükség van az újrahasznosítás és a hulladékkezelés javítására, de ha nem csökkentjük a gyártást és a fogyasztást, tíz év múlva képtelenek leszünk megbirkózni a műanyag mennyiségével” – hangsúlyozta Tvinnereim.', 'Tíz éven belül már képtelenek leszünk megbirkózni a műanyaghulladék mennyiségével', 8),
+(21, 'https://magyarmezogazdasag.hu/app/uploads/2024/03/closeup-classic-fresh-espresso-served-dark-surface_1220-5375.jpg', b'0', '2024-11-29 20:48:35', 'A kutatók egy jelentős különbséget találtak a két csoport között: a Lawsonibacter asaccharolyticus nevű baktérium populációjának számát.', 'Azoknál az embereknél, akik rendszeresen kávét ittak, a baktériumok szintje nyolcszorosa volt azokhoz képest, akik nem ittak kávét – és ez a különbség a világ minden tájáról származó embereknél stabilan fennmaradt.\n\nA kutatócsoport elismeri, hogy nem tudják, milyen hatással lehet az emberekre az L. asaccharolyticus magasabb szintje, de azt sugallják, hogy valószínűleg összefüggésbe hozható a kávéfogyasztásnak tulajdonított egészségügyi előnyökkel. Emellett azt sugallja, hogy egyetlen élelmiszer vagy étel is jelentős hatással lehet az emberi bélmikrobiomra.', 'A kávéfogyasztás megváltoztatja a bélmikrobiomot', 8),
+(22, 'https://cdn.nemzetisport.hu/2024/11/02rGfa5Crf-BorocwPlVX5wCLw5uPdAKGlpEnK9x8Kc/fill/1347/758/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50L2JmYTBkMGJhZDY5MDRkODdhNzBkNzFiYTdhZjM3MDBi.webp', b'0', '2024-11-29 20:57:14', 'A Leicester City labdarúgócsapata saját hivatalos oldalain jelentette be, hogy Ruud van Nistelrooy lett a csapat új menedzsere.', 'A Leicester a Chelsea elleni 2–1-es vereség után menesztette a nyáron érkezett Steve Coopert, miután a csapat az utolsó négy PL-meccsén csak egy pontot szerzett, és a 16. helyről várhatja a fordulót.\n\nPéntek este a Premier League újonca bejelentette, hogy Ruud van Nistelrooy veszi át Cooper helyét a kispadon, a 48 éves egykori kiváló csatár 2027-ig írt alá.\n\nA korábban a Hamburggal is szóba hozott Van Nistelrooy a Brentford elleni szombati bajnokin csak nézőként lesz jelen, a menedzseri feladatokat vasárnaptól látja el. A West Ham ellen kedden lesz az első mérkőzése.\n\nA holland szakember ebben az idényben a Manchester Unitedet megbízott edzőként irányította, érdekesség, hogy a négy meccséből kettőt a Leicester ellen vívott.', 'Van Nistelrooy lett a Leicester menedzsere – hivatalos', 8),
+(23, 'https://s.24.hu/app/uploads/2024/11/ad95086c-57de-4049-aefb-e189350a906d-e1732885627744-1140x641.jpg', b'0', '2024-11-29 21:04:44', 'Varga Zs. András, a Kúria elnöke két évre eltiltott egy kúriai tanácselnököt a munkaköre gyakorlásától.', 'A tegnapi napon egy konkrét ügyben is képviselt nyilvános jogi álláspontom miatt – mely egyes részleteiben ellentétes a Kúria elnökének álláspontjával – a Kúria elnöke a tanácselnöki munkaköröm gyakorlásától két évre eltiltott, azzal, hogy megfelelő magatartás esetén egy év múlva felülvizsgálja az intézkedést\n\n– írta Kovács András, a tanácselnöki munkaköréből ideiglenesen felfüggesztett kúriai bíró a Magyar Bírói Egyesület honlapján közzétett nyilatkozatában.\n\nA közigazgatási ügyekben ítélkező Kovács András szerint ebben az ügyben nem az ő személye fontos, „hanem az a tény, hogy az ilyen és hasonló vezetői szankció az elmozdíthatatlanságba vetett hitet visszafordíthatatlanul rendítheti meg a bírói karban”. A bíró szerint Varga Zs. András a lépésével tulajdonképpen a bírói függetlenséget veszélyezteti.\n\n„A bírói függetlenségnek számos személyes és szakmai összetevője van, amelyek együttesen garantálják a bíró döntés autonómiáját. A bíró szakmai integritásának alkotmányos garanciája az elmozdíthatatlanság, ami nem kevesebbet jelent, mint hogy mélységesen hisz abban, miszerint jogi álláspontja miatt beosztásából nem távolítható el” – fejtette ki Kovács András, aki egyúttal bírálta a bírósági szervezetek kormánnyal kötött múlt heti megállapodását. Attól tart ugyanis, hogy a jogkereső közönség hamar érdemben is tapasztalni fogja, hogy „a bírói függetlenség a sérülékeny helyzetbe taszított bírák esetén már csak fikció”.\n\n„A becsület nem eladó, a bírói függetlenség nem feladható!” – zárta levelét a Kúria bírája.\n\nKerestük Kovács Andrást, hogy megtudjuk, pontosan milyen ügyben volt véleménykülönbség közte és a Kúria elnöke között, illetve a Kúrián keresztül Varga Zs. Andrást is, amint válaszolnak, frissítjük az írásunkat.', 'Két évre eltiltott egy tanácselnököt a Kúria elnöke, a felfüggesztett bíró szerint a jogi álláspontja miatt', 8),
+(24, 'https://s.24.hu/app/uploads/2022/03/iszb-20220331-2-1140x641.jpg', b'0', '2024-11-29 21:12:31', 'Kívülállónak nem könnyű követnie, milyen meccset vív egymással a Kúria és az Alkotmánybíróság', 'Minden, magára valamit is adó cég elvárja, hogy alkalmazottai lojálisak legyenek hozzá. Lojálisak a szó jó értelmében: ne tegyenek, ne mondjanak, ne híreszteljenek olyat, ami árt a cég jó hírnevének. Ne ingassák meg az emberek bizalmát a vállalatban. De vajon mi a helyzet akkor, ha ezt az írott vagy íratlan szabályt éppen a cég vezetője sérti meg? Ráadásul egy olyan helyen, ahol az alkalmazottat a törvény hallgatásra kötelezi.\n\nA „cég” ez esetben a Kúria, a „cégvezető” pedig nem más, mint a Kúria elnöke, Varga Zs. András, a törvény által hallgatásra kötelezett „alkalmazottak” pedig a Kúria bírái. Konkrétan az a bírói tanács, amelyik két esetben is a kormányhű alkotmánybírák véleményével szemben ragaszkodott a saját, megalapozott, szakmai meggyőződéséhez.\n\nAz idáig vezető történet 2020 decemberében kezdődött. Akkor indult be a Vakcinainfó elnevezésű oldal, ahová azok regisztrálhattak, akik koronavírus elleni oltást szeretnének kapni. A Telex már ekkor kiszúrta, hogy az oldal adatkezelési tájékoztatója adatvédelmi szempontból „aggályos”. (Ez Péterfalvi Attilának, az adatvédelmi hatóság elnökének szavajárása, aki ugyan sokat aggódik, de keveset tesz.)\n\nA regisztrációs oldalon található első nyilatkozattal nincs baj, mert annak elfogadásával ahhoz járul hozzá az aláíró, hogy adatait továbbíthassák a Nemzeti Egészségbiztosítási Alapkezelőnek. Ez logikus, hisz általuk lehet az oltakozást megszervezni. A második nyilatkozat megtétele azonban a személyes adatok felhasználásának túl széles körét biztosítja a Miniszterelnöki Kabinetiroda számára:\n\nhozzájárulok, hogy későbbi kapcsolattartás céljából a megadott kapcsolattartási adataimat visszavonásomig kezeljék az adatkezelési tájékoztatóban foglaltak szerint.\n\nHogy egyáltalán miért a kabinetiroda gyűjtötte az adatokat, az csak két évvel később vált világossá.\n\nA 2021-es év sem telt eseménytelenül. A Kúria Kovács András vezette tanácsa kimondta, hogy nem lehet a „gyermekvédelmi” népszavazásra bocsátani azt a kérdést, amely így szól: „támogatja-e ön, hogy kiskorú gyermekek számára is elérhetőek legyenek nemátalakító kezelések?” Kovácsot persze személyében is kikezdte a kormánypárti sajtó, de ez nem hír. Az viszont igen, hogy a döntést a kabinet megtámadta az Alkotmánybíróságon, mondván, a Kúria döntése a tisztességes eljáráshoz való jogát sérti. Az Alkotmánybíróság – óriási meglepetésre – a kormánynak adott igazat: megsemmisítette a Kúria végzését, emiatt pedig új eljárást kellett indítani.', 'Így lett az oltásinformációból ellenzéki lejáratás', 8),
+(25, 'https://s.24.hu/app/uploads/2024/11/central-0924360848-masolat-1140x641.jpg', b'0', '2024-11-29 21:13:39', 'az nem egy mókás helyzet', 'Az ügyvédi szakmát nem lehet könnyű összekötni a standupozással, Dr. Ujvárosi Veronika életében viszont vígan megfér a kettő egymás mellett. Az osztrák fővárosban praktizáló jogász képviselte a két évvel ezelőtti, bécsi kettős gyilkosság magyar áldozatait, és bár ezzel az esettel nyilván nem poénkodik, bőven akad annyi meredek története, ami kitesz egy egész estet. Az ügyvédnő Ausztriában és Magyarországon is telt ház előtt lépett fel, mi Budapesten beszélgettünk vele a többi között arról, hogy mely esetek működnek a színpadon, és melyek nem, mit szólnak a sokszor keménykötésű ügyfelei, ha az ő történeteiken röhög a közönség, illetve miért nem szerencsés a tárgyalóteremben standupolni.', 'Amikor két órán át ott ül a gyilkos melletted, az nem egy mókás helyzet', 8),
+(27, 'https://s.24.hu/app/uploads/2024/11/ill24_haromharmad_cover_00-masolata-768x432.jpg', b'0', '2024-11-29 21:24:25', 'Mi következik a friss közvélemény-kutatásokból?', 'Mi következik a friss közvélemény-kutatásokból? Kit tart felelősnek romló életszínvonaláért a nép? Mit üzen Dombóvár? És mit üzen az, hogy Lévai Anikó is megjelent Szájer József rehabilitációján? Bánszegi Rebeka, Bita Dániel, valamint Nagy József a stúdióban.', 'A Fidesz csinál erős, magabiztos, kompetens vezetőt Magyar Péterből?', 26),
+(28, 'https://s.24.hu/app/uploads/2024/11/karacsonygergely-e1732861811410-1140x642.jpg', b'0', '2024-11-29 21:27:11', 'Öt év után kapott újra meghívást a közmédiába Karácsony Gergely, aki a közmédia 48 perc című műsorának vendége volt csütörtökön este.', 'A Telex cikke szerint a főpolgármestert a műsorvezető arról faggatta először, hogy mi lesz a helyetteseivel, akik ugye jelenleg nincsenek neki. Karácsony úgy felelt: összetett a válasz, de azt látja, hogy a fővárosi közgyűlésre vonatkozó szabályok módosításával a kormány valóban elérte a zavart. Karácsony jelezte, hogy Vitézyt is javasolta főpolgármester-helyettesnek, de belátja, ő sem gondolta, hogy meg fogják őt szavazni. Hozzátette, nagyobb bajnak látja ennél, hogy nincs a fővárosnak pénze.\n\nA riporter ugyanakkor nem hagyta annyiban, és azt mondogatta Karácsonynak, hogy így törvénytelen lesz a közgyűlés. A politikus pedig újra azt felelte, a pénzkérdés nagyobb probléma.\n\nEttől még jár a metró, folyik a víz a csapból, van közvilágítás\n\n– mondta Karácsony arra, hogyha nincs főpolgármester-helyettes, Budapest akkor is működik.\n\nA riporter kapott az alkalmon, és megjegyezte, hogy csütörtökön reggel a metró pont nem járt, de Karácsony ezt is kivédte, mondván a metrók pontosabbak, mint a vonatok, utalva a MÁV sorozatos gondjaira az elmúlt hetekből.\n\nKarácsony kérdésre válaszolva azt mondta, nem Magyar Péter kedvéért jelölte Vitézy Dávidot helyettesnek. Közölte, Vitézy Dáviddal, a Podmaniczky Mozgalom vezetőjével szívesen dolgozna egy csapat részeként Budapest érdekében, de úgy tűnik, hogy a Fővárosi Közgyűlés egy olyan sziget az országban, ahol ez nem lehetséges. Annak kapcsán, hogy a fővárosi képviselők nem szavaztak a főpolgármester-helyettesekről a Fővárosi Közgyűlés szerdai ülésén, mert az erről szóló javaslatot levették a napirendről, azt mondta: szerinte szavazni kellett volna, és kiderült volna az, hogy egyik jelöltnek sincsen támogatottsága, és így a közgyűlésen nagyobb lett volna a súly, hogy van egy feladat, amelyet nem végeztek el.\n\nMegjegyezte, az általa előterjesztett jelöltek megválasztására ő sem látott nagyon nagy matematikai esélyt.\n\nDe újra előjött, hogy akkor mi lesz a helyettesekkel, mire Karácsony visszakérdezett:', '„Azért a metrók pontosabbak, mint a vonatok” – Öt év után ült be a köztévébe Karácsony Gergely', 26),
+(29, 'https://s.24.hu/app/uploads/2024/11/fiumei-e1732788565879.jpg', b'0', '2024-11-29 21:38:20', 'Holtan találtak pár nappal ezelőtt egy embert', 'A Vas Vármegyei Rendőr-főkapitányság sajtóosztálya az esettel kapcsolatos megkeresésünkre azt közölte, hogy a Körmendi Rendőrkapitányság szakértő bevonásával, közigazgatási hatósági eljárás keretében vizsgálja az eset körülményeit. És hogy bővebb információt nem áll módjukban adni.', 'Holtan találtak pár nappal ezelőtt egy embert Budapest VIII. kerületében', 26),
+(30, 'https://s.24.hu/app/uploads/2024/11/central-0426366982-e1732652826339-1140x641.jpg', b'0', '2024-11-29 21:44:36', 'Egy kis csoport várta a salgótarjáni református templom előtt az oda meghívott Balog Zoltán püspököt a napokban', 'Egy kis csoport várta a salgótarjáni református templom előtt az oda meghívott Balog Zoltán püspököt a napokban– írja az atv.hu. „Egy bátor csapat hozott egy molinót, amelyre az volt írva, hogy szégyelljétek magatokat. Ezzel utalva a püspöki kegyelmi botrányra. Mi pedig ezt csendben szerettük volna tudatni az emberekkel, hogy ez a véleményünk. Nem akartunk ebből botrányt, de sajnos a lelkész asszonynak a férje elénk ugrott és leszaggatta a molinót, illetve a telefonom előtt ugrált is ki akarta szedni a kezemből a telefont” – mondta el Tóth-Beeri Szilvia református gyülekezeti tag az ATV Híradójának.', 'Balhé lett abból, hogy református tiltakozók várták Balog Zoltánt a templom előtt', 26),
+(31, 'https://s.24.hu/app/uploads/2024/11/banyakes.png', b'0', '2024-11-29 21:46:25', 'Nyolc év börtönre ítélte a Tatabányai Törvényszék azt az ukrán férfit, aki kis híján megölte az egyik tatabánya', 'Stoller Katalin, a Komárom-Esztergom Vármegyei Főügyészség helyettes szóvivője az üggyel kapcsolatos megkeresésünkre azt közölte, hogy az ügyész hosszabb tartalmú börtönbüntetésért és közügyektől eltiltásért, míg a vádlott és védője a büntetés enyhítéséért fellebbeztek.\n\nA vádirat szerint az ukrán férfi egy lakótelepen sétált hazafelé Tatabányán, amikor egy lépcsősoron szembetalálkozott a hat fiatalból álló baráti társaságával arra sétáló sértettel. Amikor az elkövető élettársa és a fiatal férfi a haladásuk során egymás mellé értek, a vállukkal érintőlegesen egymásnak ütköztek.\n\nA későbbi áldozat megkérdezte a nőt, hogy véletlenül ment-e neki, mire az bocsánatot kért tőle. A terhelt ekkor dühében elővett egy kést, és háromszor is megszúrta vele az áldozatát. A szúrásokat követően a fiatal férfi a barátaival elmenekült a helyszínről, mentőt hívtak hozzá, majd a kórházban megműtötték.\n\nA Tatabányai Törvényszék közleménye szerint a szúrások eredményeképpen az áldozatnak egy bordája eltörött, továbbá a mellüregének megnyílása miatt vérmell és légmell alakult ki nála, mely sérülések orvosi ellátás nélkül a halálához vezethettek volna. A bíróság nyolc év börtönre ítélte az emberölési kísérlettel vádolt férfit.', 'Nyolc évet kapott a férfi, aki megszurkálta a barátnője vállához véletlenül hozzáérő gyalogost', 26),
+(32, 'https://s.24.hu/app/uploads/2024/11/nissan_1-1024x682.jpg', b'0', '2024-11-29 21:47:33', 'A legfontosabb teendők év végén', 'A legfontosabb teendők év végén\n\nÁm mielőtt rátérnénk a szabad forrással kapcsolatos legésszerűbb teendőre, azelőtt érdemes pár szót ejteni arról, hogy a cégvezetők mi alapján gondolhatják úgy, hogy cégük stabilan és jól működik. Mik azok a feladatok, amelyeket minden év végén el kell végezniük ahhoz, hogy tiszta képet kapjanak vállalkozásuk jelenlegi és jövőbeni helyzetéről. Hiszen szinte minden cégvezető tudja, hogy a pénzügyi év forduló napja számtalan lehetőséget nyújt a jobb működésre. Ilyenkor lehetőség adódik a cég átfogó értékelésére, az addigi stratégiák felülvizsgálatára, a következő üzleti év legfontosabb céljainak meghatározására. Emellett a következő feladatokra is sort kell keríteni:\n\nAdókötelezettségek teljesítése\n\nAz adófizetések rendezése és adóoptimalizálás.\n\nPénzügyi beszámoló készítése\n\nAz éves pénzügyi eredmények összegzése.\n\nLikviditás felmérése\n\nA rövid távú pénzügyi kötelezettségek teljesítési képességének számbavétele.', 'Nissan X-Trail: fektessen be okosan, vásároljon céges autót jobb áron!', 26),
+(33, 'https://s.24.hu/app/uploads/2024/11/nissan_5.jpg?_gl=1*1y6r824*_ga*MTA1ODk0ODcyNS4xNzMyODg5MzA5*_ga_WQCPVWN1XZ*MTczMjkxMDU1OS41LjEuMTczMjkxNDQ0OC4wLjAuMA..', b'1', '2024-11-29 22:08:16', 'Nissan', 'A legfontosabb teendők év végén\n\nÁm mielőtt rátérnénk a szabad forrással kapcsolatos legésszerűbb teendőre, azelőtt érdemes pár szót ejteni arról, hogy a cégvezetők mi alapján gondolhatják úgy, hogy cégük stabilan és jól működik. Mik azok a feladatok, amelyeket minden év végén el kell végezniük ahhoz, hogy tiszta képet kapjanak vállalkozásuk jelenlegi és jövőbeni helyzetéről. Hiszen szinte minden cégvezető tudja, hogy a pénzügyi év forduló napja számtalan lehetőséget nyújt a jobb működésre. Ilyenkor lehetőség adódik a cég átfogó értékelésére, az addigi stratégiák felülvizsgálatára, a következő üzleti év legfontosabb céljainak meghatározására. Emellett a következő feladatokra is sort kell keríteni:\n\nAdókötelezettségek teljesítése\n\nAz adófizetések rendezése és adóoptimalizálás.\n\nPénzügyi beszámoló készítése\n\nAz éves pénzügyi eredmények összegzése.\n\nLikviditás felmérése\n\nA rövid távú pénzügyi kötelezettségek teljesítési képességének számbavétele.\n\nKöltségvetés tervezése\n\nA következő év pénzügyi céljainak és forrásainak meghatározása.', 'Nissan X-Trail: fektessen be okosan, vásároljon céges autót jobb áron', 26),
+(34, 'https://noklapja.p3k.hu/uploads/2024/11/Csokor-alaku-melldisz-17-szazad-kozepe-arany-gyongy-rubin-kovek-zomanc-960x720.jpg', b'0', '2024-11-29 22:10:02', 'Néhány héttel ezelőtt, október 18-án nyílt meg az MNMKK Magyar Nemzeti Múzeum új időszaki kiállítása Ragyogj!', 'Néhány héttel ezelőtt, október 18-án nyílt meg az MNMKK Magyar Nemzeti Múzeum új időszaki kiállítása Ragyogj! – Ékszerek ideje címmel, amely a múzeum ékszergyűjteményének legkülönlegesebb darabjait, illetve Spengler Katalin műgyűjtőnek és a Moholy-Nagy Művészeti Egyetem egykori és jelenlegi hallgatóinak, valamint oktatóinak kortárs ékszereit mutatja be.\nIdőtlen idők óta az ékszerek hordozzák a legkomplexebb üzenetet az emberről, életében és halálában is. Az ékszereket nemcsak az értékes anyag, a gondos kialakítás, hanem a szellemi érték, a mögöttes tartalom és a személyes kötődések teszik időtlenné, mégis millió módon egyedivé és megismételhetetlenné. Legyenek akár a test, akár a viselet ékei, az ékszerek sosem magukban léteznek, hanem egy társadalmi kontextuson belül, egyedül ezen keresztül értelmezhetőek teljességükben.', 'III. Béla király méreggyűrűjét is megcsodálhatjuk az új ékszerkiállításon (x)', 26),
+(35, 'https://s.24.hu/app/uploads/2024/11/nok-elleni-idoszak-afp-e1732879392795.jpg', b'1', '2024-11-29 22:29:22', 'Európai viszonylatban Magyarországon a legmagasabb a bántalmazó', 'Tíz év után először jelent meg reprezentatív felmérés a nők elleni erőszak mértékéről Magyarországon – közölte a Patent Egyesület. Az EU-s tagállamokban készített felmérés független közvélemény-kutatók segítségével készülhetett csak el, mivel a magyar kormány nem egyezett bele a részvételbe.\n\nA kutatás a 2020 szeptembere és a 2024 márciusa közötti intervallumot foglalja magába, és 115 000 nő vett benne részt Európa minden pontjáról. A Patent szerint lesújtóak az adatok, hiszen a bántalmazott nők aránya Magyarországon toronymagasan kiemelkedik a többi európai országhoz képest.\n\nA kutatás a lelki- és fizikai erőszakkal, fenyegetéssel, szexuális erőszakkal, és szexuális zaklatással kapcsolatos adatokat vizsgálta.\n\nAz összesített átlag alapján az európai nők 31,8 százaléka, míg ehhez képest a magyar nők 54,6 százaléka szenved el valamilyen formában erőszakot élete során.\n\nA kutatás összefoglalója az alábbi adatokat közli:\n\nAz EU-ban 3 nőből 1 élt már át felnőttkorában fizikai vagy szexuális erőszakot, illetve fenyegetést.\nAz EU-ban 6 nőből 1 tapasztalt felnőttkorában szexuális erőszakot, ideértve a nemi erőszakot is.\nSok nő számára nem mindig biztonságos az otthon: 5 nőből 1 szenvedett már el a partnere, rokona vagy a háztartás más tagja által elkövetett fizikai vagy szexuális erőszakot.\n3 nőből 1 élt már át szexuális zaklatást a munkahelyén. A fiatalabb nők nagyobb gyakoriságról számolnak be: 5-ből 2 fiatal nő tapasztalt már szexuális zaklatást a munkahelyén.\nBár az erőszakot átélt nők többsége beszélt erről egy hozzá közel álló személlyel, csak minden ötödik nő fordult egészségügyi vagy szociális szolgáltatóhoz, és csak minden nyolcadik nő jelentette az esetet a rendőrségnek.\nA magyar nőkre vonatkozóan a felmérésben szereplő arányok a következők:\n\nA magyar nők 41 százaléka szenvedett már el fizikai erőszakot vagy fenyegetést, és/vagy szexuális erőszakot a partnerétől.\nA magyar nők 7,6 százaléka él jelenleg bántalmazó párkapcsolatban.\nMinden második magyar nő szenved el fizikai és/vagy szexuális erőszakot vagy fenyegetést élete folyamán.\nA magyar nők 18 százaléka szenved el szexuális erőszakot élete során.', 'Európai viszonylatban Magyarországon a legmagasabb a bántalmazó', 26),
+(36, 'https://s.24.hu/app/uploads/2023/06/306806597_5153215648141305_852541841906198198_n-e1663067379340.jpg', b'0', '2024-11-29 22:30:40', 'A leggyakrabban olyan nők döntenek így, akiknek már van legalább egy gyermekük, és felmérik, fel tudnak-e nevelni még egyet.', 'Ezt mondta a Klubrádió reggeli műsorában Les Krisztina, a Patent Egyesület munkatársa arra reagálva, hogy kiderült, nem csökkent, hanem nőtt az abortuszok száma, miután megjelent tavaly ősszel Pintér Sándor belügyminiszter szívhangrendelete. A nők jogaival foglalkozó civil szervezet egyébként már korábban is jelezte, az ilyen lépések nincsenek hatással arra, hányan döntenek terhességük megszakítása mellett, a Válasz Online elemzése ezt igazolta.\n\nLes Krisztina szerint a 2022-es év azonos szakaszához viszonyítva 100 élveszületésre több abortusz jut, noha a kormánynak lennének hatékony eszközei a tendencia javítására. Mint mondta, jelenleg négy esetben lehetséges abortusz. Az egyik, ha a terhes nő súlyos válsághelyzetben van, és legtöbben erre hivatkozva is kezdeményezik.\n\nNoha a pontos adatok nem nyilvánosak, de indokoltnak tűnik, hogy az életszínvonal csökkenése miatt növekedett az abortuszok száma. Emlékeztetett rá, a KSH 2016-ban kiadott egy részletes statisztikát, ami egyértelműen cáfolta azt a tévhitet, amely szerint „fiatal tinilányok rohangálnak abortuszra”. Olyan nők döntenek leggyakrabban így, akiknek már van legalább egy gyermekük, fel tudják mérni azt, hogy fel tudnak-e nevelni egy újabbat, vagy sem.\n\nKorábban Pintér Sándor döntését Dúró Dóra (Mi Hazánk) és a MOK Etikai Bizottsága támogatta, a Nőkért Egyesület elnöke, Antoni Rita viszont attól tartott, hogy az utat nyit az illegális – a nők számára akár életveszélyes – abortuszok felé, az állam semmilyen eszközzel nem tudja a nők akaratát befolyásolni, de az abortuszok számát TB-támogatott fogamzásgátlással és átfogó iskolai szexedukációval csökkenthetné.', 'Tévhit, hogy tinilányok rohangálnak abortuszra ', 26);
 
 -- --------------------------------------------------------
 
@@ -118,50 +124,54 @@ INSERT INTO `news` (`id`, `img_path`, `priority`, `releasedate`, `subtitle`, `te
 CREATE TABLE `news_type` (
   `news_id` bigint(20) NOT NULL,
   `type_id` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_bin;
 
 --
 -- A tábla adatainak kiíratása `news_type`
 --
 
 INSERT INTO `news_type` (`news_id`, `type_id`) VALUES
-(2, 1),
-(10, 3),
-(11, 2),
-(11, 5),
-(14, 3),
-(15, 4),
+(3, 2),
+(5, 1),
+(5, 5),
+(6, 3),
+(7, 1),
+(9, 1),
+(9, 5),
+(10, 4),
+(11, 4),
+(12, 4),
+(13, 4),
+(14, 4),
+(15, 3),
 (16, 4),
-(17, 3),
-(18, 3),
-(19, 2),
-(20, 2),
-(21, 7),
-(22, 7),
-(23, 2),
-(23, 7),
-(24, 6),
-(25, 6),
-(26, 6),
+(17, 7),
+(18, 7),
+(19, 6),
+(20, 6),
+(21, 6),
+(22, 4),
+(23, 1),
+(24, 3),
+(25, 2),
+(27, 1),
 (27, 5),
+(28, 1),
 (28, 5),
-(29, 2),
-(29, 5),
+(29, 1),
+(30, 1),
 (30, 5),
-(30, 6),
-(31, 7),
-(32, 4),
+(31, 1),
+(31, 5),
+(32, 6),
+(33, 1),
 (33, 4),
-(34, 5),
-(34, 6),
-(37, 4),
-(38, 2),
-(39, 2),
-(40, 4),
-(41, 4),
-(42, 5),
-(43, 7),
-(44, 7);
+(33, 6),
+(33, 7),
+(34, 3),
+(35, 1),
+(35, 5),
+(36, 1);
 
 -- --------------------------------------------------------
 
@@ -172,7 +182,7 @@ INSERT INTO `news_type` (`news_id`, `type_id`) VALUES
 CREATE TABLE `roles` (
   `id` bigint(20) NOT NULL,
   `title` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_bin;
 
 --
 -- A tábla adatainak kiíratása `roles`
@@ -192,7 +202,7 @@ INSERT INTO `roles` (`id`, `title`) VALUES
 CREATE TABLE `type_of_news` (
   `id` bigint(20) NOT NULL,
   `title` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_bin;
 
 --
 -- A tábla adatainak kiíratása `type_of_news`
@@ -221,20 +231,18 @@ CREATE TABLE `users` (
   `image_path` varchar(255) DEFAULT NULL,
   `locked` bit(1) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `sec_name` varchar(255) DEFAULT NULL,
-  `users_id` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_hungarian_ci;
+  `sec_name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_bin;
 
 --
 -- A tábla adatainak kiíratása `users`
 --
 
-INSERT INTO `users` (`id`, `chat_name`, `email`, `first_name`, `image_path`, `locked`, `password`, `sec_name`, `users_id`) VALUES
-(1, 'iamadmin', 'iamdamin@gmail.com', 'iam', './uploads/2024-03-04_22:02:34.jpeg', b'0', 'admin', 'admin', 0),
-(2, 'irobela', 'writer@gmail.com', 'Béla', './uploads/2024-03-05_14:18:30.jpeg', b'0', 'irobela', 'Bela', 0),
-(3, 'olvasoiren', 'olvaso@gmail.com', 'Iren', './uploads/2024-03-05_12:18:12.jpeg', b'0', 'olvasoiren', 'Olvaso', 0),
-(4, 'iroeszter', 'iroeszter@gmail.com', 'Eszter', NULL, b'0', 'iroeszter', 'Iro', 0),
-(5, 'olvasotibor', 'olvasotibor@gmail.com', 'Tibor', NULL, b'0', 'olvasotibor', 'Olvaso', 0);
+INSERT INTO `users` (`id`, `chat_name`, `email`, `first_name`, `image_path`, `locked`, `password`, `sec_name`) VALUES
+(1, 'Admin1234', 'iamadmin@gmail.com', 'Admin', './uploads/image.jpeg', b'0', 'admin1234', 'Ádám'),
+(2, 'irobela', 'irobela@gmail.com', 'Író', './uploads/2024_11_29_23_38_05.jpeg', b'0', 'irobela1234', 'Béla'),
+(8, 'irokálmán', 'irokalman@gmail.com', 'Író', './uploads/2024_11_29_23_38_35.jpeg', b'0', 'irokalman1234', 'Kálmán'),
+(26, 'IroAttila', 'iroAttila@gmail.com', 'Iro', './uploads/2024_11_29_23_38_56.jpeg', b'0', 'iroattila', 'Attila');
 
 -- --------------------------------------------------------
 
@@ -245,7 +253,7 @@ INSERT INTO `users` (`id`, `chat_name`, `email`, `first_name`, `image_path`, `lo
 CREATE TABLE `users_comment` (
   `users_id` bigint(20) NOT NULL,
   `comment_id` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_bin;
 
 -- --------------------------------------------------------
 
@@ -256,17 +264,14 @@ CREATE TABLE `users_comment` (
 CREATE TABLE `user_news_likes` (
   `news_id` bigint(20) NOT NULL,
   `users_id` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_bin;
 
 --
 -- A tábla adatainak kiíratása `user_news_likes`
 --
 
 INSERT INTO `user_news_likes` (`news_id`, `users_id`) VALUES
-(2, 1),
-(10, 2),
-(22, 2),
-(25, 2);
+(3, 1);
 
 -- --------------------------------------------------------
 
@@ -277,7 +282,7 @@ INSERT INTO `user_news_likes` (`news_id`, `users_id`) VALUES
 CREATE TABLE `user_roles` (
   `roles_id` bigint(20) NOT NULL,
   `users_id` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf16 COLLATE=utf16_bin;
 
 --
 -- A tábla adatainak kiíratása `user_roles`
@@ -286,9 +291,10 @@ CREATE TABLE `user_roles` (
 INSERT INTO `user_roles` (`roles_id`, `users_id`) VALUES
 (1, 1),
 (3, 2),
-(2, 3),
-(2, 5),
-(3, 4);
+(3, 8),
+(2, 8),
+(2, 26),
+(3, 26);
 
 --
 -- Indexek a kiírt táblákhoz
@@ -300,7 +306,7 @@ INSERT INTO `user_roles` (`roles_id`, `users_id`) VALUES
 ALTER TABLE `comment`
   ADD PRIMARY KEY (`id`),
   ADD KEY `FKnxm8x9npdhuwxv2x2wxsghm17` (`news_id`),
-  ADD KEY `FKmea7pyuw3c1i7w8y0wljw1sy7` (`users_id`);
+  ADD KEY `FKesq8qbb4pp4k3gsxku3tqvgmn` (`writer_id`);
 
 --
 -- A tábla indexei `news`
@@ -364,7 +370,7 @@ ALTER TABLE `user_roles`
 -- Megkötések a táblához `comment`
 --
 ALTER TABLE `comment`
-  ADD CONSTRAINT `FKmea7pyuw3c1i7w8y0wljw1sy7` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `FKesq8qbb4pp4k3gsxku3tqvgmn` FOREIGN KEY (`writer_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `FKnxm8x9npdhuwxv2x2wxsghm17` FOREIGN KEY (`news_id`) REFERENCES `news` (`id`);
 
 --
@@ -400,7 +406,469 @@ ALTER TABLE `user_news_likes`
 ALTER TABLE `user_roles`
   ADD CONSTRAINT `FKdbv8tdyltxa1qjmfnj9oboxse` FOREIGN KEY (`roles_id`) REFERENCES `roles` (`id`),
   ADD CONSTRAINT `FKoovdgg7vvr1hb8vw6ivcrv3tb` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`);
-SET FOREIGN_KEY_CHECKS=1;
+--
+-- Adatbázis: `phpmyadmin`
+--
+CREATE DATABASE IF NOT EXISTS `phpmyadmin` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
+USE `phpmyadmin`;
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__bookmark`
+--
+
+CREATE TABLE `pma__bookmark` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `dbase` varchar(255) NOT NULL DEFAULT '',
+  `user` varchar(255) NOT NULL DEFAULT '',
+  `label` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `query` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Bookmarks';
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__central_columns`
+--
+
+CREATE TABLE `pma__central_columns` (
+  `db_name` varchar(64) NOT NULL,
+  `col_name` varchar(64) NOT NULL,
+  `col_type` varchar(64) NOT NULL,
+  `col_length` text DEFAULT NULL,
+  `col_collation` varchar(64) NOT NULL,
+  `col_isNull` tinyint(1) NOT NULL,
+  `col_extra` varchar(255) DEFAULT '',
+  `col_default` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Central list of columns';
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__column_info`
+--
+
+CREATE TABLE `pma__column_info` (
+  `id` int(5) UNSIGNED NOT NULL,
+  `db_name` varchar(64) NOT NULL DEFAULT '',
+  `table_name` varchar(64) NOT NULL DEFAULT '',
+  `column_name` varchar(64) NOT NULL DEFAULT '',
+  `comment` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `mimetype` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `transformation` varchar(255) NOT NULL DEFAULT '',
+  `transformation_options` varchar(255) NOT NULL DEFAULT '',
+  `input_transformation` varchar(255) NOT NULL DEFAULT '',
+  `input_transformation_options` varchar(255) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Column information for phpMyAdmin';
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__designer_settings`
+--
+
+CREATE TABLE `pma__designer_settings` (
+  `username` varchar(64) NOT NULL,
+  `settings_data` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Settings related to Designer';
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__export_templates`
+--
+
+CREATE TABLE `pma__export_templates` (
+  `id` int(5) UNSIGNED NOT NULL,
+  `username` varchar(64) NOT NULL,
+  `export_type` varchar(10) NOT NULL,
+  `template_name` varchar(64) NOT NULL,
+  `template_data` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Saved export templates';
+
+--
+-- A tábla adatainak kiíratása `pma__export_templates`
+--
+
+INSERT INTO `pma__export_templates` (`id`, `username`, `export_type`, `template_name`, `template_data`) VALUES
+(1, 'root', 'table', 'fakenews', '{\"quick_or_custom\":\"quick\",\"what\":\"sql\",\"allrows\":\"1\",\"aliases_new\":\"\",\"output_format\":\"sendit\",\"filename_template\":\"@TABLE@\",\"remember_template\":\"on\",\"charset\":\"utf-8\",\"compression\":\"none\",\"maxsize\":\"\",\"codegen_structure_or_data\":\"data\",\"codegen_format\":\"0\",\"csv_separator\":\",\",\"csv_enclosed\":\"\\\"\",\"csv_escaped\":\"\\\"\",\"csv_terminated\":\"AUTO\",\"csv_null\":\"NULL\",\"csv_columns\":\"something\",\"csv_structure_or_data\":\"data\",\"excel_null\":\"NULL\",\"excel_columns\":\"something\",\"excel_edition\":\"win\",\"excel_structure_or_data\":\"data\",\"json_structure_or_data\":\"data\",\"json_unicode\":\"something\",\"latex_caption\":\"something\",\"latex_structure_or_data\":\"structure_and_data\",\"latex_structure_caption\":\"@TABLE@ tÃ¡bla szerkezete\",\"latex_structure_continued_caption\":\"@TABLE@ tÃ¡bla szerkezete (folytatÃ¡s)\",\"latex_structure_label\":\"tab:@TABLE@-structure\",\"latex_relation\":\"something\",\"latex_comments\":\"something\",\"latex_mime\":\"something\",\"latex_columns\":\"something\",\"latex_data_caption\":\"@TABLE@ tÃ¡bla tartalma\",\"latex_data_continued_caption\":\"@TABLE@ tÃ¡bla tartalma (folytatÃ¡s)\",\"latex_data_label\":\"tab:@TABLE@-data\",\"latex_null\":\"\\\\textit{NULL}\",\"mediawiki_structure_or_data\":\"data\",\"mediawiki_caption\":\"something\",\"mediawiki_headers\":\"something\",\"htmlword_structure_or_data\":\"structure_and_data\",\"htmlword_null\":\"NULL\",\"ods_null\":\"NULL\",\"ods_structure_or_data\":\"data\",\"odt_structure_or_data\":\"structure_and_data\",\"odt_relation\":\"something\",\"odt_comments\":\"something\",\"odt_mime\":\"something\",\"odt_columns\":\"something\",\"odt_null\":\"NULL\",\"pdf_report_title\":\"\",\"pdf_structure_or_data\":\"data\",\"phparray_structure_or_data\":\"data\",\"sql_include_comments\":\"something\",\"sql_header_comment\":\"\",\"sql_use_transaction\":\"something\",\"sql_compatibility\":\"NONE\",\"sql_structure_or_data\":\"structure_and_data\",\"sql_create_table\":\"something\",\"sql_auto_increment\":\"something\",\"sql_create_view\":\"something\",\"sql_create_trigger\":\"something\",\"sql_backquotes\":\"something\",\"sql_type\":\"INSERT\",\"sql_insert_syntax\":\"both\",\"sql_max_query_size\":\"50000\",\"sql_hex_for_binary\":\"something\",\"sql_utc_time\":\"something\",\"texytext_structure_or_data\":\"structure_and_data\",\"texytext_null\":\"NULL\",\"xml_structure_or_data\":\"data\",\"xml_export_events\":\"something\",\"xml_export_functions\":\"something\",\"xml_export_procedures\":\"something\",\"xml_export_tables\":\"something\",\"xml_export_triggers\":\"something\",\"xml_export_views\":\"something\",\"xml_export_contents\":\"something\",\"yaml_structure_or_data\":\"data\",\"\":null,\"lock_tables\":null,\"csv_removeCRLF\":null,\"excel_removeCRLF\":null,\"json_pretty_print\":null,\"htmlword_columns\":null,\"ods_columns\":null,\"sql_dates\":null,\"sql_relation\":null,\"sql_mime\":null,\"sql_disable_fk\":null,\"sql_views_as_tables\":null,\"sql_metadata\":null,\"sql_drop_table\":null,\"sql_if_not_exists\":null,\"sql_simple_view_export\":null,\"sql_view_current_user\":null,\"sql_or_replace_view\":null,\"sql_procedure_function\":null,\"sql_truncate\":null,\"sql_delayed\":null,\"sql_ignore\":null,\"texytext_columns\":null}');
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__favorite`
+--
+
+CREATE TABLE `pma__favorite` (
+  `username` varchar(64) NOT NULL,
+  `tables` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Favorite tables';
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__history`
+--
+
+CREATE TABLE `pma__history` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `username` varchar(64) NOT NULL DEFAULT '',
+  `db` varchar(64) NOT NULL DEFAULT '',
+  `table` varchar(64) NOT NULL DEFAULT '',
+  `timevalue` timestamp NOT NULL DEFAULT current_timestamp(),
+  `sqlquery` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='SQL history for phpMyAdmin';
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__navigationhiding`
+--
+
+CREATE TABLE `pma__navigationhiding` (
+  `username` varchar(64) NOT NULL,
+  `item_name` varchar(64) NOT NULL,
+  `item_type` varchar(64) NOT NULL,
+  `db_name` varchar(64) NOT NULL,
+  `table_name` varchar(64) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Hidden items of navigation tree';
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__pdf_pages`
+--
+
+CREATE TABLE `pma__pdf_pages` (
+  `db_name` varchar(64) NOT NULL DEFAULT '',
+  `page_nr` int(10) UNSIGNED NOT NULL,
+  `page_descr` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='PDF relation pages for phpMyAdmin';
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__recent`
+--
+
+CREATE TABLE `pma__recent` (
+  `username` varchar(64) NOT NULL,
+  `tables` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Recently accessed tables';
+
+--
+-- A tábla adatainak kiíratása `pma__recent`
+--
+
+INSERT INTO `pma__recent` (`username`, `tables`) VALUES
+('root', '[{\"db\":\"fakenews\",\"table\":\"users\"},{\"db\":\"fakenews\",\"table\":\"user_roles\"},{\"db\":\"fakenews\",\"table\":\"type_of_news\"},{\"db\":\"fakenews\",\"table\":\"roles\"},{\"db\":\"fakenews\",\"table\":\"news\"},{\"db\":\"fakenews\",\"table\":\"user_news_likes\"},{\"db\":\"fakenews\",\"table\":\"users_comment\"},{\"db\":\"fakenews\",\"table\":\"news_type\"},{\"db\":\"fakenews\",\"table\":\"comment\"},{\"db\":\"fakenews\",\"table\":\"hibernate_sequence\"}]');
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__relation`
+--
+
+CREATE TABLE `pma__relation` (
+  `master_db` varchar(64) NOT NULL DEFAULT '',
+  `master_table` varchar(64) NOT NULL DEFAULT '',
+  `master_field` varchar(64) NOT NULL DEFAULT '',
+  `foreign_db` varchar(64) NOT NULL DEFAULT '',
+  `foreign_table` varchar(64) NOT NULL DEFAULT '',
+  `foreign_field` varchar(64) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Relation table';
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__savedsearches`
+--
+
+CREATE TABLE `pma__savedsearches` (
+  `id` int(5) UNSIGNED NOT NULL,
+  `username` varchar(64) NOT NULL DEFAULT '',
+  `db_name` varchar(64) NOT NULL DEFAULT '',
+  `search_name` varchar(64) NOT NULL DEFAULT '',
+  `search_data` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Saved searches';
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__table_coords`
+--
+
+CREATE TABLE `pma__table_coords` (
+  `db_name` varchar(64) NOT NULL DEFAULT '',
+  `table_name` varchar(64) NOT NULL DEFAULT '',
+  `pdf_page_number` int(11) NOT NULL DEFAULT 0,
+  `x` float UNSIGNED NOT NULL DEFAULT 0,
+  `y` float UNSIGNED NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Table coordinates for phpMyAdmin PDF output';
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__table_info`
+--
+
+CREATE TABLE `pma__table_info` (
+  `db_name` varchar(64) NOT NULL DEFAULT '',
+  `table_name` varchar(64) NOT NULL DEFAULT '',
+  `display_field` varchar(64) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Table information for phpMyAdmin';
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__table_uiprefs`
+--
+
+CREATE TABLE `pma__table_uiprefs` (
+  `username` varchar(64) NOT NULL,
+  `db_name` varchar(64) NOT NULL,
+  `table_name` varchar(64) NOT NULL,
+  `prefs` text NOT NULL,
+  `last_update` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Tables'' UI preferences';
+
+--
+-- A tábla adatainak kiíratása `pma__table_uiprefs`
+--
+
+INSERT INTO `pma__table_uiprefs` (`username`, `db_name`, `table_name`, `prefs`, `last_update`) VALUES
+('root', 'fakenews', 'user_roles', '{\"sorted_col\":\"`users_id` ASC\"}', '2024-11-29 14:51:25');
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__tracking`
+--
+
+CREATE TABLE `pma__tracking` (
+  `db_name` varchar(64) NOT NULL,
+  `table_name` varchar(64) NOT NULL,
+  `version` int(10) UNSIGNED NOT NULL,
+  `date_created` datetime NOT NULL,
+  `date_updated` datetime NOT NULL,
+  `schema_snapshot` text NOT NULL,
+  `schema_sql` text DEFAULT NULL,
+  `data_sql` longtext DEFAULT NULL,
+  `tracking` set('UPDATE','REPLACE','INSERT','DELETE','TRUNCATE','CREATE DATABASE','ALTER DATABASE','DROP DATABASE','CREATE TABLE','ALTER TABLE','RENAME TABLE','DROP TABLE','CREATE INDEX','DROP INDEX','CREATE VIEW','ALTER VIEW','DROP VIEW') DEFAULT NULL,
+  `tracking_active` int(1) UNSIGNED NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Database changes tracking for phpMyAdmin';
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__userconfig`
+--
+
+CREATE TABLE `pma__userconfig` (
+  `username` varchar(64) NOT NULL,
+  `timevalue` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `config_data` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='User preferences storage for phpMyAdmin';
+
+--
+-- A tábla adatainak kiíratása `pma__userconfig`
+--
+
+INSERT INTO `pma__userconfig` (`username`, `timevalue`, `config_data`) VALUES
+('root', '2024-11-29 22:32:26', '{\"Console\\/Mode\":\"collapse\",\"lang\":\"hu\",\"NavigationWidth\":259}');
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__usergroups`
+--
+
+CREATE TABLE `pma__usergroups` (
+  `usergroup` varchar(64) NOT NULL,
+  `tab` varchar(64) NOT NULL,
+  `allowed` enum('Y','N') NOT NULL DEFAULT 'N'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='User groups with configured menu items';
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pma__users`
+--
+
+CREATE TABLE `pma__users` (
+  `username` varchar(64) NOT NULL,
+  `usergroup` varchar(64) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='Users and their assignments to user groups';
+
+--
+-- Indexek a kiírt táblákhoz
+--
+
+--
+-- A tábla indexei `pma__bookmark`
+--
+ALTER TABLE `pma__bookmark`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- A tábla indexei `pma__central_columns`
+--
+ALTER TABLE `pma__central_columns`
+  ADD PRIMARY KEY (`db_name`,`col_name`);
+
+--
+-- A tábla indexei `pma__column_info`
+--
+ALTER TABLE `pma__column_info`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `db_name` (`db_name`,`table_name`,`column_name`);
+
+--
+-- A tábla indexei `pma__designer_settings`
+--
+ALTER TABLE `pma__designer_settings`
+  ADD PRIMARY KEY (`username`);
+
+--
+-- A tábla indexei `pma__export_templates`
+--
+ALTER TABLE `pma__export_templates`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `u_user_type_template` (`username`,`export_type`,`template_name`);
+
+--
+-- A tábla indexei `pma__favorite`
+--
+ALTER TABLE `pma__favorite`
+  ADD PRIMARY KEY (`username`);
+
+--
+-- A tábla indexei `pma__history`
+--
+ALTER TABLE `pma__history`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `username` (`username`,`db`,`table`,`timevalue`);
+
+--
+-- A tábla indexei `pma__navigationhiding`
+--
+ALTER TABLE `pma__navigationhiding`
+  ADD PRIMARY KEY (`username`,`item_name`,`item_type`,`db_name`,`table_name`);
+
+--
+-- A tábla indexei `pma__pdf_pages`
+--
+ALTER TABLE `pma__pdf_pages`
+  ADD PRIMARY KEY (`page_nr`),
+  ADD KEY `db_name` (`db_name`);
+
+--
+-- A tábla indexei `pma__recent`
+--
+ALTER TABLE `pma__recent`
+  ADD PRIMARY KEY (`username`);
+
+--
+-- A tábla indexei `pma__relation`
+--
+ALTER TABLE `pma__relation`
+  ADD PRIMARY KEY (`master_db`,`master_table`,`master_field`),
+  ADD KEY `foreign_field` (`foreign_db`,`foreign_table`);
+
+--
+-- A tábla indexei `pma__savedsearches`
+--
+ALTER TABLE `pma__savedsearches`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `u_savedsearches_username_dbname` (`username`,`db_name`,`search_name`);
+
+--
+-- A tábla indexei `pma__table_coords`
+--
+ALTER TABLE `pma__table_coords`
+  ADD PRIMARY KEY (`db_name`,`table_name`,`pdf_page_number`);
+
+--
+-- A tábla indexei `pma__table_info`
+--
+ALTER TABLE `pma__table_info`
+  ADD PRIMARY KEY (`db_name`,`table_name`);
+
+--
+-- A tábla indexei `pma__table_uiprefs`
+--
+ALTER TABLE `pma__table_uiprefs`
+  ADD PRIMARY KEY (`username`,`db_name`,`table_name`);
+
+--
+-- A tábla indexei `pma__tracking`
+--
+ALTER TABLE `pma__tracking`
+  ADD PRIMARY KEY (`db_name`,`table_name`,`version`);
+
+--
+-- A tábla indexei `pma__userconfig`
+--
+ALTER TABLE `pma__userconfig`
+  ADD PRIMARY KEY (`username`);
+
+--
+-- A tábla indexei `pma__usergroups`
+--
+ALTER TABLE `pma__usergroups`
+  ADD PRIMARY KEY (`usergroup`,`tab`,`allowed`);
+
+--
+-- A tábla indexei `pma__users`
+--
+ALTER TABLE `pma__users`
+  ADD PRIMARY KEY (`username`,`usergroup`);
+
+--
+-- A kiírt táblák AUTO_INCREMENT értéke
+--
+
+--
+-- AUTO_INCREMENT a táblához `pma__bookmark`
+--
+ALTER TABLE `pma__bookmark`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT a táblához `pma__column_info`
+--
+ALTER TABLE `pma__column_info`
+  MODIFY `id` int(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT a táblához `pma__export_templates`
+--
+ALTER TABLE `pma__export_templates`
+  MODIFY `id` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT a táblához `pma__history`
+--
+ALTER TABLE `pma__history`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT a táblához `pma__pdf_pages`
+--
+ALTER TABLE `pma__pdf_pages`
+  MODIFY `page_nr` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT a táblához `pma__savedsearches`
+--
+ALTER TABLE `pma__savedsearches`
+  MODIFY `id` int(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- Adatbázis: `test`
+--
+CREATE DATABASE IF NOT EXISTS `test` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `test`;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

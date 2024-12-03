@@ -19,13 +19,11 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public String add(String image) {
         LocalDateTime currentTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
         String filePath ="";
 
         try {
-
             byte[] imageBytes = Base64.getDecoder().decode(image);
-
             filePath = "./uploads/"+currentTime.format(formatter)+".jpeg";
             try (FileOutputStream fos = new FileOutputStream(filePath)) {
                 fos.write(imageBytes);
@@ -46,7 +44,19 @@ public class ImageServiceImpl implements ImageService {
     public void delete(String path){
 
        File image = new File(path);
-        System.out.println(image.delete());
+        if (image.exists()) {
+            System.out.println("A fájl létezik.");
+
+            // Fájl törlése
+            if (image.delete()) {
+                System.out.println("A fájl sikeresen törölve lett.");
+            } else {
+                System.out.println("A fájl törlése nem sikerült.");
+            }
+        } else {
+            System.out.println("A fájl nem létezik.");
+        }
+     //   System.out.println(image.delete());
     }
     @Override
     public Resource get(String imageName) {

@@ -214,11 +214,11 @@ const RegModal: FC = () => {
               )}
             </FormControl>
             <FormControl  isInvalid={!!errors.secname}>
-              <FormLabel>Adja meg vezetéknevét</FormLabel>
+              <FormLabel>Adja meg keresztnevét</FormLabel>
               <Input
                 type="text"
                 autoComplete="new-password"
-                placeholder="Adja meg a vezetéknevét"
+                placeholder="Adja meg a keresztnevét"
                 onChange={(event) =>
                   setFieldValue("secname", event.target.value)
                 }
@@ -226,11 +226,11 @@ const RegModal: FC = () => {
                <FormErrorMessage>{errors.secname}</FormErrorMessage>
             </FormControl>
             <FormControl  isInvalid={!!errors.firstname}>
-              <FormLabel>Adja meg keresztnevét</FormLabel>
+              <FormLabel>Adja meg vezetéknevét</FormLabel>
               <Input
                 type="text"
                 autoComplete="off"
-                placeholder="Adja meg a keresztnevét"
+                placeholder="Adja meg a vezetéknevét"
                 onChange={(event) =>
                   setFieldValue("firstname", event.target.value)
                 }

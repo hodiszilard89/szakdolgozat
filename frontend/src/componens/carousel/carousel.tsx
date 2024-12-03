@@ -39,7 +39,7 @@ const Carousel: React.FC<{news:News[]}> = ({news}) => {
   };
   const handleImageClick = (news: News) => {
     dispatch(setNews(serializeNews(news)));
-    navigate("/news");
+    navigate(`/news/${news.id}`);
   };
 
   const [slider, setSlider] = React.useState<Slider | null>(null);

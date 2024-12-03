@@ -104,17 +104,30 @@ public class NewsController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
-
     @RequestMapping(method = RequestMethod.POST)
-    public  ResponseEntity<NewsDTO>save(@RequestBody NewsDTO newsDTO){
+    public  ResponseEntity<NewsDTO>save(@RequestBody String jsonString){
+        JSONObject jsonObject = new JSONObject(jsonString);
+
+        NewsDTO newsDTO=modelMapper.map(jsonObject.toMap(),NewsDTO.class);
         Date dt = new Date();
-        System.out.println(newsDTO.getText());
+
         newsDTO.setReleasedate(dt);
         newsService.save(newsDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(null
                 );
     }
+
+//    @RequestMapping(method = RequestMethod.POST)
+//    public  ResponseEntity<NewsDTO>save(@RequestBody NewsDTO newsDTO){
+//        Date dt = new Date();
+//        System.out.println(newsDTO.getText());
+//        newsDTO.setReleasedate(dt);
+//        newsService.save(newsDTO);
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).body(null
+//                );
+//    }
 
     @RequestMapping(path = "/like/{id}", method = RequestMethod.GET)
     public ResponseEntity<List<UsersDTO>> printLineLikes(@PathVariable Long id){

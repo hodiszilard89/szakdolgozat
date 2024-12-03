@@ -4,8 +4,7 @@ import { selectEditor } from "../../store/slices/editor-slice";
 import NewsEditor from "./news-editor";
 import { newsFactory } from "../../utils/news_factory";
 import { Box,  Text } from "@chakra-ui/react";
-import { Navbar } from "../../componens/navbar";
-import { Footer } from "../../componens/footer";
+
 import {
 
   selectOnlineUser,

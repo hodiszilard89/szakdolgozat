@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 
 
-import {  selectNews, setNews, showEditor } from "../../store/slices/editor-slice";
+import { showEditor } from "../../store/slices/editor-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { News } from "../../models/news";
 import { useNewsTypes } from "../../store/hooks/use-news-types";
@@ -27,6 +27,7 @@ import { newsEditValidationSchema } from "./news-edit-validation.schema";
 import { selectAuthUser } from "../../store/slices/auth-user-slice";
 
 import { useNewsChancages } from "../../store/hooks/use-news-chancages";
+import { useNavigate } from "react-router-dom";
 export interface NewsEditorProps {
   news: News;
 }
@@ -36,10 +37,11 @@ export const NewsEditor: FC<NewsEditorProps> = ({ news }) => {
   const { types } = useNewsTypes();
   const dispatch = useDispatch();
   const { save } = useNewsChancages();
-
+  const navigate = useNavigate();
   const onSubmit = useCallback(
     async (news: News) => {
       await save(news);
+      navigate("/")
     },
     [save, dispatch]
   );

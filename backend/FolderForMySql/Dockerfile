@@ -1,11 +1,17 @@
-FROM ubuntu:latest
+# Alap MySQL image verzióval
+FROM mysql:8.0
 
-# Telepítés MySQL és egyéb szükséges csomagok
-RUN apt-get update && apt-get install -y mysql-server && apt-get install -y netcat
+# Kötelező környezeti változók beállítása
+ENV MYSQL_ROOT_PASSWORD=rootpassword
+ENV MYSQL_DATABASE=adatbazisnev
+ENV MYSQL_USER=felhasznalonev
+ENV MYSQL_PASSWORD=jelszo
 
-# Adatok importálása
-COPY fakenews.sql /fakenews.sql
-COPY database_entrypoint.sh /opt/script.sh
-#ENTRYPOINT /opt/script.sh
-# MySQL indítása
-CMD service mysql start && mysql -u < /fakenews.sql && tail -f /dev/null
+# Az init.sql fájl másolása az image-be
+COPY fakenews.sql /docker-entrypoint-initdb.d/
+
+# MySQL alapértelmezett portjának megnyitása
+EXPOSE 3306
+
+
+

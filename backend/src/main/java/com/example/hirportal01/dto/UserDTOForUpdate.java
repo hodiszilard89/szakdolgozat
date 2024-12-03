@@ -1,7 +1,12 @@
 package com.example.hirportal01.dto;
 
-public class UserDTOForUpdate
-{
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
+
+public class UserDTOForUpdate implements UserDetails {
     private UsersDTO usersDTO;
     private String image;
 
@@ -22,5 +27,40 @@ public class UserDTOForUpdate
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return "";
+    }
+
+    @Override
+    public String getUsername() {
+        return "";
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }

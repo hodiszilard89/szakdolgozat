@@ -1,4 +1,3 @@
-#!/bin/bash
-sleep 15
-echo "${MYSQL_HOST}"
-java -jar app.jar
+      #!/bin/bash
+      sleep 25
+      java -jar app.jar && tail -f /dev/nulldocker

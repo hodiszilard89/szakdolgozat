@@ -1,5 +1,6 @@
 package com.example.hirportal01.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +9,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Users implements UserDetails  {
     private Boolean locked;
     @Id

@@ -1,8 +1,7 @@
-version: '3'
 
 services:
   database:
-    image: mysql_db
+    image: database
     container_name: database
     networks:
       mynetwork:
@@ -12,8 +11,8 @@ services:
       - "3306:3306"
 
   server:
-    image: webapp_image2
-    container_name: server
+    image: backend
+    container_name: backend
     networks:
       mynetwork:
         ipv4_address: 172.19.0.3
@@ -21,22 +20,19 @@ services:
       - database
     ports:
       - "8080:8080"
-    environment:
-      - MYSQL_HOST=172.18.0.2
 
 
-  # frontend:
-  #   image: alpine_image
-  #   container_name: frontend
-  #   networks:
-  #     mynetwork:
-  #       ipv4_address: 172.19.0.4
-  #   depends_on:
-  #     - server
-  #   ports:
-  #     - "3001:3000"
-  #   environment:
-  #    - SERVERHOST=172.18.0.2
+  frontend:
+     image: frontend
+     container_name: frontend
+     networks:
+       mynetwork:
+         ipv4_address: 172.19.0.4
+     depends_on:
+      - server
+     ports:
+       - "3000:3000"
+
      
 
 networks:

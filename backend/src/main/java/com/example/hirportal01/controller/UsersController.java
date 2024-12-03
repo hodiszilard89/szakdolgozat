@@ -3,12 +3,8 @@ package com.example.hirportal01.controller;
 import com.example.hirportal01.dto.*;
 import com.example.hirportal01.exceptions.InvalidEntityException;
 import com.example.hirportal01.service.impl.UsersServiceImpl;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +19,7 @@ public class UsersController {
     final String IMAGE_PATH="./uploads/image.jpeg";
     private final UsersServiceImpl usersService;
 
-    private static final Logger LOGGER= LoggerFactory.getLogger(UsersController.class);
+
 
     public UsersController(UsersServiceImpl usersService) {
 
@@ -69,8 +65,7 @@ public class UsersController {
     @CrossOrigin
     @RequestMapping(path = "/checkemail/{email}",method = RequestMethod.GET)
     public ResponseEntity<Boolean> checkEmail(@PathVariable String email){
-      //  System.out.println(email);
-        //usersService.checkEmail(email);
+
         return ResponseEntity.ok(usersService.checkEmail(email));
     }
 

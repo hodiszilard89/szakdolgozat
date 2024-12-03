@@ -16,12 +16,6 @@ public class News {
     private Date releasedate;
 
 
-    //próba
-//    @ManyToMany(mappedBy = "likedNews")
-//    @JsonBackReference (value="newsLikes")
-//    private Set<Users> likes = new HashSet<>();
-//
-
     @ManyToMany
     @JoinTable(name = "user_news_likes",
             joinColumns = @JoinColumn(name = "news_id"),
@@ -36,9 +30,6 @@ public class News {
     public void setLikes(Set<Users> likes) {
         this.likes = likes;
     }
-
-    //eredeti
-
 
     @ManyToMany
     @JoinTable(name = "news_type",

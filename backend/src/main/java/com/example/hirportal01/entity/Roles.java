@@ -16,10 +16,11 @@ public class Roles {
 
 
     @ManyToMany
+    @JsonBackReference(value = "rolesUsers")
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "roles_id"),
             inverseJoinColumns = @JoinColumn(name = "users_id"))
-    @JsonBackReference(value = "rolesUsers")
+
     private List<Users> users;
 
     public Roles() {
