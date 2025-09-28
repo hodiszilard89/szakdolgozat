@@ -19,8 +19,8 @@ export const NewsList: FC<{news:News[]|undefined}> = ({news}) => {
   return (
     <Grid justifyItems={"center"}>
      
-      <Box w={"80%"}>
-        <Grid
+      <Box  w={"80%"}>
+        <Grid 
           as={OrderedList}
           templateColumns={{ base: "1fr", md: "1fr 1fr", lg: "1fr 1fr 1fr" }}
           sx={{
