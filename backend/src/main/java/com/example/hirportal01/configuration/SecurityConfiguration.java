@@ -36,26 +36,37 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService);
 
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
+
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers("/uploads/**").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/authentication/**").permitAll()
                 .antMatchers("/users/delete/**").hasAnyAuthority("ADMIN")
 
                 .antMatchers("/users/**").permitAll()
                 .antMatchers("/news/delete/**").hasAnyAuthority("ADMIN")
                 .antMatchers("/news/**").permitAll()
-                .antMatchers("/comment/**").hasAnyAuthority("ADMIN","USER","WRITER")
+                .antMatchers("/comment/**").hasAnyAuthority("ADMIN", "USER", "WRITER")
                 .anyRequest().authenticated()
                 .and()
+
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-        .cors(Customizer.withDefaults());
+                .headers(headers -> headers
+                        .frameOptions().sameOrigin()  // ⬅️ EZ AZ A RÉSZ AMI KELL!
+                )
+                .cors(Customizer.withDefaults())
+                .requiresChannel()
+                .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+                .requiresSecure();
     }
+
     private static final String[] AUTH_WHITELIST = {
             "*",
             // -- Swagger UI v2

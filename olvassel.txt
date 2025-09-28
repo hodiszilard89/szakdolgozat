@@ -1,0 +1,14 @@
+Fejlesztőeszközök:
+frontend : Visual Studio Code 1.95.3
+backend : InteliJ IDEA Community Edition 2024.2.1
+xampp v3.3.0
+
+Az xampp program telepítése után el kell indítani az Apache és MySql szervereket.
+Ezután a localhost https://localhost/phpmyadmin oldalon létrehozunk egy új adatbázist fakenews néven.Majd az imortálás fülre kattintva importáljuk a fakenews.sql filet.
+Ezekután indíthatjuk a szervert majd végül az frontendet ügyelve a sorrendre.
+
+Biztonsági okokból a backend projektben lévő .0sh, .0com kiterjesztésü  -FolderForMySql/database_entrypoint.0sh
+									-server_entrypoint.0sh
+									-mvnv.com.0com
+fileokra kellet átneveznem ezért használat előtt ezeket vissza kell nevezni vagy a https://github.com/hodiszilard89/szakdolgozat.git
+reposytoriból letölthető a projekt 
